@@ -34,6 +34,16 @@ float padding = 20.0f;
 float loadDistance = 200.0f;
 float no_render_distance = 1000.0f;
 
+class Entity {
+public:
+	Matrix44 model;
+	Mesh* mesh;
+	Texture* texture;
+
+};
+
+std::vector<Entity*> entities;
+
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -58,8 +68,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-	/*mesh = Mesh::Get("data/island.ASE");
-	texture = Texture::Get("data/island_color.tga");*/
+	mesh = Mesh::Get("data/island.ASE");
+	texture = Texture::Get("data/island_color.tga");
 
 	planeMesh = Mesh::Get("data/spitfire.ASE");
 	planeTex = Texture::Get("data/spitfire_color_spec.tga");
@@ -172,7 +182,25 @@ void RenderPlanes() {
 	shader->disable();
 }
 
+void AddEntityInFront(Camera* cam) {
 
+	Vector2 mouse = Input::mouse_position;
+	Game* g = Game::instance;
+	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+	Vector3 rayOrigin = cam->eye;
+	RayPlaneCollision(Vector3(), Vector3(0,1,0), rayOrigin, dir );
+
+
+	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
+	Matrix44 model;
+	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
+	Entity* entity = new Entity();
+	entity->model = model;
+	entity->mesh = Mesh::Get("data/Dragon_Busts_Gerhald3D.obj");
+	entity->texture = Texture::Get("data/BlackDragon_Horns2_Roughness.png");
+
+	entities.push_back(entity);
+}
 //what to do when the image has to be draw
 void Game::render(void)
 {
@@ -204,7 +232,12 @@ void Game::render(void)
 	RenderPlanes();
 	//mesh->renderBounding(model); //Ver boundings de un modelo
 	//create model matrix for cube
+	for (size_t i = 0; i < entities.size(); i++)
+	{
+		Entity* entity = entities[i];
 
+		RenderMesh(entity->model, entity->mesh, entity->texture, shader, camera);
+	}
 	//RenderIslands();
 
 	//Draw the floor grid
@@ -266,6 +299,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	{
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
+		case SDLK_2: AddEntityInFront(camera); break;
 	}
 }
 
