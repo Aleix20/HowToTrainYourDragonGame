@@ -1,7 +1,7 @@
 .exe
 .iobj
 .ipdb
-.pdb
+*.pdb
 .db
 .d
 .ipch
