@@ -71,9 +71,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	mesh = Mesh::Get("data/island.ASE");
 	texture = Texture::Get("data/island_color.tga");
 
-	planeMesh = Mesh::Get("data/spitfire.ASE");
-	planeTex = Texture::Get("data/spitfire_color_spec.tga");
- 	
+	planeMesh = Mesh::Get("data/NightFury/Toothless.obj");
+	planeTex = Texture::Get("data/NightFury/Toothless.png");
+	//planeModel.rotate(DEG2RAD * 90, Vector3(0, 1, 0));
 
 
 
@@ -226,8 +226,8 @@ void Game::render(void)
 	
     }
 	
-	//Matrix44 islandModel;
-	//RenderMesh(islandModel, mesh, texture, shader, camera);
+	Matrix44 islandModel;
+	RenderMesh(islandModel, mesh, texture, shader, camera);
 	RenderMesh(planeModel, planeMesh, planeTex, shader, camera);
 	RenderPlanes();
 	//mesh->renderBounding(model); //Ver boundings de un modelo

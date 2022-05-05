@@ -224,7 +224,8 @@ class Matrix44
 		void setUpAndOrthonormalize(Vector3 up);
 		void setFrontAndOrthonormalize(Vector3 front);
 
-		Matrix44 getRotationOnly(); //used when having scale
+		Matrix44 getRotationOnly(); //used when having 
+
 
 		//rotate only
 		Vector3 rotateVector( const Vector3& v) const;
