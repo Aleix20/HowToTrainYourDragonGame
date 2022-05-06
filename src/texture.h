@@ -158,11 +158,11 @@ public:
 	void operator = (const Texture& tex) { assert("textures cannot be cloned like this!");  }
 
 	//load without using the manager
-	bool load(const char* filename, bool mipmaps = true, bool wrap = true, unsigned int type = GL_UNSIGNED_BYTE);
+	bool load(const char* filename, bool mipmaps = true, bool wrap = true, bool flip_y = false ,unsigned int type = GL_UNSIGNED_BYTE);
 	void loadFromImage(Image* image, bool mipmaps = true, bool wrap = true, unsigned int type = GL_UNSIGNED_BYTE);
 
 	//load using the manager (caching loaded ones to avoid reloading them)
-	static Texture* Get(const char* filename, bool mipmaps = true, bool wrap = true);
+	static Texture* Get(const char* filename, bool flip_y = false, bool mipmaps = true, bool wrap = true );
 	static Texture* Find(const char* filename);
 	void setName(const char* name) {
 		filename = name;

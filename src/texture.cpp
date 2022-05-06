@@ -213,7 +213,7 @@ Texture* Texture::Find(const char* filename)
 	return NULL;
 }
 
-Texture* Texture::Get(const char* filename, bool mipmaps, bool wrap)
+Texture* Texture::Get(const char* filename, bool flip_y, bool mipmaps, bool wrap)
 {
 	//load it
 	Texture* texture = Find(filename);
@@ -221,7 +221,7 @@ Texture* Texture::Get(const char* filename, bool mipmaps, bool wrap)
 		return texture;
 
 	texture = new Texture();
-	if (!texture->load(filename, mipmaps, wrap))
+	if (!texture->load(filename, mipmaps, wrap, flip_y))
 	{
 		delete texture;
 		return NULL;
@@ -230,7 +230,7 @@ Texture* Texture::Get(const char* filename, bool mipmaps, bool wrap)
 	return texture;
 }
 
-bool Texture::load(const char* filename, bool mipmaps, bool wrap, unsigned int type)
+bool Texture::load(const char* filename, bool mipmaps, bool wrap,bool flip_y, unsigned int type)
 {
 	std::string str = filename;
 	std::string ext = str.substr(str.size() - 4, 4);
@@ -245,9 +245,9 @@ bool Texture::load(const char* filename, bool mipmaps, bool wrap, unsigned int t
 	if (ext == ".tga" || ext == ".TGA")
 		found = image->loadTGA(filename);
 	else if (ext == ".png" || ext == ".PNG")
-		found = image->loadPNG(filename, true);
+		found = image->loadPNG(filename, flip_y);
 	else if (ext == ".jpg" || ext == ".JPG" || ext == "JPEG" || ext == "jpeg")
-		found = image->loadJPG(filename);
+		found = image->loadJPG(filename,flip_y);
 	else
 	{
 		std::cout << "[ERROR]: unsupported format" << std::endl;

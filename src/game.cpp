@@ -44,6 +44,8 @@ public:
 
 std::vector<Entity*> entities;
 
+Entity drake;
+
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -71,9 +73,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	mesh = Mesh::Get("data/island.ASE");
 	texture = Texture::Get("data/island_color.tga");
 
-	planeMesh = Mesh::Get("data/NightFury/Toothless.obj");
-	planeTex = Texture::Get("data/NightFury/Toothless.png");
-	//planeModel.rotate(DEG2RAD * 90, Vector3(0, 1, 0));
+	drake.mesh= Mesh::Get("data/NightFury/Toothless.obj");
+	drake.texture = Texture::Get("data/NightFury/Toothless.png", true);
+	Matrix44 drakeModel;
+	drakeModel.rotate(DEG2RAD * 180, Vector3(0, 1, 0));
+	drakeModel.setTranslation(0,0,0);
+	drake.model = drakeModel;
+
+
 
 
 
@@ -141,7 +148,7 @@ void RenderPlanes() {
 
 	//enable shader
 	shader->enable();
-
+	planeTex = Texture::Get("data/spitfire_axis_color_spec.tga");
 	Camera* cam = Game::instance->camera;
 	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
 	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
@@ -218,17 +225,19 @@ void Game::render(void)
 	glDisable(GL_CULL_FACE);
 	if (cameraLocked) {
 
-		Vector3 eye = planeModel * Vector3(0.0f, 12.0f, 20.0f);
-		Vector3 center = planeModel * Vector3(0.0f, 0.0f, -20.0f);
-		Vector3 up = planeModel.rotateVector(Vector3(0.0f,1.0f,0.0f));
+		Vector3 eye = drake.model * Vector3(0.0f, 8.0f, -5.0f);
+		Vector3 center = drake.model * Vector3(0.0f, 0.0f, 10.0f);
+		Vector3 up = drake.model.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
-		camera->lookAt(eye,center,up);
-	
-    }
+		camera->lookAt(eye, center, up);
+
+	}
 	
 	Matrix44 islandModel;
 	RenderMesh(islandModel, mesh, texture, shader, camera);
-	RenderMesh(planeModel, planeMesh, planeTex, shader, camera);
+	
+	
+	RenderMesh(drake.model, drake.mesh, drake.texture, shader, camera);
 	RenderPlanes();
 	//mesh->renderBounding(model); //Ver boundings de un modelo
 	//create model matrix for cube
@@ -269,12 +278,12 @@ void Game::update(double seconds_elapsed)
 		float planeSpeed = 50.0f * elapsed_time; 
 		float rotSpeed = 90.0f * DEG2RAD * elapsed_time;
 		
-		if (Input::isKeyPressed(SDL_SCANCODE_W)) planeModel.translate(0.0f, 0.0f, -planeSpeed );
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) planeModel.translate(0.0f, 0.0f, planeSpeed);
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) planeModel.rotate(-rotSpeed, Vector3(0.0f,1.0f,0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) planeModel.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_Q)) planeModel.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_E)) planeModel.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) drake.model.translate(0.0f, 0.0f, planeSpeed );
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) drake.model.translate(0.0f, 0.0f, -planeSpeed);
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) drake.model.rotate(-rotSpeed, Vector3(0.0f,1.0f,0.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) drake.model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_Q)) drake.model.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_E)) drake.model.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
 	}
 	else {
 
