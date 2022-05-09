@@ -24,7 +24,12 @@
 #include "sysdep.h"
 #include "box.h"
 #include "mytritri.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+
+#else
 #include "tritri.cpp"
+#endif
+
 
 __CD__BEGIN
 ////////////////////////////////////////////////////
