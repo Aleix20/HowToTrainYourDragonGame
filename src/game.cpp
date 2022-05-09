@@ -9,6 +9,11 @@
 
 #include <cmath>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+ std::string PATH = "data/";
+#else
+std::string PATH = "../data/";
+#endif
 //some globals
 Mesh* mesh = NULL;
 Texture* texture = NULL;
@@ -46,6 +51,7 @@ std::vector<Entity*> entities;
 
 Entity drake;
 
+	std::string s;
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -68,16 +74,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
-
+	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-	mesh = Mesh::Get("data/island.ASE");
-	texture = Texture::Get("data/island_color.tga");
+	mesh = Mesh::Get((PATH + s.assign("island.ASE")).c_str());
+	texture = Texture::Get((PATH + s.assign("island_color.tga")).c_str());
 
-	drake.mesh= Mesh::Get("data/NightFury/Toothless.obj");
-	drake.texture = Texture::Get("data/NightFury/Toothless.png", true);
+	drake.mesh= Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str());
+	drake.texture = Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true);
 	Matrix44 drakeModel;
-	drakeModel.rotate(DEG2RAD * 180, Vector3(0, 1, 0));
-	drakeModel.setTranslation(0,0,0);
 	drake.model = drakeModel;
 
 
@@ -85,7 +89,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 
 	// example of shader loading using the shaders manager
-	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -148,7 +152,7 @@ void RenderPlanes() {
 
 	//enable shader
 	shader->enable();
-	planeTex = Texture::Get("data/spitfire_axis_color_spec.tga");
+	planeTex = Texture::Get((PATH + s.assign("spitfire_axis_color_spec.tga")).c_str());
 	Camera* cam = Game::instance->camera;
 	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
 	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
@@ -171,9 +175,9 @@ void RenderPlanes() {
 			if (dist > no_render_distance) {
 				continue;
 			}
-			Mesh* mesh = Mesh::Get("data/spitfire_low2.ASE");
+			Mesh* mesh = Mesh::Get((PATH + s.assign("spitfire_low2.ASE")).c_str());
 			if (dist < loadDistance) {
-				mesh = Mesh::Get("data/spitfire.ASE");
+				mesh = Mesh::Get((PATH + s.assign("spitfire.ASE")).c_str());
 			}
 			BoundingBox worldAABB  = transformBoundingBox(model, mesh->box);
 			if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
@@ -203,8 +207,8 @@ void AddEntityInFront(Camera* cam) {
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
 	Entity* entity = new Entity();
 	entity->model = model;
-	entity->mesh = Mesh::Get("data/Dragon_Busts_Gerhald3D.obj");
-	entity->texture = Texture::Get("data/BlackDragon_Horns2_Roughness.png");
+	entity->mesh = Mesh::Get((PATH + s.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
+	entity->texture = Texture::Get((PATH + s.assign("BlackDragon_Horns2_Roughness.png")).c_str());
 
 	entities.push_back(entity);
 }
@@ -225,8 +229,8 @@ void Game::render(void)
 	glDisable(GL_CULL_FACE);
 	if (cameraLocked) {
 
-		Vector3 eye = drake.model * Vector3(0.0f, 8.0f, -5.0f);
-		Vector3 center = drake.model * Vector3(0.0f, 0.0f, 10.0f);
+		Vector3 eye = drake.model * Vector3(0.0f, 40.0f,30.0f);
+		Vector3 center = drake.model * Vector3(0.0f, 0.0f, -20.0f);
 		Vector3 up = drake.model.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
 		camera->lookAt(eye, center, up);
@@ -278,12 +282,12 @@ void Game::update(double seconds_elapsed)
 		float planeSpeed = 50.0f * elapsed_time; 
 		float rotSpeed = 90.0f * DEG2RAD * elapsed_time;
 		
-		if (Input::isKeyPressed(SDL_SCANCODE_W)) drake.model.translate(0.0f, 0.0f, planeSpeed );
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) drake.model.translate(0.0f, 0.0f, -planeSpeed);
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) drake.model.translate(0.0f, 0.0f, -planeSpeed );
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) drake.model.translate(0.0f, 0.0f, planeSpeed);
 		if (Input::isKeyPressed(SDL_SCANCODE_A)) drake.model.rotate(-rotSpeed, Vector3(0.0f,1.0f,0.0f));
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) drake.model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_Q)) drake.model.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_E)) drake.model.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_Q)) drake.model.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
+		if (Input::isKeyPressed(SDL_SCANCODE_E)) drake.model.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
 	}
 	else {
 
