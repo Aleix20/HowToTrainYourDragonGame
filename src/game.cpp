@@ -12,7 +12,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
  std::string PATH = "data/";
 #else
-std::string PATH = "../data/";
+std::string PATH = "/Users/alexialozano/Desktop/UNIVERSIDAD/3ro/Jocs_Electronics/JocsElectronicsClasse-main/data/";
 #endif
 //some globals
 Mesh* mesh = NULL;
