@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
+#include "entityDragon.h"
 
 #include <cmath>
 
@@ -22,11 +23,11 @@ Shader* shader = NULL;
 Mesh* planeMesh = NULL;
 Texture* planeTex = NULL;
 Matrix44 planeModel;
-bool cameraLocked = true;
+
 
 Animation* anim = NULL;
 float angle = 0;
-float mouse_speed = 100.0f;
+
 FBO* fbo = NULL;
 
 Game* Game::instance = NULL;
@@ -39,19 +40,11 @@ float padding = 20.0f;
 float loadDistance = 200.0f;
 float no_render_distance = 1000.0f;
 
-class Entity {
-public:
-	Matrix44 model;
-	Mesh* mesh;
-	Texture* texture;
+std::vector<Entity*>  entities;
+EntityDragon dragon;
 
-};
+std::string s;
 
-std::vector<Entity*> entities;
-
-Entity drake;
-
-	std::string s;
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -78,18 +71,12 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	mesh = Mesh::Get((PATH + s.assign("island.ASE")).c_str());
 	texture = Texture::Get((PATH + s.assign("island_color.tga")).c_str());
-
-	drake.mesh= Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str());
-	drake.texture = Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true);
-	Matrix44 drakeModel;
-	drake.model = drakeModel;
-
-
-
+	dragon = EntityDragon(Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str()), Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true), Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str()), Matrix44());
+	cameraLocked = true;
 
 
 	// example of shader loading using the shaders manager
-	shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
+	//shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -127,26 +114,26 @@ void RenderIslands() {
 }
 
 
-void RenderMesh(Matrix44 model, Mesh* a_mesh, Texture* tex, Shader* a_shader, Camera* cam) {
-	//assert(a_mesh != null, "mesh in renderMesh was null");
-	if (!a_shader) return;
-
-	//enable shader
-	a_shader->enable();
-
-	//upload uniforms
-	a_shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-	a_shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-	a_shader->setUniform("u_texture", tex, 0);
-	a_shader->setUniform("u_time", time);
-
-	shader->setUniform("u_model", model);
-	a_mesh->render(GL_TRIANGLES);
-
-	//disable shader
-	a_shader->disable();
-
-}
+//void RenderMesh(Matrix44 model, Mesh* a_mesh, Texture* tex, Shader* a_shader, Camera* cam) {
+//	assert(a_mesh != null, "mesh in renderMesh was null");
+//	if (!a_shader) return;
+//
+//	enable shader
+//	a_shader->enable();
+//
+//	upload uniforms
+//	a_shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+//	a_shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+//	a_shader->setUniform("u_texture", tex, 0);
+//	a_shader->setUniform("u_time", time);
+//
+//	shader->setUniform("u_model", model);
+//	a_mesh->render(GL_TRIANGLES);
+//
+//	disable shader
+//	a_shader->disable();
+//
+//}
 void RenderPlanes() {
 	
 
@@ -205,7 +192,7 @@ void AddEntityInFront(Camera* cam) {
 	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
 	Matrix44 model;
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	Entity* entity = new Entity();
+	EntityDragon* entity = new EntityDragon();
 	entity->model = model;
 	entity->mesh = Mesh::Get((PATH + s.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
 	entity->texture = Texture::Get((PATH + s.assign("BlackDragon_Horns2_Roughness.png")).c_str());
@@ -229,28 +216,28 @@ void Game::render(void)
 	glDisable(GL_CULL_FACE);
 	if (cameraLocked) {
 
-		Vector3 eye = drake.model * Vector3(0.0f, 40.0f,30.0f);
-		Vector3 center = drake.model * Vector3(0.0f, 0.0f, -20.0f);
-		Vector3 up = drake.model.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
+		Vector3 eye = dragon.model * Vector3(0.0f, 40.0f,30.0f);
+		Vector3 center = dragon.model * Vector3(0.0f, 0.0f, -20.0f);
+		Vector3 up = dragon.model.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
 		camera->lookAt(eye, center, up);
 
 	}
 	
 	Matrix44 islandModel;
-	RenderMesh(islandModel, mesh, texture, shader, camera);
+	//RenderMesh(islandModel, mesh, texture, shader, camera);
 	
-	
-	RenderMesh(drake.model, drake.mesh, drake.texture, shader, camera);
-	RenderPlanes();
+	dragon.render();
+	//RenderMesh(drake.model, drake.mesh, drake.texture, shader, camera);
+	//RenderPlanes();
 	//mesh->renderBounding(model); //Ver boundings de un modelo
 	//create model matrix for cube
-	for (size_t i = 0; i < entities.size(); i++)
-	{
-		Entity* entity = entities[i];
+	//for (size_t i = 0; i < entities.size(); i++)
+	//{
+	//	Entity* entity = entities[i];
 
-		RenderMesh(entity->model, entity->mesh, entity->texture, shader, camera);
-	}
+	//	RenderMesh(entity->model, entity->mesh, entity->texture, shader, camera);
+	//}
 	//RenderIslands();
 
 	//Draw the floor grid
@@ -266,39 +253,27 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-	float speed = seconds_elapsed * mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
-
+	 
+	float speed = seconds_elapsed * mouse_speed;//the speed is defined by the seconds_elapsed so it goes constant
 	//example
 	angle += (float)seconds_elapsed * 10.0f;
-
-	//mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked ) //is left button pressed?
+	if ((Input::mouse_state & SDL_BUTTON_LEFT) || Game::instance->mouse_locked) //is left button pressed?
 	{
-		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
+		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
+		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 	}
 	if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) cameraLocked = !cameraLocked;
-	if (cameraLocked) {
-		float planeSpeed = 50.0f * elapsed_time; 
-		float rotSpeed = 90.0f * DEG2RAD * elapsed_time;
-		
-		if (Input::isKeyPressed(SDL_SCANCODE_W)) drake.model.translate(0.0f, 0.0f, -planeSpeed );
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) drake.model.translate(0.0f, 0.0f, planeSpeed);
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) drake.model.rotate(-rotSpeed, Vector3(0.0f,1.0f,0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) drake.model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_Q)) drake.model.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_E)) drake.model.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
-	}
-	else {
+	if(!cameraLocked) {
 
 		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
 		if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 		if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
-		
 
 	}
+	//mouse input to rotate the cam
+	dragon.update(seconds_elapsed);
 	//async input to move the camera around
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
