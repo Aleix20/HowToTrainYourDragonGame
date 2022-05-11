@@ -147,6 +147,8 @@ void RenderPlanes() {
 	shader->setUniform("u_time", time);
 
 
+
+
 	for (size_t i = 0; i < planes_width; i++)
 	{
 		for (size_t j = 0; j < planes_height; j++)
