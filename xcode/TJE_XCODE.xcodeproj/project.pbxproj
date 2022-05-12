@@ -38,6 +38,10 @@
 		12BE84F21981D8F20090DDBD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BE84F11981D8F20090DDBD /* SDL2.framework */; };
 		12D3D2D419903A8200779234 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D319903A8200779234 /* GLUT.framework */; };
 		12D3D2D619903A9A00779234 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D519903A9A00779234 /* OpenGL.framework */; };
+		E2BC2862282C57CE005A0631 /* entityDragon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2BC2861282C57CE005A0631 /* entityDragon.cpp */; };
+		E2EDD926282D93880089AA9B /* entityCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD925282D93880089AA9B /* entityCharacter.cpp */; };
+		E2EDD929282D946D0089AA9B /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD928282D946D0089AA9B /* entity.cpp */; };
+		E2EDD92C282D95400089AA9B /* entityMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD92B282D95400089AA9B /* entityMesh.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +91,14 @@
 		12BE84F11981D8F20090DDBD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		12D3D2D319903A8200779234 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		12D3D2D519903A9A00779234 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		E2BC285F282C57CE005A0631 /* entityDragon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entityDragon.h; path = ../../src/entityDragon.h; sourceTree = "<group>"; };
+		E2BC2860282C57CE005A0631 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entity.h; path = ../../src/entity.h; sourceTree = "<group>"; };
+		E2BC2861282C57CE005A0631 /* entityDragon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = entityDragon.cpp; path = ../../src/entityDragon.cpp; sourceTree = "<group>"; };
+		E2EDD925282D93880089AA9B /* entityCharacter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = entityCharacter.cpp; path = ../../src/entityCharacter.cpp; sourceTree = "<group>"; };
+		E2EDD927282D93B90089AA9B /* entityCharacter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = entityCharacter.h; path = ../../src/entityCharacter.h; sourceTree = "<group>"; };
+		E2EDD928282D946D0089AA9B /* entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = entity.cpp; path = ../../src/entity.cpp; sourceTree = "<group>"; };
+		E2EDD92A282D952B0089AA9B /* entityMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = entityMesh.h; path = ../../src/entityMesh.h; sourceTree = "<group>"; };
+		E2EDD92B282D95400089AA9B /* entityMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = entityMesh.cpp; path = ../../src/entityMesh.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +179,14 @@
 				128DBA191AD69163002B8C0C /* framework.h */,
 				128DBA1A1AD69163002B8C0C /* game.cpp */,
 				128DBA1B1AD69163002B8C0C /* game.h */,
+				E2BC2860282C57CE005A0631 /* entity.h */,
+				E2EDD928282D946D0089AA9B /* entity.cpp */,
+				E2BC2861282C57CE005A0631 /* entityDragon.cpp */,
+				E2BC285F282C57CE005A0631 /* entityDragon.h */,
+				E2EDD925282D93880089AA9B /* entityCharacter.cpp */,
+				E2EDD927282D93B90089AA9B /* entityCharacter.h */,
+				E2EDD92A282D952B0089AA9B /* entityMesh.h */,
+				E2EDD92B282D95400089AA9B /* entityMesh.cpp */,
 				128DBA1C1AD69163002B8C0C /* includes.h */,
 				128DBA1D1AD69163002B8C0C /* main.cpp */,
 				128DBA1E1AD69163002B8C0C /* mesh.cpp */,
@@ -231,6 +251,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -269,7 +290,9 @@
 				1208AC8D2433FCC500BB6E8A /* coldet_bld.cpp in Sources */,
 				1208AC8E2433FCC500BB6E8A /* tritri.cpp in Sources */,
 				1208AC8F2433FCC500BB6E8A /* math3d.cpp in Sources */,
+				E2EDD929282D946D0089AA9B /* entity.cpp in Sources */,
 				1208AC902433FCC500BB6E8A /* mytritri.cpp in Sources */,
+				E2EDD926282D93880089AA9B /* entityCharacter.cpp in Sources */,
 				1208AC912433FCC500BB6E8A /* box.cpp in Sources */,
 				1208AC922433FCC500BB6E8A /* coldet.cpp in Sources */,
 				1208AC932433FCC500BB6E8A /* sysdep.cpp in Sources */,
@@ -279,11 +302,13 @@
 				1208AC7D2433FC5500BB6E8A /* fbo.cpp in Sources */,
 				128DBA2F1AD69163002B8C0C /* shader.cpp in Sources */,
 				128DBA2A1AD69163002B8C0C /* framework.cpp in Sources */,
+				E2BC2862282C57CE005A0631 /* entityDragon.cpp in Sources */,
 				128DBA281AD69163002B8C0C /* camera.cpp in Sources */,
 				128DBA2C1AD69163002B8C0C /* main.cpp in Sources */,
 				128DBA2D1AD69163002B8C0C /* mesh.cpp in Sources */,
 				128DBA301AD69163002B8C0C /* texture.cpp in Sources */,
 				128DBA311AD69163002B8C0C /* utils.cpp in Sources */,
+				E2EDD92C282D95400089AA9B /* entityMesh.cpp in Sources */,
 				128DBA2E1AD69163002B8C0C /* rendertotexture.cpp in Sources */,
 				128DBA2B1AD69163002B8C0C /* game.cpp in Sources */,
 			);

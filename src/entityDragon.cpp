@@ -1,22 +1,19 @@
 #include "entityDragon.h"
 #include "input.h"
 
-Entity::Entity() {
-
-}
 EntityDragon::EntityDragon()
 {
 }
-EntityDragon::EntityDragon(Mesh* mesh, Texture* texture, Shader* shader, Matrix44 model) {
+EntityDragon::EntityDragon(Mesh* mesh, Texture* texture, Matrix44 model) {
 	this->model = model;
-	this->shader = shader;
 	this->name = "Toothless";
-	this->mesh = mesh;
 	this->texture = texture;
+    this->mesh = mesh;
 }
 
 void EntityDragon::render()
 {
+    Shader* shader = Game::instance->shader;
 	if (!shader) return;
 
 	

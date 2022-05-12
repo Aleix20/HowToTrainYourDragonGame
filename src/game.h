@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"
-
+#include "shader.h"
 
 class Game
 {
@@ -19,6 +19,7 @@ public:
 	SDL_Window* window;
 	int window_width;
 	int window_height;
+    Shader* shader;
 
 	//some globals
 	long frame;

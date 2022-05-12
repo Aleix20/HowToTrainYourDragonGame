@@ -7,18 +7,19 @@
 #include "input.h"
 #include "animation.h"
 #include "entityDragon.h"
+#include "entityMesh.h"
 
 #include <cmath>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
  std::string PATH = "data/";
 #else
-std::string PATH = "/Users/alexialozano/Desktop/UNIVERSIDAD/3ro/Jocs_Electronics/JocsElectronicsClasse-main/data/";
+std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
 #endif
 //some globals
 Mesh* mesh = NULL;
 Texture* texture = NULL;
-Shader* shader = NULL;
+
 
 Mesh* planeMesh = NULL;
 Texture* planeTex = NULL;
@@ -40,9 +41,11 @@ float padding = 20.0f;
 float loadDistance = 200.0f;
 float no_render_distance = 1000.0f;
 
-std::vector<Entity*>  entities;
+std::vector<EntityMesh*> entities;
 EntityDragon dragon;
-
+EntityMesh island;
+EntityMesh ground;
+EntityMesh sky;
 std::string s;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
@@ -69,118 +72,32 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-	mesh = Mesh::Get((PATH + s.assign("island.ASE")).c_str());
-	texture = Texture::Get((PATH + s.assign("island_color.tga")).c_str());
-	dragon = EntityDragon(Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str()), Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true), Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str()), Matrix44());
+    
+	
+	
+	dragon = EntityDragon(Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str()), Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true), Matrix44());
 	cameraLocked = true;
-
-
+    
+    shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
+    island = EntityMesh();
+    island.model = Matrix44();
+    island.mesh = Mesh::Get((PATH + s.assign("island.ASE")).c_str());
+    island.texture = Texture::Get((PATH + s.assign("island_color.tga")).c_str());
+    
+    ground = EntityMesh();
+    ground.mesh = Mesh::Get((PATH + s.assign("terrain/terrain.ASE")).c_str());
+    ground.texture = Texture::Get((PATH + s.assign("terrain/terrain.tga")).c_str());
+    sky = EntityMesh();
+    sky.mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
+    sky.texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
+    
+    
 	// example of shader loading using the shaders manager
-	//shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
-
+	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
-void RenderIslands() {
-	if (shader)
-	{
-		//enable shader
-		shader->enable();
 
-		//upload uniforms
-		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-		shader->setUniform("u_viewprojection", Game::instance->camera->viewprojection_matrix);
-		shader->setUniform("u_texture", texture, 0);
-		shader->setUniform("u_time", time);
-
-		//float padding = 10000.0f;
-		Matrix44 m;
-		for (size_t i = 0; i < 10; i++)
-		{
-			for (size_t j = 0; j < 10; j++)
-			{
-				Vector3 size = mesh->box.halfsize * 2;
-				m.setTranslation(size.x * i, 0.0f, size.z * j);
-				shader->setUniform("u_model", m);
-				mesh->render(GL_TRIANGLES);
-			}
-		}
-
-		//do the draw call
-
-		//disable shader
-		shader->disable();
-	}
-}
-
-
-//void RenderMesh(Matrix44 model, Mesh* a_mesh, Texture* tex, Shader* a_shader, Camera* cam) {
-//	assert(a_mesh != null, "mesh in renderMesh was null");
-//	if (!a_shader) return;
-//
-//	enable shader
-//	a_shader->enable();
-//
-//	upload uniforms
-//	a_shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-//	a_shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-//	a_shader->setUniform("u_texture", tex, 0);
-//	a_shader->setUniform("u_time", time);
-//
-//	shader->setUniform("u_model", model);
-//	a_mesh->render(GL_TRIANGLES);
-//
-//	disable shader
-//	a_shader->disable();
-//
-//}
-void RenderPlanes() {
-	
-
-	//enable shader
-	shader->enable();
-	planeTex = Texture::Get((PATH + s.assign("spitfire_axis_color_spec.tga")).c_str());
-	Camera* cam = Game::instance->camera;
-	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-	shader->setUniform("u_texture", planeTex, 0);
-	shader->setUniform("u_time", time);
-
-
-
-
-	for (size_t i = 0; i < planes_width; i++)
-	{
-		for (size_t j = 0; j < planes_height; j++)
-		{
-			Matrix44 model;
-			model.translate(i * padding, 0.0f, j * padding);
-
-			Vector3 planePos = model.getTranslation();
-
-			Vector3 camPos = cam->eye;
-			float dist = planePos.distance(camPos);
-
-			if (dist > no_render_distance) {
-				continue;
-			}
-			Mesh* mesh = Mesh::Get((PATH + s.assign("spitfire_low2.ASE")).c_str());
-			if (dist < loadDistance) {
-				mesh = Mesh::Get((PATH + s.assign("spitfire.ASE")).c_str());
-			}
-			BoundingBox worldAABB  = transformBoundingBox(model, mesh->box);
-			if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
-				continue;
-			}
-			
-			shader->setUniform("u_model", model);
-			mesh->render(GL_TRIANGLES);
-			
-		}
-	}
-	//disable shader
-	shader->disable();
-}
 
 void AddEntityInFront(Camera* cam) {
 
@@ -188,19 +105,41 @@ void AddEntityInFront(Camera* cam) {
 	Game* g = Game::instance;
 	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
 	Vector3 rayOrigin = cam->eye;
-	RayPlaneCollision(Vector3(), Vector3(0,1,0), rayOrigin, dir );
-
 
 	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
 	Matrix44 model;
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	EntityDragon* entity = new EntityDragon();
+	EntityMesh* entity = new EntityMesh();
 	entity->model = model;
 	entity->mesh = Mesh::Get((PATH + s.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
 	entity->texture = Texture::Get((PATH + s.assign("BlackDragon_Horns2_Roughness.png")).c_str());
 
 	entities.push_back(entity);
 }
+//no entiendo que hace aqui
+void RayPickCheck (Camera* cam){
+    //esto exactamente no se lo que hace
+    Vector2 mouse = Input::mouse_position;
+    Game* g = Game::instance;
+    Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+    Vector3 rayOrigin = cam->eye;
+    
+    for (size_t i = 0; entities.size(); i ++){
+        Entity* entity = entities[i];
+        Vector3 pos;
+        Vector3 normal;
+        if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)){
+            std::cout <<"selected" <<std::endl;
+            break;
+        }
+    };
+    
+};
+//void RotateSelected(float angleDegrees){
+//    if (selectedEntity == NULL){
+//        return;
+//    };
+//};
 //what to do when the image has to be draw
 void Game::render(void)
 {
@@ -225,30 +164,25 @@ void Game::render(void)
 		camera->lookAt(eye, center, up);
 
 	}
+    
+    for(int i = 0; i < entities.size(); i++ ){
+        entities[i]->render();
+    }
 	
-	Matrix44 islandModel;
-	//RenderMesh(islandModel, mesh, texture, shader, camera);
-	
+
 	dragon.render();
-	//RenderMesh(drake.model, drake.mesh, drake.texture, shader, camera);
-	//RenderPlanes();
-	//mesh->renderBounding(model); //Ver boundings de un modelo
-	//create model matrix for cube
-	//for (size_t i = 0; i < entities.size(); i++)
-	//{
-	//	Entity* entity = entities[i];
-
-	//	RenderMesh(entity->model, entity->mesh, entity->texture, shader, camera);
-	//}
-	//RenderIslands();
-
-	//Draw the floor grid
+//    island.render();
+    ground.render();
+    
+    Matrix44 skyModel;
+    skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
+    sky.model = skyModel;
+    glDisable(GL_DEPTH_TEST);
+    sky.render();
+    glEnable(GL_DEPTH_TEST);
 	drawGrid();
 
-	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-
-	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
 }
 

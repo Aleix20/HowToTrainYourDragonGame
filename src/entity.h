@@ -5,6 +5,8 @@
 #include <string>
 #include "texture.h"
 #include "mesh.h"
+#include "shader.h"
+
 class Entity
 {
 public:
@@ -14,6 +16,8 @@ public:
     //some attributes 
     std::string name;
     Matrix44 model;
+    Mesh* mesh;
+    Texture* texture;
 
 
     //methods overwritten by derived classes 
