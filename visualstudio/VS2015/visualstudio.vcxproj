@@ -128,7 +128,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\animation.cpp" />
     <ClCompile Include="..\..\src\camera.cpp" />
+    <ClCompile Include="..\..\src\entityCharacter.cpp" />
     <ClCompile Include="..\..\src\entityDragon.cpp" />
+    <ClCompile Include="..\..\src\entityMesh.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\box.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\box_bld.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\coldet.cpp" />
@@ -155,7 +157,9 @@
     <ClInclude Include="..\..\src\animation.h" />
     <ClInclude Include="..\..\src\camera.h" />
     <ClInclude Include="..\..\src\entity.h" />
+    <ClInclude Include="..\..\src\entityCharacter.h" />
     <ClInclude Include="..\..\src\entityDragon.h" />
+    <ClInclude Include="..\..\src\entityMesh.h" />
     <ClInclude Include="..\..\src\extra\coldet\box.h" />
     <ClInclude Include="..\..\src\extra\coldet\coldet.h" />
     <ClInclude Include="..\..\src\extra\coldet\coldetimpl.h" />

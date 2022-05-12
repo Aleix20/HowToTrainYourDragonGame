@@ -10,7 +10,7 @@
 class Entity
 {
 public:
-    Entity(); //constructor
+    Entity(){}; //constructor
     virtual ~Entity() {}; //destructor
 
     //some attributes 

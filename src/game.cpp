@@ -164,6 +164,12 @@ void Game::render(void)
 		camera->lookAt(eye, center, up);
 
 	}
+    Matrix44 skyModel;
+    skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
+    sky.model = skyModel;
+    glDisable(GL_DEPTH_TEST);
+    sky.render();
+    glEnable(GL_DEPTH_TEST);
     
     for(int i = 0; i < entities.size(); i++ ){
         entities[i]->render();
@@ -174,12 +180,6 @@ void Game::render(void)
 //    island.render();
     ground.render();
     
-    Matrix44 skyModel;
-    skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
-    sky.model = skyModel;
-    glDisable(GL_DEPTH_TEST);
-    sky.render();
-    glEnable(GL_DEPTH_TEST);
 	drawGrid();
 
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);

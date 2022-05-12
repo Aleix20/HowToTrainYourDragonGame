@@ -65,6 +65,8 @@
       <Filter>extra</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\entityDragon.cpp" />
+    <ClCompile Include="..\..\src\entityCharacter.cpp" />
+    <ClCompile Include="..\..\src\entityMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -128,6 +130,8 @@
     </ClInclude>
     <ClInclude Include="..\..\src\entity.h" />
     <ClInclude Include="..\..\src\entityDragon.h" />
+    <ClInclude Include="..\..\src\entityCharacter.h" />
+    <ClInclude Include="..\..\src\entityMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">
