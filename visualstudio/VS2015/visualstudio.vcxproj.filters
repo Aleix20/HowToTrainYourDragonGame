@@ -67,6 +67,8 @@
     <ClCompile Include="..\..\src\entityDragon.cpp" />
     <ClCompile Include="..\..\src\entityCharacter.cpp" />
     <ClCompile Include="..\..\src\entityMesh.cpp" />
+    <ClCompile Include="..\..\src\world.cpp" />
+    <ClCompile Include="..\..\src\entityCharacterDragon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -132,6 +134,8 @@
     <ClInclude Include="..\..\src\entityDragon.h" />
     <ClInclude Include="..\..\src\entityCharacter.h" />
     <ClInclude Include="..\..\src\entityMesh.h" />
+    <ClInclude Include="..\..\src\world.h" />
+    <ClInclude Include="..\..\src\entityCharacterDragon.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

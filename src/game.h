@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "shader.h"
 
+
 class Game
 {
 public:
@@ -20,6 +21,7 @@ public:
 	int window_width;
 	int window_height;
     Shader* shader;
+	
 
 	//some globals
 	long frame;

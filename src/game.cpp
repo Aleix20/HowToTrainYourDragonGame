@@ -6,15 +6,15 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
-#include "entityDragon.h"
-#include "entityMesh.h"
+
+#include "world.h"
 
 #include <cmath>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
- std::string PATH = "data/";
+std::string PATH1 = "data/";
 #else
-std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
 #endif
 //some globals
 Mesh* mesh = NULL;
@@ -42,11 +42,10 @@ float loadDistance = 200.0f;
 float no_render_distance = 1000.0f;
 
 std::vector<EntityMesh*> entities;
-EntityDragon dragon;
-EntityMesh island;
-EntityMesh ground;
-EntityMesh sky;
-std::string s;
+
+
+World world;
+std::string a;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -72,50 +71,34 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-    
+	world = World();
 	
-	
-	dragon = EntityDragon(Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str()), Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true), Matrix44());
 	cameraLocked = true;
     
-    shader = Shader::Get((PATH + s.assign("shaders/basic.vs")).c_str(), (PATH + s.assign("shaders/texture.fs")).c_str());
-    island = EntityMesh();
-    island.model = Matrix44();
-    island.mesh = Mesh::Get((PATH + s.assign("island.ASE")).c_str());
-    island.texture = Texture::Get((PATH + s.assign("island_color.tga")).c_str());
-    
-    ground = EntityMesh();
-    ground.mesh = Mesh::Get((PATH + s.assign("terrain/terrain.ASE")).c_str());
-    ground.texture = Texture::Get((PATH + s.assign("terrain/terrain.tga")).c_str());
-    sky = EntityMesh();
-    sky.mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
-    sky.texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
-    
-    
-	// example of shader loading using the shaders manager
-	
+    shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
+
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
 
 
-void AddEntityInFront(Camera* cam) {
-
-	Vector2 mouse = Input::mouse_position;
-	Game* g = Game::instance;
-	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
-	Vector3 rayOrigin = cam->eye;
-
-	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
-	Matrix44 model;
-	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	EntityMesh* entity = new EntityMesh();
-	entity->model = model;
-	entity->mesh = Mesh::Get((PATH + s.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
-	entity->texture = Texture::Get((PATH + s.assign("BlackDragon_Horns2_Roughness.png")).c_str());
-
-	entities.push_back(entity);
-}
+//void AddEntityInFront(Camera* cam) {
+//
+//	Vector2 mouse = Input::mouse_position;
+//	Game* g = Game::instance;
+//	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+//	Vector3 rayOrigin = cam->eye;
+//
+//	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
+//	Matrix44 model;
+//	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
+//	EntityMesh* entity = new EntityMesh();
+//	entity->model = model;
+//	entity->mesh = Mesh::Get((PATH1 + a.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
+//	entity->texture = Texture::Get((PATH1 + a.assign("BlackDragon_Horns2_Roughness.png")).c_str());
+//
+//	entities.push_back(entity);
+//}
 //no entiendo que hace aqui
 void RayPickCheck (Camera* cam){
     //esto exactamente no se lo que hace
@@ -135,12 +118,7 @@ void RayPickCheck (Camera* cam){
     };
     
 };
-//void RotateSelected(float angleDegrees){
-//    if (selectedEntity == NULL){
-//        return;
-//    };
-//};
-//what to do when the image has to be draw
+
 void Game::render(void)
 {
 	//set the clear color (the background color)
@@ -156,29 +134,35 @@ void Game::render(void)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	if (cameraLocked) {
-
-		Vector3 eye = dragon.model * Vector3(0.0f, 40.0f,30.0f);
-		Vector3 center = dragon.model * Vector3(0.0f, 0.0f, -20.0f);
-		Vector3 up = dragon.model.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
+		int currentDragon = world.currentDragon;
+		Matrix44 currentDragonModel = world.dynamicEntitiesDragons[currentDragon]->model;
+		Vector3 eye = currentDragonModel * Vector3(0.0f, 40.0f, 30.0f);
+		Vector3 center = currentDragonModel * Vector3(0.0f, 0.0f, -20.0f);
+		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
 		camera->lookAt(eye, center, up);
 
 	}
     Matrix44 skyModel;
     skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
-    sky.model = skyModel;
+	world.sky.model = skyModel;
     glDisable(GL_DEPTH_TEST);
-    sky.render();
+	world.sky.render();
     glEnable(GL_DEPTH_TEST);
-    
-    for(int i = 0; i < entities.size(); i++ ){
+
+	int dynamicDragonsLength = world.dynamicEntitiesDragons.size();
+	for (size_t i = 0; i < dynamicDragonsLength; i++)
+	{
+		world.dynamicEntitiesDragons[i]->render();
+
+	}
+ /*   for(int i = 0; i < entities.size(); i++ ){
         entities[i]->render();
-    }
+    }*/
 	
 
-	dragon.render();
 //    island.render();
-    ground.render();
+	world.ground.render();
     
 	drawGrid();
 
@@ -209,7 +193,9 @@ void Game::update(double seconds_elapsed)
 
 	}
 	//mouse input to rotate the cam
-	dragon.update(seconds_elapsed);
+	int currentDragon = world.currentDragon;
+	EntityCharacterDragon* currentDragonEntity = world.dynamicEntitiesDragons[currentDragon];
+	currentDragonEntity->update(seconds_elapsed);
 	//async input to move the camera around
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
@@ -223,7 +209,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	{
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
-		case SDLK_2: AddEntityInFront(camera); break;
+		//case SDLK_2: AddEntityInFront(camera); break;
 	}
 }
 
