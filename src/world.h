@@ -9,7 +9,7 @@
 #include "shader.h"
 class EntityMesh;
 class EntityCharacterDragon;
-class EntityCharacterDragon;
+class EntityCharacter;
 
 class World
 {
