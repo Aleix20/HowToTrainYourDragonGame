@@ -9,8 +9,8 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
-
-
+#include "world.h"
+class World;
 class Game
 {
 public:
@@ -21,7 +21,7 @@ public:
 	int window_width;
 	int window_height;
     Shader* shader;
-	
+	World* world;
 
 	//some globals
 	long frame;

@@ -7,7 +7,6 @@
 #include "input.h"
 #include "animation.h"
 
-#include "world.h"
 
 #include <cmath>
 
@@ -41,14 +40,15 @@ float padding = 20.0f;
 float loadDistance = 200.0f;
 float no_render_distance = 1000.0f;
 
-std::vector<EntityMesh*> entities;
+//std::vector<EntityMesh*> entities;
 
 
-World world;
+
 std::string a;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
+	
 	this->window_width = window_width;
 	this->window_height = window_height;
 	this->window = window;
@@ -69,13 +69,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
+    shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
 	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-	world = World();
+	world = new World();
 	
 	cameraLocked = true;
     
-    shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -100,24 +100,24 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 //	entities.push_back(entity);
 //}
 //no entiendo que hace aqui
-void RayPickCheck (Camera* cam){
-    //esto exactamente no se lo que hace
-    Vector2 mouse = Input::mouse_position;
-    Game* g = Game::instance;
-    Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
-    Vector3 rayOrigin = cam->eye;
-    
-    for (size_t i = 0; entities.size(); i ++){
-        Entity* entity = entities[i];
-        Vector3 pos;
-        Vector3 normal;
-        if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)){
-            std::cout <<"selected" <<std::endl;
-            break;
-        }
-    };
-    
-};
+//void RayPickCheck (Camera* cam){
+//    //esto exactamente no se lo que hace
+//    Vector2 mouse = Input::mouse_position;
+//    Game* g = Game::instance;
+//    Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+//    Vector3 rayOrigin = cam->eye;
+//    
+//    for (size_t i = 0; entities.size(); i ++){
+//        Entity* entity = entities[i];
+//        Vector3 pos;
+//        Vector3 normal;
+//        if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)){
+//            std::cout <<"selected" <<std::endl;
+//            break;
+//        }
+//    };
+//    
+//};
 
 void Game::render(void)
 {
@@ -133,9 +133,10 @@ void Game::render(void)
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
+	camera->enable();
 	if (cameraLocked) {
-		int currentDragon = world.currentDragon;
-		Matrix44 currentDragonModel = world.dynamicEntitiesDragons[currentDragon]->model;
+		int currentDragon = world->currentDragon;
+		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
 		Vector3 eye = currentDragonModel * Vector3(0.0f, 40.0f, 30.0f);
 		Vector3 center = currentDragonModel * Vector3(0.0f, 0.0f, -20.0f);
 		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
@@ -145,15 +146,15 @@ void Game::render(void)
 	}
     Matrix44 skyModel;
     skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
-	world.sky.model = skyModel;
+	world->sky->model = skyModel;
     glDisable(GL_DEPTH_TEST);
-	world.sky.render();
+	world->sky->render();
     glEnable(GL_DEPTH_TEST);
 
-	int dynamicDragonsLength = world.dynamicEntitiesDragons.size();
+	int dynamicDragonsLength = world->dynamicEntitiesDragons.size();
 	for (size_t i = 0; i < dynamicDragonsLength; i++)
 	{
-		world.dynamicEntitiesDragons[i]->render();
+		world->dynamicEntitiesDragons[i]->render();
 
 	}
  /*   for(int i = 0; i < entities.size(); i++ ){
@@ -162,7 +163,8 @@ void Game::render(void)
 	
 
 //    island.render();
-	world.ground.render();
+	Matrix44 a = camera->viewprojection_matrix;
+	world->ground->render();
     
 	drawGrid();
 
@@ -193,8 +195,8 @@ void Game::update(double seconds_elapsed)
 
 	}
 	//mouse input to rotate the cam
-	int currentDragon = world.currentDragon;
-	EntityCharacterDragon* currentDragonEntity = world.dynamicEntitiesDragons[currentDragon];
+	int currentDragon = world->currentDragon;
+	EntityCharacterDragon* currentDragonEntity = world->dynamicEntitiesDragons[currentDragon];
 	currentDragonEntity->update(seconds_elapsed);
 	//async input to move the camera around
 	//to navigate with the mouse fixed in the middle
