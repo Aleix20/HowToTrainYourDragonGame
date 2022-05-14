@@ -145,8 +145,8 @@ void Game::render(void)
 		
 		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
 		EntityCharacterDragon* currentEntityDragon = world->dynamicEntitiesDragons[currentDragon];
-		Vector3 eye = currentDragonModel * Vector3(0.0f, 40.0f, 30.0f);
-		Vector3 center = currentDragonModel * Vector3(0.0f, 0.0f, -20.0f);
+		Vector3 eye = currentDragonModel * Vector3(0.0f, 5.5f, 5.0f);
+		Vector3 center = currentDragonModel * Vector3(0.0f, 5.0f, -5.0f);
 		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
 		camera->lookAt(eye, center, up);
@@ -156,8 +156,8 @@ void Game::render(void)
 	else if (cameraLocked && !world->topOfDragon) {
 		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		Matrix44 currentCharacterModel = world->mainCharacter->model;
-		Vector3 eye = currentCharacterModel * Vector3(0.0f, 2.0f, 5.0f);
-		Vector3 center = currentCharacterModel * Vector3(0.0f, 0.0f, -10.0f);
+		Vector3 eye = currentCharacterModel * Vector3(0.0f, 5.0f, 5.0f);
+		Vector3 center = currentCharacterModel * Vector3(0.0f, 0.0f, -5.0f);
 		Vector3 up = currentCharacterModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
 		camera->enable();
 		camera->lookAt(eye, center, up);
@@ -168,10 +168,17 @@ void Game::render(void)
 	}
 
 	
- /*   for(int i = 0; i < entities.size(); i++ ){
-        entities[i]->render();
-    }*/
+    for(int i = 0; i < world->staticEntities.size(); i++ ){
+        world->staticEntities[i]->render();
+    }
 	
+    for(int i = 0; i < world->staticEntitiesCharacter.size(); i++ ){
+        EntityMesh* currentCharacter =world->staticEntitiesCharacter[i];
+        currentCharacter->render();
+       
+    }
+    
+    
 	
 	//world->ground->render();
     
@@ -238,7 +245,19 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 				}
 			}
 			break;
-		
+        case SDLK_f:
+            for(int i = 0; i < world->staticEntitiesCharacter.size(); i++ ){
+                EntityMesh* currentCharacter =world->staticEntitiesCharacter[i];
+                Vector3 currentCharacterPosition = currentCharacter->getPosition();
+                if(currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 10.0f){
+                    if(currentCharacter->name.compare("Mission1")){
+                        world->staticEntities[1]->render();
+                    }
+                }
+               
+            }
+            
+            
 
 	}
 }

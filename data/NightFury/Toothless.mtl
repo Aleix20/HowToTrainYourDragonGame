@@ -1,7 +1,12 @@
-newmtl acmat_0
-Kd 1 1 1
-Ka 0.2 0.2 0.2
-Ks 0.2 0.2 0.2
-Ns 128
-Tr 0
-map_Kd Toothless.png
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl acmat_0_1_13be47e7-8264-4806-a66e-7f4921be891e
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2

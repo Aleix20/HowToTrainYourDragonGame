@@ -8,7 +8,3 @@
 
 #include <stdio.h>
 #include "entity.h"
-
-Entity::Entity() {
-
-}

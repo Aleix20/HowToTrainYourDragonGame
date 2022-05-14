@@ -38,7 +38,8 @@
 		12BE84F21981D8F20090DDBD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BE84F11981D8F20090DDBD /* SDL2.framework */; };
 		12D3D2D419903A8200779234 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D319903A8200779234 /* GLUT.framework */; };
 		12D3D2D619903A9A00779234 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D519903A9A00779234 /* OpenGL.framework */; };
-		E2BC2862282C57CE005A0631 /* entityDragon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2BC2861282C57CE005A0631 /* entityDragon.cpp */; };
+		E29E95F9282FAE95002F0B39 /* entityCharacterDragon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29E95F6282FAE95002F0B39 /* entityCharacterDragon.cpp */; };
+		E29E95FA282FAE95002F0B39 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29E95F8282FAE95002F0B39 /* world.cpp */; };
 		E2EDD926282D93880089AA9B /* entityCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD925282D93880089AA9B /* entityCharacter.cpp */; };
 		E2EDD929282D946D0089AA9B /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD928282D946D0089AA9B /* entity.cpp */; };
 		E2EDD92C282D95400089AA9B /* entityMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD92B282D95400089AA9B /* entityMesh.cpp */; };
@@ -91,9 +92,11 @@
 		12BE84F11981D8F20090DDBD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		12D3D2D319903A8200779234 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		12D3D2D519903A9A00779234 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		E2BC285F282C57CE005A0631 /* entityDragon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entityDragon.h; path = ../../src/entityDragon.h; sourceTree = "<group>"; };
+		E29E95F5282FAE95002F0B39 /* entityCharacterDragon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entityCharacterDragon.h; path = ../../src/entityCharacterDragon.h; sourceTree = "<group>"; };
+		E29E95F6282FAE95002F0B39 /* entityCharacterDragon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = entityCharacterDragon.cpp; path = ../../src/entityCharacterDragon.cpp; sourceTree = "<group>"; };
+		E29E95F7282FAE95002F0B39 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = world.h; path = ../../src/world.h; sourceTree = "<group>"; };
+		E29E95F8282FAE95002F0B39 /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = world.cpp; path = ../../src/world.cpp; sourceTree = "<group>"; };
 		E2BC2860282C57CE005A0631 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entity.h; path = ../../src/entity.h; sourceTree = "<group>"; };
-		E2BC2861282C57CE005A0631 /* entityDragon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = entityDragon.cpp; path = ../../src/entityDragon.cpp; sourceTree = "<group>"; };
 		E2EDD925282D93880089AA9B /* entityCharacter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = entityCharacter.cpp; path = ../../src/entityCharacter.cpp; sourceTree = "<group>"; };
 		E2EDD927282D93B90089AA9B /* entityCharacter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = entityCharacter.h; path = ../../src/entityCharacter.h; sourceTree = "<group>"; };
 		E2EDD928282D946D0089AA9B /* entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = entity.cpp; path = ../../src/entity.cpp; sourceTree = "<group>"; };
@@ -180,9 +183,11 @@
 				128DBA1A1AD69163002B8C0C /* game.cpp */,
 				128DBA1B1AD69163002B8C0C /* game.h */,
 				E2BC2860282C57CE005A0631 /* entity.h */,
+				E29E95F6282FAE95002F0B39 /* entityCharacterDragon.cpp */,
+				E29E95F5282FAE95002F0B39 /* entityCharacterDragon.h */,
+				E29E95F8282FAE95002F0B39 /* world.cpp */,
+				E29E95F7282FAE95002F0B39 /* world.h */,
 				E2EDD928282D946D0089AA9B /* entity.cpp */,
-				E2BC2861282C57CE005A0631 /* entityDragon.cpp */,
-				E2BC285F282C57CE005A0631 /* entityDragon.h */,
 				E2EDD925282D93880089AA9B /* entityCharacter.cpp */,
 				E2EDD927282D93B90089AA9B /* entityCharacter.h */,
 				E2EDD92A282D952B0089AA9B /* entityMesh.h */,
@@ -286,8 +291,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1208AC952433FD5800BB6E8A /* input.cpp in Sources */,
+				E29E95F9282FAE95002F0B39 /* entityCharacterDragon.cpp in Sources */,
 				1208AC8C2433FCC500BB6E8A /* box_bld.cpp in Sources */,
 				1208AC8D2433FCC500BB6E8A /* coldet_bld.cpp in Sources */,
+				E29E95FA282FAE95002F0B39 /* world.cpp in Sources */,
 				1208AC8E2433FCC500BB6E8A /* tritri.cpp in Sources */,
 				1208AC8F2433FCC500BB6E8A /* math3d.cpp in Sources */,
 				E2EDD929282D946D0089AA9B /* entity.cpp in Sources */,
@@ -302,7 +309,6 @@
 				1208AC7D2433FC5500BB6E8A /* fbo.cpp in Sources */,
 				128DBA2F1AD69163002B8C0C /* shader.cpp in Sources */,
 				128DBA2A1AD69163002B8C0C /* framework.cpp in Sources */,
-				E2BC2862282C57CE005A0631 /* entityDragon.cpp in Sources */,
 				128DBA281AD69163002B8C0C /* camera.cpp in Sources */,
 				128DBA2C1AD69163002B8C0C /* main.cpp in Sources */,
 				128DBA2D1AD69163002B8C0C /* mesh.cpp in Sources */,
