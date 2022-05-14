@@ -133,38 +133,47 @@ void Game::render(void)
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
-	camera->enable();
-	if (cameraLocked) {
-		int currentDragon = world->currentDragon;
-		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
-		Vector3 eye = currentDragonModel * Vector3(0.0f, 40.0f, 30.0f);
-		Vector3 center = currentDragonModel * Vector3(0.0f, 0.0f, -20.0f);
-		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
-		camera->enable();
-		camera->lookAt(eye, center, up);
-
-	}
     Matrix44 skyModel;
     skyModel.translate(camera->eye.x, camera->eye.y -40.0f, camera->eye.z);
 	world->sky->model = skyModel;
     glDisable(GL_DEPTH_TEST);
 	world->sky->render();
     glEnable(GL_DEPTH_TEST);
-
-	int dynamicDragonsLength = world->dynamicEntitiesDragons.size();
-	for (size_t i = 0; i < dynamicDragonsLength; i++)
-	{
-		world->dynamicEntitiesDragons[i]->render();
+	//camera->enable();
+	int currentDragon = world->currentDragon;
+	if (cameraLocked && world->topOfDragon) {
+		
+		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
+		EntityCharacterDragon* currentEntityDragon = world->dynamicEntitiesDragons[currentDragon];
+		Vector3 eye = currentDragonModel * Vector3(0.0f, 40.0f, 30.0f);
+		Vector3 center = currentDragonModel * Vector3(0.0f, 0.0f, -20.0f);
+		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
+		camera->enable();
+		camera->lookAt(eye, center, up);
+		currentEntityDragon->render();
 
 	}
+	else if (cameraLocked && !world->topOfDragon) {
+		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
+		Matrix44 currentCharacterModel = world->mainCharacter->model;
+		Vector3 eye = currentCharacterModel * Vector3(0.0f, 2.0f, 5.0f);
+		Vector3 center = currentCharacterModel * Vector3(0.0f, 0.0f, -10.0f);
+		Vector3 up = currentCharacterModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
+		camera->enable();
+		camera->lookAt(eye, center, up);
+		world->mainCharacter->render();
+		currentStaticDragon->render();
+
+		
+	}
+
+	
  /*   for(int i = 0; i < entities.size(); i++ ){
         entities[i]->render();
     }*/
 	
-
-//    island.render();
-	Matrix44 a = camera->viewprojection_matrix;
-	world->ground->render();
+	
+	//world->ground->render();
     
 	drawGrid();
 
@@ -194,10 +203,16 @@ void Game::update(double seconds_elapsed)
 		if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 
 	}
+
+	if (world->topOfDragon) {
+		int currentDragon = world->currentDragon;
+		EntityCharacterDragon* currentDragonEntity = world->dynamicEntitiesDragons[currentDragon];
+		currentDragonEntity->update(seconds_elapsed);
+	}
+	
+	world->mainCharacter->update(seconds_elapsed);
 	//mouse input to rotate the cam
-	int currentDragon = world->currentDragon;
-	EntityCharacterDragon* currentDragonEntity = world->dynamicEntitiesDragons[currentDragon];
-	currentDragonEntity->update(seconds_elapsed);
+	
 	//async input to move the camera around
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
@@ -212,6 +227,19 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
 		//case SDLK_2: AddEntityInFront(camera); break;
+		case SDLK_3:
+			if (world->mainCharacter->getPosition().distance(Vector3(5, 0, 5))<10.0f) {
+
+				if (world->topOfDragon) {
+					world->topOfDragon = !world->topOfDragon;
+				}
+				else {
+					world->topOfDragon = true;
+				}
+			}
+			break;
+		
+
 	}
 }
 

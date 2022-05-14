@@ -17,7 +17,6 @@ void World::loadResources()
 #endif
     //EntityMesh island;
     
-    EntityCharacterDragon* firstDragon;
 
    /* island = EntityMesh();
     island.mesh = Mesh::Get((PATH1 + s.assign("island.ASE")).c_str());
@@ -35,6 +34,8 @@ void World::loadResources()
     this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
     //this->staticEntities.push_back(sky);
 
+
+    EntityCharacterDragon* firstDragon;
     firstDragon = new EntityCharacterDragon();
     firstDragon->mesh = Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str());
     firstDragon->texture = Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true);
@@ -42,4 +43,17 @@ void World::loadResources()
     firstDragon->characterTex = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str());
 
     this->dynamicEntitiesDragons.push_back(firstDragon);
+
+    EntityMesh* defaultDragon = new EntityMesh();
+    defaultDragon->mesh = Mesh::Get((PATH + s.assign("NightFury/Toothless.obj")).c_str());
+    defaultDragon->texture = Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true);
+    Matrix44 staticDragonModel = Matrix44();
+    staticDragonModel.translate(5,0,5);
+    defaultDragon->model = staticDragonModel;
+
+    this->staticEntitiesDragons.push_back(defaultDragon);
+
+    this->mainCharacter = new EntityCharacter();
+    this->mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
+    this->mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str());
 }
