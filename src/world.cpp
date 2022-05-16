@@ -83,4 +83,6 @@ void World::loadResources()
     astrid->model = astridModel;
     this->staticEntitiesCharacter.push_back(astrid);
     
+    
+    
 }

@@ -20,10 +20,13 @@ Mesh* mesh = NULL;
 Texture* texture = NULL;
 
 
+
 Mesh* planeMesh = NULL;
 Texture* planeTex = NULL;
 Matrix44 planeModel;
 
+EntityMesh* bomb = new EntityMesh();
+Matrix44 bombOffset;
 
 Animation* anim = NULL;
 float angle = 0;
@@ -65,6 +68,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 
+    
 	//create our camera
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
@@ -73,7 +77,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	world = new World();
-	
+    bombOffset.setTranslation(0.0f, 2.0f, 0.0f);
+    bomb->mesh = Mesh::Get((PATH1 + a.assign("Hiccup/Hiccup.obj")).c_str());;
+    bomb->texture = Texture::Get((PATH1 + a.assign("Hiccup/HiccupTeen.png")).c_str(), true);;
+    bomb->model = Matrix44();
 	cameraLocked = true;
     
 
@@ -151,6 +158,8 @@ void Game::render(void)
 		camera->enable();
 		camera->lookAt(eye, center, up);
 		currentEntityDragon->render();
+        bomb->model =  bombOffset* currentDragonModel ;
+        bomb->render();
 
 	}
 	else if (cameraLocked && !world->topOfDragon) {
