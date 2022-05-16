@@ -168,15 +168,19 @@ void Game::render(void)
 	}
 
 	
-    for(int i = 0; i < world->staticEntities.size(); i++ ){
+    /*for(int i = 0; i < world->staticEntities.size(); i++ ){
         world->staticEntities[i]->render();
-    }
+    }*/
 	
     for(int i = 0; i < world->staticEntitiesCharacter.size(); i++ ){
         EntityMesh* currentCharacter =world->staticEntitiesCharacter[i];
         currentCharacter->render();
        
     }
+	world->staticEntities[0]->render();
+	if (world->mission1) {
+		world->staticEntities[1]->render();
+	}
     
     
 	
@@ -250,8 +254,9 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
                 EntityMesh* currentCharacter =world->staticEntitiesCharacter[i];
                 Vector3 currentCharacterPosition = currentCharacter->getPosition();
                 if(currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 10.0f){
-                    if(currentCharacter->name.compare("Mission1")){
-                        world->staticEntities[1]->render();
+					
+                    if(currentCharacter->name.compare("Mission1")==0){
+						world->mission1 = true;
                     }
                 }
                

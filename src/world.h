@@ -18,6 +18,7 @@ public:
 	World();
 	EntityMesh* ground;
 	EntityMesh* sky;
+	bool mission1 = false;
 	bool topOfDragon = false;
 	int currentDragon = 0;
 	std::vector<EntityMesh*> staticEntities;
