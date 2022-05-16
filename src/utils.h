@@ -10,12 +10,13 @@
 
 #include "includes.h"
 #include "framework.h"
+#include "camera.h"
 
 //General functions **************
 long getTime();
 bool readFile(const std::string& filename, std::string& content);
 bool readFileBin(const std::string& filename, std::vector<unsigned char>& buffer);
-
+void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera);
 //generic purposes fuctions
 void drawGrid();
 bool drawText(float x, float y, std::string text, Vector3 c, float scale = 1);
