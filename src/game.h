@@ -39,6 +39,7 @@ public:
 
 	//main functions
 	void render( void );
+
 	void update( double dt );
 
 	//events

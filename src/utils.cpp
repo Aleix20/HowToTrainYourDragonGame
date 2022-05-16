@@ -19,6 +19,14 @@
 #include <string>
 #include <iostream>
 
+void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
+{
+	Vector3 eye = model * eyeVec;
+	Vector3 center = model * centerVec;
+	Vector3 up = model.rotateVector(upVec);
+	camera->enable();
+	camera->lookAt(eye, center, up);
+}
 long getTime()
 {
 	#ifdef WIN32

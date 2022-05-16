@@ -152,11 +152,7 @@ void Game::render(void)
 		
 		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
 		EntityCharacterDragon* currentEntityDragon = world->dynamicEntitiesDragons[currentDragon];
-		Vector3 eye = currentDragonModel * Vector3(0.0f, 5.5f, 5.0f);
-		Vector3 center = currentDragonModel * Vector3(0.0f, 5.0f, -5.0f);
-		Vector3 up = currentDragonModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
-		camera->enable();
-		camera->lookAt(eye, center, up);
+		setUpCamera(currentDragonModel, Vector3(0.0f, 5.5f, 5.0f), Vector3(0.0f, 5.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		currentEntityDragon->render();
         bomb->model =  bombOffset* currentDragonModel ;
         bomb->render();
@@ -165,14 +161,9 @@ void Game::render(void)
 	else if (cameraLocked && !world->topOfDragon) {
 		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		Matrix44 currentCharacterModel = world->mainCharacter->model;
-		Vector3 eye = currentCharacterModel * Vector3(0.0f, 5.0f, 5.0f);
-		Vector3 center = currentCharacterModel * Vector3(0.0f, 0.0f, -5.0f);
-		Vector3 up = currentCharacterModel.rotateVector(Vector3(0.0f, 1.0f, 0.0f));
-		camera->enable();
-		camera->lookAt(eye, center, up);
+		setUpCamera(currentCharacterModel, Vector3(0.0f, 5.0f, 5.0f), Vector3(0.0f, 0.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		world->mainCharacter->render();
 		currentStaticDragon->render();
-
 		
 	}
 
@@ -200,6 +191,8 @@ void Game::render(void)
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 	SDL_GL_SwapWindow(this->window);
 }
+
+
 
 
 void Game::update(double seconds_elapsed)
