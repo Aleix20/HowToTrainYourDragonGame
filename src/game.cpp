@@ -25,8 +25,6 @@ Mesh* planeMesh = NULL;
 Texture* planeTex = NULL;
 Matrix44 planeModel;
 
-EntityMesh* bomb = new EntityMesh();
-Matrix44 bombOffset;
 
 Animation* anim = NULL;
 float angle = 0;
@@ -77,10 +75,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	world = new World();
-    bombOffset.setTranslation(0.0f, 2.0f, 0.0f);
-    bomb->mesh = Mesh::Get((PATH1 + a.assign("Hiccup/Hiccup.obj")).c_str());;
-    bomb->texture = Texture::Get((PATH1 + a.assign("Hiccup/HiccupTeen.png")).c_str(), true);;
-    bomb->model = Matrix44();
 	cameraLocked = true;
     
 
@@ -153,9 +147,11 @@ void Game::render(void)
 		Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
 		EntityCharacterDragon* currentEntityDragon = world->dynamicEntitiesDragons[currentDragon];
 		setUpCamera(currentDragonModel, Vector3(0.0f, 5.5f, 5.0f), Vector3(0.0f, 5.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
+        currentEntityDragon->characterModel = currentEntityDragon->characterOffset * currentEntityDragon->model;
 		currentEntityDragon->render();
-        bomb->model =  bombOffset* currentDragonModel ;
-        bomb->render();
+       
+        
+        
 
 	}
 	else if (cameraLocked && !world->topOfDragon) {

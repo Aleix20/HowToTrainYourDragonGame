@@ -41,6 +41,9 @@ void World::loadResources()
     firstDragon->texture = Texture::Get((PATH + s.assign("NightFury/Toothless.png")).c_str(), true);
     firstDragon->characterMesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
     firstDragon->characterTex = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(),true);
+    firstDragon->characterModel = Matrix44();
+    firstDragon->characterOffset.setTranslation(0.0f, 2.0f, 0.0f);
+    
 
     this->dynamicEntitiesDragons.push_back(firstDragon);
 
