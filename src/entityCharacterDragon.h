@@ -15,6 +15,7 @@ public:
 	EntityCharacterDragon();
 	virtual void render() override;
 	virtual void update(float dt) override;
+	float tiling = 1.0f;
 };
 #endif
 

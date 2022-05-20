@@ -35,6 +35,7 @@ void EntityMesh::render()
     shader->setUniform("u_texture", texture, 0);
     shader->setUniform("u_time", time);
     shader->setUniform("u_model", model);
+    shader->setUniform("u_tex_tiling", tiling);
     mesh->render(GL_TRIANGLES);
 
     //disable shader

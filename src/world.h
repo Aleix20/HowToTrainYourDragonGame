@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
+
 class EntityMesh;
 class EntityCharacterDragon;
 class EntityCharacter;

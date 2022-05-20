@@ -21,7 +21,7 @@ public:
     EntityCharacter(Mesh*mesh, Texture* texture, Matrix44 model);
     virtual void render() override;
     virtual void update(float dt) override;
-
+    float tiling = 1.0f;
 };
 
 #endif /* entityCharacter_h */

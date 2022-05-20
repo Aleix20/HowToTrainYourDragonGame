@@ -23,10 +23,7 @@ void World::loadResources()
     island.texture = Texture::Get((PATH1+ s.assign("island_color.tga")).c_str());
     this->staticEntities.push_back(&island);*/
 
-    this->ground = new EntityMesh();
-    this->ground->model = Matrix44();
-    this->ground->mesh = Mesh::Get("data/terrain/terrain.ASE");
-    this->ground->texture = Texture::Get((PATH + s.assign("terrain/terrain.tga")).c_str());
+   
     //this->staticEntities.push_back(&ground);
 
     this->sky = new EntityMesh();
@@ -85,6 +82,12 @@ void World::loadResources()
     astridModel.translate(15,0,0);
     astrid->model = astridModel;
     this->staticEntitiesCharacter.push_back(astrid);
+
+    this->ground = new EntityMesh();
+    this->ground->mesh = new Mesh();
+    this->ground->mesh->createPlane(100);
+    this->ground->texture = Texture::Get((PATH + s.assign("grass.jpg")).c_str());
+    this->ground->tiling = 100.0f;
     
     
     

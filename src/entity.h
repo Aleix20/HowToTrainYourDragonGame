@@ -18,7 +18,7 @@ public:
     Matrix44 model;
     Mesh* mesh;
     Texture* texture;
-
+    float tiling = 1.0f;
 
     //methods overwritten by derived classes 
     virtual void render(){};

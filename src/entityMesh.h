@@ -22,6 +22,7 @@ public:
     virtual void render() override;
     virtual void update(float dt) override;
 
+
 };
 
 #endif /* entityMesh_h */

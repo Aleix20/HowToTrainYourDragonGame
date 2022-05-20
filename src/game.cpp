@@ -140,6 +140,7 @@ void Game::render(void)
     glDisable(GL_DEPTH_TEST);
 	world->sky->render();
     glEnable(GL_DEPTH_TEST);
+	world->ground->render();
 	//camera->enable();
 	int currentDragon = world->currentDragon;
 	if (cameraLocked && world->topOfDragon) {
