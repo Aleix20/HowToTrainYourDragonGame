@@ -25,6 +25,7 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
+
 void checkGameState();
 //generic purposes fuctions
 void drawGrid();

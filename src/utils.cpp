@@ -84,6 +84,7 @@ void MoveSelected(float x, float y, float z) {
 	g->world->selectedEntity->model.translate(x, y, z);
 
 }
+
 #pragma endregion
 
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos)
