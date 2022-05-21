@@ -14,55 +14,97 @@ EntityCharacter::EntityCharacter()
 {
 }
 EntityCharacter::EntityCharacter(Mesh* mesh, Texture* texture, Matrix44 model) {
-    this->model = model;
-    this->texture = texture;
-    this->mesh = mesh;
+	this->model = model;
+	this->texture = texture;
+	this->mesh = mesh;
 }
 
 void EntityCharacter::render()
 {
-    Game* g = Game::instance;
-    Shader* shader = g->shader;
-    if (!shader) return;
+	Game* g = Game::instance;
+	Shader* shader = g->shader;
+	if (!shader) return;
 
-    
-    //enable shader
-    shader->enable();
 
-    //upload uniforms
-    Camera* cam = g->camera;
-    shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-    shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-    shader->setUniform("u_texture", texture, 0);
-    shader->setUniform("u_time", time);
-    shader->setUniform("u_model", model);
-    shader->setUniform("u_tex_tiling", tiling);
+	//enable shader
+	shader->enable();
 
-    
-    mesh->render(GL_TRIANGLES);
+	//upload uniforms
+	Camera* cam = g->camera;
+	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+	shader->setUniform("u_texture", texture, 0);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_model", model);
+	shader->setUniform("u_tex_tiling", tiling);
 
-    //disable shader
-    shader->disable();
+
+	mesh->render(GL_TRIANGLES);
+
+	//disable shader
+	shader->disable();
 
 }
 
 void EntityCharacter::update(float dt)
 {
 
-    
-    bool cameraLocked = Game::instance->cameraLocked;
-    Camera* cam = Game::instance->camera;
-    
-    if (cameraLocked) {
-        float playerMovement = 50.0f * dt;
-        float rotSpeed = 90.0f * DEG2RAD * dt;
 
-        if (Input::isKeyPressed(SDL_SCANCODE_W)) model.translate(0.0f, 0.0f, -playerMovement);
-        if (Input::isKeyPressed(SDL_SCANCODE_S)) model.translate(0.0f, 0.0f, playerMovement);
-        if (Input::isKeyPressed(SDL_SCANCODE_A)) model.rotate(-rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-        if (Input::isKeyPressed(SDL_SCANCODE_D)) model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-        
-    }
-    
+	bool cameraLocked = Game::instance->cameraLocked;
+	Camera* cam = Game::instance->camera;
+
+	if (cameraLocked) {
+		float playerSpeed = 50.0f * dt;
+		float rotSpeed = 90.0f * DEG2RAD * dt;
+
+		float playYaw;
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
+			model.rotate(-rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
+
+		Matrix44 playerRotation;
+		Vector3 forward = playerRotation.rotateVector(Vector3(0,0,-1));
+		Vector3 right = playerRotation.rotateVector(Vector3(1, 0, 0));
+		Vector3 playerMovement;
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
+			playerMovement = playerMovement + (forward * playerSpeed);
+			//model.translate(0.0f, 0.0f, -playerSpeed);
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
+			playerMovement = playerMovement - (forward * playerSpeed);
+			//model.translate(0.0f, 0.0f, playerSpeed);
+		}
+		
+		
+
+		//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
+		Vector3 nexPos = getPosition() + playerMovement;
+		Vector3 character_center = nexPos + Vector3(0, 2, 0);
+		
+		Game* g = Game::instance;
+		std::vector<EntityMesh*> entities = g->world->staticEntities;
+		for (size_t i = 0; i < entities.size(); i++)
+		{
+			EntityMesh* currentEntity = entities[i];
+			Vector3 coll;
+			Vector3 collnorm;
+			//comprobamos si colisiona el objeto con la esfera (radio 3)
+			if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
+				continue; //si no colisiona, pasamos al siguiente objeto
+
+			//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+			Vector3 push_away = normalize(coll - character_center) * dt;
+			nexPos = getPosition() - push_away; //move to previous pos but a little bit further
+
+			//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
+			nexPos.y = 0;
+
+		}
+		model.setTranslation(nexPos.x, 0, nexPos.z);
+
+
+	}
+
 }
 

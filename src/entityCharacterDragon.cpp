@@ -23,9 +23,9 @@ void EntityCharacterDragon::render()
 	shader->setUniform("u_model", model);
 	shader->setUniform("u_tex_tiling", tiling);
 	mesh->render(GL_TRIANGLES);
-    shader->setUniform("u_texture", characterTex, 0);
-    shader->setUniform("u_model", characterModel);
-    characterMesh->render(GL_TRIANGLES);
+	shader->setUniform("u_texture", characterTex, 0);
+	shader->setUniform("u_model", characterModel);
+	characterMesh->render(GL_TRIANGLES);
 
 	//disable shader
 	shader->disable();

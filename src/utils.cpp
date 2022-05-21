@@ -1,9 +1,9 @@
 #include "utils.h"
 
 #ifdef WIN32
-	#include <windows.h>
+#include <windows.h>
 #else
-	#include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 #include "includes.h"
@@ -51,7 +51,7 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
 	Vector3 rayOrigin = cam->eye;
 
-	for (size_t i = 0; i<entities.size(); i++) {
+	for (size_t i = 0; i < entities.size(); i++) {
 		EntityMesh* entity = entities[i];
 		Vector3 pos;
 		Vector3 normal;
@@ -59,11 +59,11 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
 			std::cout << "selected" << std::endl;
 			float distanceCamtoObj = cam->eye.distance(pos);
-			if (distanceCamtoObj<distance) {
+			if (distanceCamtoObj < distance) {
 				distance = distanceCamtoObj;
 				g->world->selectedEntity = entity;
 			}
-			
+
 		}
 	};
 
@@ -74,14 +74,14 @@ void RotateSelected(float angleDegrees) {
 	if (g->world->selectedEntity == NULL) {
 		return;
 	}
-	g->world->selectedEntity->model.rotate(angleDegrees * DEG2RAD, Vector3(0,1,0));
+	g->world->selectedEntity->model.rotate(angleDegrees * DEG2RAD, Vector3(0, 1, 0));
 }
 void MoveSelected(float x, float y, float z) {
 	Game* g = Game::instance;
 	if (g->world->selectedEntity == NULL) {
 		return;
 	}
-	g->world->selectedEntity->model.translate(x,y,z);
+	g->world->selectedEntity->model.translate(x, y, z);
 
 }
 #pragma endregion
@@ -104,7 +104,7 @@ void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos)
 }
 void checkGameState()
 {
-	World* world =Game::instance->world;
+	World* world = Game::instance->world;
 	for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
 		EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
 		Vector3 currentCharacterPosition = currentCharacter->getPosition();
@@ -134,13 +134,13 @@ void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upV
 }
 long getTime()
 {
-	#ifdef WIN32
-		return GetTickCount();
-	#else
-		struct timeval tv;
-		gettimeofday(&tv,NULL);
-		return (int)(tv.tv_sec*1000 + (tv.tv_usec / 1000));
-	#endif
+#ifdef WIN32
+	return GetTickCount();
+#else
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (int)(tv.tv_sec * 1000 + (tv.tv_usec / 1000));
+#endif
 }
 
 
@@ -156,52 +156,52 @@ void* getGLProcAddress(const char* name)
 #endif
 
 #ifdef WIN32
-	#include <direct.h>
-	#define GetCurrentDir _getcwd
+#include <direct.h>
+#define GetCurrentDir _getcwd
 #else
-	#include <unistd.h>
-	#define GetCurrentDir getcwd
+#include <unistd.h>
+#define GetCurrentDir getcwd
 #endif
 
 std::string getPath()
 {
-    std::string fullpath;
-    // ----------------------------------------------------------------------------
-    // This makes relative paths work in C++ in Xcode by changing directory to the Resources folder inside the .app bundle
+	std::string fullpath;
+	// ----------------------------------------------------------------------------
+	// This makes relative paths work in C++ in Xcode by changing directory to the Resources folder inside the .app bundle
 #ifdef __APPLE__
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-    char path[PATH_MAX];
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
-    {
-        // error!
-    }
-    CFRelease(resourcesURL);
-    chdir(path);
-    fullpath = path;
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+	char path[PATH_MAX];
+	if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8*)path, PATH_MAX))
+	{
+		// error!
+	}
+	CFRelease(resourcesURL);
+	chdir(path);
+	fullpath = path;
 #else
-	 char cCurrentPath[1024];
-	 if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-		 return "";
+	char cCurrentPath[1024];
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+		return "";
 
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
 	fullpath = cCurrentPath;
 
 #endif    
-    return fullpath;
+	return fullpath;
 }
 
 template <typename T>
 std::string to_string(T value)
 {
-  //create an output string stream
-  std::ostringstream os ;
+	//create an output string stream
+	std::ostringstream os;
 
-  //throw the value into the string stream
-  os << value ;
+	//throw the value into the string stream
+	os << value;
 
-  //convert the string stream into a string and return
-  return os.str() ;
+	//convert the string stream into a string and return
+	return os.str();
 }
 
 bool readFile(const std::string& filename, std::string& content)
@@ -210,7 +210,7 @@ bool readFile(const std::string& filename, std::string& content)
 
 	long count = 0;
 
-	FILE *fp = fopen(filename.c_str(), "rb");
+	FILE* fp = fopen(filename.c_str(), "rb");
 	if (fp == NULL)
 	{
 		std::cerr << "::readFile: file not found " << filename << std::endl;
@@ -254,33 +254,33 @@ void stdlog(std::string str)
 
 bool checkGLErrors()
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	GLenum errCode;
-	const GLubyte *errString;
+	const GLubyte* errString;
 
 	if ((errCode = glGetError()) != GL_NO_ERROR) {
 		errString = gluErrorString(errCode);
 		std::cerr << "OpenGL Error: " << errString << std::endl;
 		return false;
 	}
-	#endif
+#endif
 
 	return true;
 }
 
-std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
+std::vector<std::string>& split(const std::string& s, char delim, std::vector<std::string>& elems) {
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+	return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, elems);
-    return elems;
+std::vector<std::string> split(const std::string& s, char delim) {
+	std::vector<std::string> elems;
+	split(s, delim, elems);
+	return elems;
 }
 
 std::string join(std::vector<std::string>& strings, const char* delim)
@@ -291,16 +291,16 @@ std::string join(std::vector<std::string>& strings, const char* delim)
 	return str;
 }
 
-Vector2 getDesktopSize( int display_index )
+Vector2 getDesktopSize(int display_index)
 {
-  SDL_DisplayMode current;
-  // Get current display mode of all displays.
-  int should_be_zero = SDL_GetCurrentDisplayMode(display_index, &current);
-  return Vector2( (float)current.w, (float)current.h );
+	SDL_DisplayMode current;
+	// Get current display mode of all displays.
+	int should_be_zero = SDL_GetCurrentDisplayMode(display_index, &current);
+	return Vector2((float)current.w, (float)current.h);
 }
 
 
-bool drawText(float x, float y, std::string text, Vector3 c, float scale )
+bool drawText(float x, float y, std::string text, Vector3 c, float scale)
 {
 	static char buffer[99999]; // ~500 chars
 	int num_quads;
@@ -412,7 +412,7 @@ std::string getGPUStats()
 		nCurAvailMemoryInKB = 0;
 	}
 
-	std::string str = "FPS: " + to_string(Game::instance->fps) + " DCS: " + to_string(Mesh::num_meshes_rendered) + " Tris: " + to_string(long(Mesh::num_triangles_rendered * 0.001)) + "Ks  VRAM: " + to_string(int((nTotalMemoryInKB-nCurAvailMemoryInKB) * 0.001)) + "MBs / " + to_string(int(nTotalMemoryInKB * 0.001)) + "MBs";
+	std::string str = "FPS: " + to_string(Game::instance->fps) + " DCS: " + to_string(Mesh::num_meshes_rendered) + " Tris: " + to_string(long(Mesh::num_triangles_rendered * 0.001)) + "Ks  VRAM: " + to_string(int((nTotalMemoryInKB - nCurAvailMemoryInKB) * 0.001)) + "MBs / " + to_string(int(nTotalMemoryInKB * 0.001)) + "MBs";
 	Mesh::num_meshes_rendered = 0;
 	Mesh::num_triangles_rendered = 0;
 	return str;
@@ -435,7 +435,7 @@ void drawGrid()
 	Shader* grid_shader = Shader::getDefaultShader("grid");
 	grid_shader->enable();
 	Matrix44 m;
-	m.translate(floor(Camera::current->eye.x / 100.0)*100.0f, 0.0f, floor(Camera::current->eye.z / 100.0f)*100.0f);
+	m.translate(floor(Camera::current->eye.x / 100.0) * 100.0f, 0.0f, floor(Camera::current->eye.z / 100.0f) * 100.0f);
 	grid_shader->setUniform("u_color", Vector4(0.7, 0.7, 0.7, 0.7));
 	grid_shader->setUniform("u_model", m);
 	grid_shader->setUniform("u_camera_position", Camera::current->eye);
@@ -460,7 +460,7 @@ char* fetchWord(char* data, char* word)
 char* fetchFloat(char* data, float& v)
 {
 	char w[255];
-	data = fetchWord(data,w);
+	data = fetchWord(data, w);
 	v = atof(w);
 	return data;
 }
@@ -484,7 +484,7 @@ char* fetchEndLine(char* data)
 	return data;
 }
 
-char* fetchBufferFloat(char* data, std::vector<float>& vector, int num )
+char* fetchBufferFloat(char* data, std::vector<float>& vector, int num)
 {
 	int pos = 0;
 	char word[255];
@@ -537,7 +537,7 @@ char* fetchBufferVec3(char* data, std::vector<Vector3>& vector)
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 3);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 
@@ -547,7 +547,7 @@ char* fetchBufferVec2(char* data, std::vector<Vector2>& vector)
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 2);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 
@@ -579,7 +579,7 @@ char* fetchBufferVec4(char* data, std::vector<Vector4>& vector)
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 4);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 

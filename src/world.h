@@ -21,6 +21,7 @@ public:
 	World();
 	EntityMesh* ground;
 	EntityMesh* sky;
+	EntityMesh* ocean;
 	Entity* selectedEntity;
 	bool mission1 = false;
 	bool topOfDragon = false;

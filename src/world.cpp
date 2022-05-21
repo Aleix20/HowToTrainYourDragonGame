@@ -21,6 +21,9 @@ void World::loadResources()
 	this->sky->mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
 	this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
 
+	ocean = new EntityMesh();
+	ocean->mesh = Mesh::Get((PATH + s.assign("water_deep.ASE")).c_str());
+	ocean->texture = Texture::Get((PATH + s.assign("water_deep.tga")).c_str());
 
 	EntityCharacterDragon* dragon1;
 	dragon1 = new EntityCharacterDragon();
@@ -78,13 +81,14 @@ void World::loadResources()
 	dragon3_staticModel.translate(5, 1.5, 5);
 	dragon3_static->model = dragon3_staticModel;
 
-	this->staticEntitiesDragons.push_back(dragon1_static);
-	this->staticEntitiesDragons.push_back(dragon2_static);
-	this->staticEntitiesDragons.push_back(dragon3_static);
+	staticEntitiesDragons.push_back(dragon1_static);
+	staticEntitiesDragons.push_back(dragon2_static);
+	staticEntitiesDragons.push_back(dragon3_static);
 
-	this->mainCharacter = new EntityCharacter();
-	this->mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
-	this->mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(), true);
+	mainCharacter = new EntityCharacter();
+	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
+	mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(), true);
+	mainCharacter->model.setTranslation(5,0,15);
 
 	EntityMesh* table = new EntityMesh();
 	table->mesh = Mesh::Get((PATH + s.assign("aldeas/table.obj")).c_str());

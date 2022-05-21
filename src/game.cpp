@@ -106,6 +106,7 @@ void Game::render(void)
 	world->sky->render();
 	glEnable(GL_DEPTH_TEST);
 	world->ground->render();
+	world->ocean->render();
 	//camera->enable();
 	int currentDragon = world->currentDragon;
 	if (cameraLocked && world->topOfDragon) {
@@ -123,7 +124,6 @@ void Game::render(void)
 		Matrix44 currentCharacterModel = world->mainCharacter->model;
 		setUpCamera(currentCharacterModel, Vector3(0.0f, 5.0f, 5.0f), Vector3(0.0f, 0.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		world->mainCharacter->render();
-
 		currentStaticDragon->render();
 
 	}
@@ -138,10 +138,10 @@ void Game::render(void)
 	checkFrustrumStatic(entities, camPos);
 	entities = world->staticEntitiesCharacter;
 	checkFrustrumStatic(entities, camPos);
-	
-	
 
-	
+
+
+
 	if (world->mission1) {
 		EntityMesh* table1 = new EntityMesh();
 		table1->mesh = Mesh::Get((PATH1 + a.assign("aldeas/table.obj")).c_str());

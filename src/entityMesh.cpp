@@ -12,38 +12,38 @@
 EntityMesh::EntityMesh()
 {
 }
-EntityMesh::EntityMesh(Mesh* mesh, Texture* texture,  Matrix44 model) {
-    this->model = model;
-    this->name = "Toothless";
-    this->texture = texture;
-    this->mesh = mesh;
+EntityMesh::EntityMesh(Mesh* mesh, Texture* texture, Matrix44 model) {
+	this->model = model;
+	this->name = "Toothless";
+	this->texture = texture;
+	this->mesh = mesh;
 }
 
 void EntityMesh::render()
 {
-    Shader* shader = Game::instance->shader;
-    if (!shader) return;
+	Shader* shader = Game::instance->shader;
+	if (!shader) return;
 
-    
-    //enable shader
-    shader->enable();
 
-    //upload uniforms
-    Camera* cam = Game::instance->camera;
-    shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-    shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-    shader->setUniform("u_texture", texture, 0);
-    shader->setUniform("u_time", time);
-    shader->setUniform("u_model", model);
-    shader->setUniform("u_tex_tiling", tiling);
-    mesh->render(GL_TRIANGLES);
+	//enable shader
+	shader->enable();
 
-    //disable shader
-    shader->disable();
-    
-    if (!Game::instance->cameraLocked) {
-        mesh->renderBounding(model);
-    }
+	//upload uniforms
+	Camera* cam = Game::instance->camera;
+	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+	shader->setUniform("u_texture", texture, 0);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_model", model);
+	shader->setUniform("u_tex_tiling", tiling);
+	mesh->render(GL_TRIANGLES);
+
+	//disable shader
+	shader->disable();
+
+	if (!Game::instance->cameraLocked) {
+		mesh->renderBounding(model);
+	}
 
 }
 
