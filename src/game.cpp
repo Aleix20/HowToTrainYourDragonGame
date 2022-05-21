@@ -121,15 +121,18 @@ void Game::render(void)
 
 	}
 	else if (cameraLocked && !world->topOfDragon) {
-		
+
+		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		Matrix44 currentCharacterModel = world->mainCharacter->model;
 		setUpCamera(currentCharacterModel, Vector3(0.0f, 5.0f, 5.0f), Vector3(0.0f, 0.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		world->mainCharacter->render();
-		
+		currentStaticDragon->render();
 
 	}
-	EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
-	currentStaticDragon->render();
+	if (!cameraLocked) {
+		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
+		currentStaticDragon->render();
+	}
 	for (int i = 0; i < world->staticEntities.size(); i++) {
 		world->staticEntities[i]->render();
 	}
