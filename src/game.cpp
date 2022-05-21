@@ -116,9 +116,6 @@ void Game::render(void)
 		currentEntityDragon->characterModel = currentEntityDragon->characterOffset * currentEntityDragon->model;
 		currentEntityDragon->render();
 
-
-
-
 	}
 	else if (cameraLocked && !world->topOfDragon) {
 
@@ -126,23 +123,25 @@ void Game::render(void)
 		Matrix44 currentCharacterModel = world->mainCharacter->model;
 		setUpCamera(currentCharacterModel, Vector3(0.0f, 5.0f, 5.0f), Vector3(0.0f, 0.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		world->mainCharacter->render();
+
 		currentStaticDragon->render();
 
 	}
+	//Check static dragon with camera unlocked
 	if (!cameraLocked) {
 		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		currentStaticDragon->render();
 	}
-	for (int i = 0; i < world->staticEntities.size(); i++) {
-		world->staticEntities[i]->render();
-	}
 
-	for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
-		EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
-		currentCharacter->render();
+	Vector3 camPos = camera->eye;
+	std::vector<EntityMesh*> entities = world->staticEntities;
+	checkFrustrumStatic(entities, camPos);
+	entities = world->staticEntitiesCharacter;
+	checkFrustrumStatic(entities, camPos);
+	
+	
 
-	}
-	//world->staticEntities[0]->render();
+	
 	if (world->mission1) {
 		EntityMesh* table1 = new EntityMesh();
 		table1->mesh = Mesh::Get((PATH1 + a.assign("aldeas/table.obj")).c_str());
@@ -155,13 +154,13 @@ void Game::render(void)
 
 
 
-	//world->ground->render();
-
 	drawGrid();
 
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 	SDL_GL_SwapWindow(this->window);
 }
+
+
 
 
 
@@ -237,29 +236,12 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 				world->topOfDragon = !world->topOfDragon;
 			}
 			else {
+				world->dynamicEntitiesDragons[world->currentDragon]->model.setTranslation(5, 1.5, 5);
 				world->topOfDragon = true;
 			}
 		}
 		break;
-	case SDLK_f:
-		for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
-			EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
-			Vector3 currentCharacterPosition = currentCharacter->getPosition();
-			if (currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 3.0f) {
-                if(currentCharacter->name.compare("ChangeDragon") == 0){
-                    if(world->currentDragon == (world->staticEntitiesDragons.size()-1)){
-                        world->currentDragon = 0;
-                    }else{
-                        world->currentDragon++;
-                    }
-                }
-				if (currentCharacter->name.compare("Mission1") == 0) {
-					world->mission1 = true;
-				}
-			}
-
-		}
-		break;
+	case SDLK_f:checkGameState(); break;
 	case SDLK_MINUS: RotateSelected(20.0f * elapsed_time); break;
 	case SDLK_PLUS:  RotateSelected(-20.0f * elapsed_time); break;
 	case SDLK_LESS:
@@ -285,6 +267,8 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 
 	}
 }
+
+
 
 void Game::onKeyUp(SDL_KeyboardEvent event)
 {

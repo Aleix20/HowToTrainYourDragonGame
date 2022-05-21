@@ -86,6 +86,44 @@ void MoveSelected(float x, float y, float z) {
 }
 #pragma endregion
 
+void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos)
+{
+	Game* g = Game::instance;
+	for (int i = 0; i < entities.size(); i++) {
+		Vector3 entityPos = entities[i]->model.getTranslation();
+		Mesh* entityMesh = entities[i]->mesh;
+		float dist = entityPos.distance(camPos);
+		if (dist > g->noRenderDistance) {
+			continue;
+		}
+		if (!g->camera->testSphereInFrustum(entityPos, entityMesh->radius)) {
+			continue;
+		}
+		entities[i]->render();
+	}
+}
+void checkGameState()
+{
+	World* world =Game::instance->world;
+	for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
+		EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
+		Vector3 currentCharacterPosition = currentCharacter->getPosition();
+		if (currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 3.0f) {
+			if (currentCharacter->name.compare("ChangeDragon") == 0) {
+				if (world->currentDragon == (world->staticEntitiesDragons.size() - 1)) {
+					world->currentDragon = 0;
+				}
+				else {
+					world->currentDragon++;
+				}
+			}
+			if (currentCharacter->name.compare("Mission1") == 0) {
+				world->mission1 = true;
+			}
+		}
+
+	}
+}
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
 {
 	Vector3 eye = model * eyeVec;

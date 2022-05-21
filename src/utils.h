@@ -22,8 +22,10 @@ bool readFileBin(const std::string& filename, std::vector<unsigned char>& buffer
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera);
 void AddEntityInFront(Camera* cam);
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
+void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
+void checkGameState();
 //generic purposes fuctions
 void drawGrid();
 bool drawText(float x, float y, std::string text, Vector3 c, float scale = 1);

@@ -21,7 +21,8 @@ EntityCharacter::EntityCharacter(Mesh* mesh, Texture* texture, Matrix44 model) {
 
 void EntityCharacter::render()
 {
-    Shader* shader = Game::instance->shader;
+    Game* g = Game::instance;
+    Shader* shader = g->shader;
     if (!shader) return;
 
     
@@ -29,13 +30,15 @@ void EntityCharacter::render()
     shader->enable();
 
     //upload uniforms
-    Camera* cam = Game::instance->camera;
+    Camera* cam = g->camera;
     shader->setUniform("u_color", Vector4(1, 1, 1, 1));
     shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
     shader->setUniform("u_texture", texture, 0);
     shader->setUniform("u_time", time);
     shader->setUniform("u_model", model);
     shader->setUniform("u_tex_tiling", tiling);
+
+    
     mesh->render(GL_TRIANGLES);
 
     //disable shader
