@@ -22,7 +22,7 @@ public:
 	int window_height;
     Shader* shader;
 	World* world;
-
+	int selectedEntities=0;
 	//some globals
 	long frame;
     float time;

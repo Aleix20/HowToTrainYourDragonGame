@@ -65,13 +65,7 @@ void World::loadResources()
     table->model = tableModel;
     this->staticEntities.push_back(table);
     
-    EntityMesh* table1 = new EntityMesh();
-    table1->mesh = Mesh::Get((PATH + s.assign("aldeas/table.obj")).c_str());
-    table1->texture = Texture::Get((PATH + s.assign("aldeas/table.png")).c_str(),true);
-    Matrix44 tableModel1 = Matrix44();
-    tableModel1.translate(4, 5, 3);
-    table1->model = tableModel1;
-    this->staticEntities.push_back(table1);
+   
     
 
     EntityMesh* astrid = new EntityMesh();

@@ -40,6 +40,10 @@ void EntityMesh::render()
 
     //disable shader
     shader->disable();
+    
+    if (!Game::instance->cameraLocked) {
+        mesh->renderBounding(model);
+    }
 
 }
 

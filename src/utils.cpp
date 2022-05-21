@@ -18,6 +18,73 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include "input.h"
+
+#pragma region EDITORMUNDO
+void AddEntityInFront(Camera* cam) {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH2 = "data/";
+#else
+	std::string PATH2 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	std::string a;
+	Vector2 mouse = Input::mouse_position;
+	Game* g = Game::instance;
+
+	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+	Vector3 rayOrigin = cam->eye;
+
+	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
+	Matrix44 model;
+	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
+	EntityMesh* entity = new EntityMesh();
+	entity->model = model;
+	entity->mesh = Mesh::Get((PATH2 + a.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
+	entity->texture = Texture::Get((PATH2 + a.assign("BlackDragon_Horns2_Roughness.png")).c_str());
+
+	g->world->staticEntities.push_back(entity);
+}
+void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
+	//esto exactamente no se lo que hace
+	Vector2 mouse = Input::mouse_position;
+	Game* g = Game::instance;
+	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+	Vector3 rayOrigin = cam->eye;
+
+	for (size_t i = 0; i<entities.size(); i++) {
+		EntityMesh* entity = entities[i];
+		Vector3 pos;
+		Vector3 normal;
+		float distance = 1000.0f;
+		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
+			std::cout << "selected" << std::endl;
+			float distanceCamtoObj = cam->eye.distance(pos);
+			if (distanceCamtoObj<distance) {
+				distance = distanceCamtoObj;
+				g->world->selectedEntity = entity;
+			}
+			
+		}
+	};
+
+};
+
+void RotateSelected(float angleDegrees) {
+	Game* g = Game::instance;
+	if (g->world->selectedEntity == NULL) {
+		return;
+	}
+	g->world->selectedEntity->model.rotate(angleDegrees * DEG2RAD, Vector3(0,1,0));
+}
+void MoveSelected(float x, float y, float z) {
+	Game* g = Game::instance;
+	if (g->world->selectedEntity == NULL) {
+		return;
+	}
+	g->world->selectedEntity->model.translate(x,y,z);
+
+}
+#pragma endregion
 
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
 {
