@@ -245,8 +245,14 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
 			EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
 			Vector3 currentCharacterPosition = currentCharacter->getPosition();
-			if (currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 10.0f) {
-
+			if (currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 3.0f) {
+                if(currentCharacter->name.compare("ChangeDragon") == 0){
+                    if(world->currentDragon == (world->staticEntitiesDragons.size()-1)){
+                        world->currentDragon = 0;
+                    }else{
+                        world->currentDragon++;
+                    }
+                }
 				if (currentCharacter->name.compare("Mission1") == 0) {
 					world->mission1 = true;
 				}
