@@ -270,6 +270,11 @@ void Matrix44::setScale(float x, float y, float z)
 	m[10] = z;
 }
 
+Vector3 Matrix44::getScale()
+{
+	return Vector3(m[0], m[5], m[10]);
+}
+
 //To create a traslation matrix
 void Matrix44::setTranslation(float x, float y, float z)
 {

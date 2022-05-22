@@ -50,12 +50,12 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 	Game* g = Game::instance;
 	Vector3 dir = cam->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
 	Vector3 rayOrigin = cam->eye;
-
+	float distance = 1000.0f;
 	for (size_t i = 0; i < entities.size(); i++) {
 		EntityMesh* entity = entities[i];
 		Vector3 pos;
 		Vector3 normal;
-		float distance = 1000.0f;
+		
 		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
 			std::cout << "selected" << std::endl;
 			float distanceCamtoObj = cam->eye.distance(pos);
@@ -84,6 +84,15 @@ void MoveSelected(float x, float y, float z) {
 	g->world->selectedEntity->model.translate(x, y, z);
 
 }
+void ScaleSelected(float x, float y, float z) {
+	Game* g = Game::instance;
+	if (g->world->selectedEntity == NULL) {
+		return;
+	}
+	g->world->selectedEntity->model.scale(x, y, z);
+
+}
+
 
 #pragma endregion
 
@@ -102,6 +111,22 @@ void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos)
 		}
 		entities[i]->render();
 	}
+}
+void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
+{
+	Game* g = Game::instance;
+
+		Vector3 entityPos = entity->model.getTranslation();
+		Mesh* entityMesh = entity->mesh;
+		float dist = entityPos.distance(camPos);
+		if (dist > g->noRenderDistance) {
+			return;
+		}
+		if (!g->camera->testSphereInFrustum(entityPos, entityMesh->radius)) {
+			return;
+		}
+		entity->render();
+	
 }
 void checkGameState()
 {

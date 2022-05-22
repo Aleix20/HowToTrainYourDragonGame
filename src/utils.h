@@ -23,8 +23,10 @@ void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upV
 void AddEntityInFront(Camera* cam);
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
+void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos);
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
+void ScaleSelected(float x, float y, float z);
 
 void checkGameState();
 //generic purposes fuctions

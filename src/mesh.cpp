@@ -1548,7 +1548,10 @@ Mesh* Mesh::Get(const char* filename)
 		return it->second;
 
 	Mesh* m = new Mesh();
+	std::string str = filename;
+	
 	std::string name = filename;
+	
 
 	//detect format
 	char file_format = 0;
@@ -1570,6 +1573,7 @@ Mesh* Mesh::Get(const char* filename)
 	//stats
 	long time = getTime();
 	std::cout << " + Mesh loading: " << filename << " ... ";
+	m->name = str.erase(0, 5);
 	std::string binfilename = filename;
 
 	if (file_format != FORMAT_MBIN)

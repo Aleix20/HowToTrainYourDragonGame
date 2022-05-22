@@ -1,5 +1,5 @@
 #include "world.h"
-
+#include <fstream>
 
 
 std::string s;
@@ -18,6 +18,7 @@ void World::loadResources()
 #endif
 
 	loadObjectFile((PATH + s.assign("objects.txt")).c_str());
+	//writeObjectFile((PATH + s.assign("objects2.txt")).c_str());
 	this->sky = new EntityMesh();
 	this->sky->mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
 	this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
@@ -32,11 +33,12 @@ void World::loadResources()
 	mainCharacter->model.setTranslation(5, 0, 15);
 
 
-	this->ground = new EntityMesh();
-	this->ground->mesh = new Mesh();
-	this->ground->mesh->createPlane(100);
-	this->ground->texture = Texture::Get((PATH + s.assign("grass.jpg")).c_str());
-	this->ground->tiling = 100.0f;
+	ground = new EntityMesh();
+	ground->mesh = new Mesh();
+	ground->mesh->createPlane(100);
+	ground->texture = Texture::Get((PATH + s.assign("grass.jpg")).c_str());
+	ground->tiling = 100.0f;
+	
 
 
 }
@@ -88,6 +90,78 @@ void World::loadObjectFile(const char* path)
 		//staticCharacterDragonRead(type, ss, out, entityB, entity, PATH2, entities);
 	}
 
+}
+
+void World::writeObjectFile(const char* path)
+{
+	std::ofstream outdata; // outdata is like cin
+	
+
+	outdata.open(path); // opens the file
+	if (!outdata) { // file couldn't be opened
+		std::cerr << "Error: file could not be opened" << std::endl;
+		exit(1);
+	}
+	std::cerr << "Saving file" << std::endl;
+	for (int i = 0; i < this->staticEntities.size();i++) {
+		EntityMesh* entity = staticEntities[i];
+		staticEntitiesWrite(outdata, entity, "STATICENTITIES");
+	}
+	for (int i = 0; i < this->staticEntitiesCharacter.size(); i++) {
+		EntityMesh* entity = staticEntitiesCharacter[i];
+		staticEntitiesWrite(outdata, entity, "STATICCHARACTER");
+	}
+	for (int i = 0; i < this->staticEntitiesDragons.size(); i++) {
+		EntityMesh* entity = staticEntitiesDragons[i];
+		staticEntitiesWrite(outdata, entity, "STATICDRAGONS");
+	}
+	for (int i = 0; i < this->dynamicEntitiesDragons.size(); i++) {
+		EntityCharacterDragon* entity = dynamicEntitiesDragons[i];
+		std::string type;
+		writeDynamicDragons(outdata, entity, "DYNAMICDRAGONS");
+		
+
+	}
+	outdata.close();
+}
+
+void World::writeDynamicDragons(std::ofstream& outdata,  EntityCharacterDragon* entity, std::string type)
+{
+	outdata << "TYPE " + type << std::endl;
+	outdata << "MESH " + entity->mesh->name << std::endl;
+	outdata << "TEX " + entity->texture->filename << std::endl;
+	outdata << "MESH2 " + entity->characterMesh->name << std::endl;
+	outdata << "TEX2 " + entity->characterTex->filename << std::endl;
+	Vector3 entityPos = entity->getPosition();
+	outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
+	Vector3 entityOff = entity->characterOffset.getTranslation();
+	outdata << "OFFSET " + std::to_string(entityOff.x) + " " + std::to_string(entityOff.y) + " " + std::to_string(entityOff.z) << std::endl;
+	//Vector3 entityPos = entity->model.getRotationOnly();
+	outdata << "ROT " + std::to_string(0) + " " + std::to_string(0) + " " + std::to_string(0) << std::endl;
+	if (strcmp(entity->name.c_str(), "") != 0) {
+		outdata << "NAME " + entity->name << std::endl;
+	}
+	outdata << "END" << std::endl;
+}
+
+void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std::string type)
+{
+	outdata << "TYPE " + type << std::endl;
+	
+	outdata << "MESH " + entity->mesh->name << std::endl;
+	
+	
+	outdata << "TEX " + entity->texture->filename << std::endl;
+	Vector3 entityPos = entity->getPosition();
+	outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
+	//Vector3 entityPos = entity->model.getRotationOnly();
+	outdata << "ROT " + std::to_string(0) + " " + std::to_string(0) + " " + std::to_string(0) << std::endl;
+	if (strcmp(entity->name.c_str(), "") != 0) {
+		outdata << "NAME " + entity->name << std::endl;
+	}
+	Vector3 entityScale = entity->model.getScale();
+	outdata << "SCALE " + std::to_string(entityScale.x) + " " + std::to_string(entityScale.y) + " " + std::to_string(entityScale.z) << std::endl;
+	outdata << "END" << std::endl;
 }
 
 void World::readEntitiesCharacterDragonAttributes(std::stringstream& ss, std::string& out, bool& entityB, EntityCharacterDragon*& entityDragon, std::string& PATH2, std::vector<EntityCharacterDragon*>* entitiesDragons)
@@ -190,6 +264,12 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 	if (strcmp(out.c_str(), "NAME") == 0) {
 		ss >> out;
 		entity->name = out;
+		ss >> out;
+	}
+	if (strcmp(out.c_str(), "SCALE") == 0) {
+		float x, y, z;
+		ss >> x >> y >> z;
+		entity->model.scale(x,y,z);
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "END") == 0) {

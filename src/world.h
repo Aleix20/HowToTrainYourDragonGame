@@ -19,10 +19,11 @@ class World
 {
 public:
 	World();
-	EntityMesh* ground;
+
 	EntityMesh* sky;
 	EntityMesh* ocean;
 	Entity* selectedEntity;
+	EntityMesh* ground;
 	bool mission1 = false;
 	bool topOfDragon = false;
 	int currentDragon = 0;
@@ -34,6 +35,9 @@ public:
 
 	void loadResources();
 	void loadObjectFile(const char* path);
+	void writeObjectFile(const char* path);
+	void writeDynamicDragons(std::ofstream& outdata,  EntityCharacterDragon* entity, std::string type);
+	void staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std::string type);
 	void readEntitiesCharacterDragonAttributes(std::stringstream& ss, std::string& out, bool& entityB, EntityCharacterDragon*& entityDragon, std::string& PATH2, std::vector<EntityCharacterDragon*>* entitiesDragons);
 	void readEntitiesAttributes(std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities);
 	//void staticCharacterDragonRead(std::string& type, std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities);

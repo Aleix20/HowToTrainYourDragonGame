@@ -233,10 +233,13 @@ Texture* Texture::Get(const char* filename, bool flip_y, bool mipmaps, bool wrap
 bool Texture::load(const char* filename, bool mipmaps, bool wrap,bool flip_y, unsigned int type)
 {
 	std::string str = filename;
+	std::string str2 = filename;
 	std::string ext = str.substr(str.size() - 4, 4);
 	Image* image = NULL;
 	double time = getTime();
+	
 
+	str2.erase(0,5);
 	std::cout << " + Texture loading: " << filename << " ... ";
 
 	image = new Image();
@@ -261,8 +264,8 @@ bool Texture::load(const char* filename, bool mipmaps, bool wrap,bool flip_y, un
 	}
 
 	loadFromImage(image,mipmaps,wrap,type);
-	this->filename = filename;
 	setName(filename);
+	this->filename = str2;
 
 	std::cout << "[OK] Size: " << width << "x" << height << " Time: " << (getTime() - time) * 0.001 << "sec" << std::endl;
 	this->image.clear();
