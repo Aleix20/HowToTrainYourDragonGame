@@ -217,7 +217,19 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	case SDLK_F3: MoveSelected(0, 10.0f * elapsed_time, 0); break;
 	case SDLK_F4: scale = scale - Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x,scale.y,scale.z); break;
 	case SDLK_F5: scale = scale + Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
-	case SDLK_F6:break; //remove
+	case SDLK_F6:
+		switch (selectedEntities) {
+		case 0:
+			RemoveSelected(world->staticEntities);
+			break;
+		case 1:
+			RemoveSelected( world->staticEntitiesCharacter);
+			break;
+		case 2:
+			RemoveSelected( world->staticEntitiesDragons);
+			break;
+		}
+		break;  //remove
 	case SDLK_g: world->writeObjectFile((PATH1+ a.assign("objects.txt")).c_str()); break;
 	case SDLK_1:
 		switch (selectedEntities) {

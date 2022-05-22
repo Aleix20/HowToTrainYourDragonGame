@@ -39,8 +39,8 @@ void AddEntityInFront(Camera* cam) {
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
 	EntityMesh* entity = new EntityMesh();
 	entity->model = model;
-	entity->mesh = Mesh::Get((PATH2 + a.assign("Dragon_Busts_Gerhald3D.obj")).c_str());
-	entity->texture = Texture::Get((PATH2 + a.assign("BlackDragon_Horns2_Roughness.png")).c_str());
+	entity->mesh = Mesh::Get((PATH2 + a.assign("blacksmith.obj")).c_str());
+	entity->texture = Texture::Get((PATH2 + a.assign("blacksmith.png")).c_str());
 
 	g->world->staticEntities.push_back(entity);
 }
@@ -93,9 +93,21 @@ void ScaleSelected(float x, float y, float z) {
 
 }
 
+void RemoveSelected(std::vector<EntityMesh*>& entities)
+{
+	Game* g = Game::instance;
+	if (g->world->selectedEntity == NULL) {
+		return;
+	}
+	std::vector<EntityMesh*>::iterator it = std::find(entities.begin(), entities.end(), g->world->selectedEntity);
+	entities.erase(it);
+	g->world->selectedEntity = NULL;
+}
+
 
 #pragma endregion
 
+#pragma region FRUSTRUM
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos)
 {
 	Game* g = Game::instance;
@@ -128,6 +140,8 @@ void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
 		entity->render();
 	
 }
+#pragma endregion
+
 void checkGameState()
 {
 	World* world = Game::instance->world;
