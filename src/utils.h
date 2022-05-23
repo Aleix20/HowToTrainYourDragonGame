@@ -20,7 +20,7 @@ long getTime();
 bool readFile(const std::string& filename, std::string& content);
 bool readFileBin(const std::string& filename, std::vector<unsigned char>& buffer);
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera);
-void AddEntityInFront(Camera* cam, EntityMesh* entity);
+void AddEntityInFront(Camera* cam, EntityMesh* entity, std::vector<EntityMesh*>& entities);
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos);
@@ -28,6 +28,7 @@ void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
 void ScaleSelected(float x, float y, float z);
 void RemoveSelected(std::vector<EntityMesh*>& entities);
+void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos);
 
 void checkGameState();
 //generic purposes fuctions

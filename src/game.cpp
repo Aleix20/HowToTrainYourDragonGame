@@ -127,31 +127,29 @@ void Game::render(void)
 		checkFrustrumEntity(currentStaticDragon, camera->eye);
 
 	}
-	//Check static dragon with camera unlocked
-	if (!cameraLocked) {
-		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
-		currentStaticDragon->render();
-	}
+	
 
 	Vector3 camPos = camera->eye;
 	std::vector<EntityMesh*> entities = world->staticEntities;
 	checkFrustrumStatic(entities, camPos);
 	entities = world->staticEntitiesCharacter;
 	checkFrustrumStatic(entities, camPos);
+	
 
-
+	//Check static dragon with camera unlocked
+	if (!cameraLocked) {
+		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
+		currentStaticDragon->render();
+		entities = world->mission1Entities;
+		checkFrustrumStatic(entities, camPos);
+	}
 
 
 
 
 	if (world->mission1) {
-		EntityMesh* table1 = new EntityMesh();
-		table1->mesh = Mesh::Get((PATH1 + a.assign("aldeas/table.obj")).c_str());
-		table1->texture = Texture::Get((PATH1 + a.assign("aldeas/table.png")).c_str(), true);
-		Matrix44 tableModel1 = Matrix44();
-		tableModel1.translate(4, 5, 3);
-		table1->model = tableModel1;
-		table1->render();
+		entities = world->mission1Entities;
+		checkFrustrumStatic(entities, camPos);
 	}
 
 
@@ -208,14 +206,14 @@ void Game::update(double seconds_elapsed)
 void Game::onKeyDown(SDL_KeyboardEvent event)
 {
 
-	Vector3 scale = Vector3(1,1,1);
+	Vector3 scale = Vector3(1, 1, 1);
 	switch (event.keysym.sym)
 	{
 	case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 	case SDLK_F1: Shader::ReloadAll(); break;
 	case SDLK_F2: MoveSelected(0, -10.0f * elapsed_time, 0); break;
 	case SDLK_F3: MoveSelected(0, 10.0f * elapsed_time, 0); break;
-	case SDLK_F4: scale = scale - Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x,scale.y,scale.z); break;
+	case SDLK_F4: scale = scale - Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
 	case SDLK_F5: scale = scale + Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
 	case SDLK_F6:
 		switch (selectedEntities) {
@@ -223,14 +221,14 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			RemoveSelected(world->staticEntities);
 			break;
 		case 1:
-			RemoveSelected( world->staticEntitiesCharacter);
+			RemoveSelected(world->staticEntitiesCharacter);
 			break;
 		case 2:
-			RemoveSelected( world->staticEntitiesDragons);
+			RemoveSelected(world->staticEntitiesDragons);
 			break;
 		}
 		break;  //remove
-	case SDLK_g: world->writeObjectFile((PATH1+ a.assign("objects.txt")).c_str()); break;
+	case SDLK_g: world->writeObjectFile((PATH1 + a.assign("objects.txt")).c_str()); break;
 	case SDLK_1:
 		switch (selectedEntities) {
 		case 0:
@@ -242,13 +240,29 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		case 2:
 			RayPickCheck(camera, world->staticEntitiesDragons);
 			break;
+		case 3: 
+			RayPickCheck(camera, world->mission1Entities);
+			break;
 		}
 		break;
-	case SDLK_2: AddEntityInFront(camera,currentBuild); break;
-	case SDLK_UP:if (currentBuild == NULL) break; MoveSelected(0, 0, -10.0f * elapsed_time); break;
-	case SDLK_DOWN:if (currentBuild == NULL) break; MoveSelected(0, 0, 10.0f * elapsed_time); break;
-	case SDLK_LEFT: if (currentBuild == NULL) break; MoveSelected(-10.0f * elapsed_time, 0, 0); break;
-	case SDLK_RIGHT:if (currentBuild == NULL) break; MoveSelected(10.0f * elapsed_time, 0, 0); break;
+	case SDLK_2:
+		switch (selectedEntities) {
+		case 0:
+			AddEntityInFront(camera, currentBuild, world->staticEntities);
+			break;
+		case 3:
+			AddEntityInFront(camera, currentBuild, world->mission1Entities);
+			break;
+		default:
+			AddEntityInFront(camera, currentBuild, world->staticEntities);
+			break;
+		}
+		
+		break;
+	case SDLK_UP: if (world->selectedEntity == NULL) { break; } MoveSelected(0, 0, -30.0f * elapsed_time); break;
+	case SDLK_DOWN: if (world->selectedEntity == NULL) { break; } MoveSelected(0, 0, 30.0f * elapsed_time); break;
+	case SDLK_LEFT: if (world->selectedEntity == NULL) { break; } MoveSelected(-30.0f * elapsed_time, 0, 0); break;
+	case SDLK_RIGHT: if (world->selectedEntity == NULL) { break; } MoveSelected(30.0f * elapsed_time, 0, 0); break;
 	case SDLK_3:
 		if (world->mainCharacter->getPosition().distance(Vector3(5, 1.5, 5)) < 10.0f) {
 
@@ -262,11 +276,10 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		}
 		break;
 	case SDLK_f:checkGameState(); break;
-	
-	case SDLK_MINUS: RotateSelected(20.0f * elapsed_time); break;
-	case SDLK_PLUS:  RotateSelected(-20.0f * elapsed_time); break;
+	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time); break;
+	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time); break;
 	case SDLK_z:
-		if (selectedEntities == 2) {
+		if (selectedEntities == 3) {
 			selectedEntities = 0;
 		}
 		else {
@@ -283,16 +296,19 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		case 2:
 			std::cout << "staticEntitiesDragons" << std::endl;
 			break;
+		case 3:
+			std::cout << "Mission1 ITEMS" << std::endl;
+			break;
 		}
 		break;
+
 	case SDLK_PERIOD:
-		if (selectedBuild == world->buildWorld.size()-1) {
+		if (selectedBuild == world->buildWorld.size() - 1) {
 			selectedBuild = 0;
 			currentBuild = world->buildWorld[selectedBuild];
 			std::cout << currentBuild->name << std::endl;
 		}
 		else {
-
 			selectedBuild++;
 			currentBuild = world->buildWorld[selectedBuild];
 			std::cout << currentBuild->name << std::endl;
@@ -305,7 +321,6 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			std::cout << currentBuild->name << std::endl;
 		}
 		else {
-
 			selectedBuild--;
 			currentBuild = world->buildWorld[selectedBuild];
 			std::cout << currentBuild->name << std::endl;

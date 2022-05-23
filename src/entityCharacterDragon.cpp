@@ -33,17 +33,40 @@ void EntityCharacterDragon::render()
 
 void EntityCharacterDragon::update(float dt)
 {
-	bool cameraLocked = Game::instance->cameraLocked;
-	Camera* cam = Game::instance->camera;
+	Game* g = Game::instance;
+	bool cameraLocked = g->cameraLocked;
+	Camera* cam = g->camera;
 
 	if (cameraLocked) {
-		float rotSpeed = 90.0f * DEG2RAD * dt;
 
-		if (Input::isKeyPressed(SDL_SCANCODE_W)) model.translate(0.0f, 0.0f, -dragonSpeed * dt);
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) model.translate(0.0f, 0.0f, dragonSpeed * dt);
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) model.rotate(-rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_Q)) model.rotate(-rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
-		if (Input::isKeyPressed(SDL_SCANCODE_E)) model.rotate(rotSpeed, Vector3(0.0f, 0.0f, 1.0f));
+		float rotSpeed = 120.0f * dt;
+
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle -= rotSpeed;
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle += rotSpeed;
+		if (Input::isKeyPressed(SDL_SCANCODE_Q)) angle2 -= rotSpeed;
+		if (Input::isKeyPressed(SDL_SCANCODE_E)) angle2 += rotSpeed;
+		Matrix44 dragonRotation;
+		dragonRotation.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+
+		Vector3 forward = dragonRotation.rotateVector(Vector3(0, 0, 1));
+
+		Vector3 dragonVel;
+
+		if (Input::isKeyPressed(SDL_SCANCODE_W))  dragonVel = dragonVel - (forward * dragonSpeed * dt);
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) dragonVel = dragonVel + (forward * dragonSpeed * dt);
+
+		Vector3 nexPos = getPosition() + dragonVel;
+		Vector3 character_center = nexPos + Vector3(0, 2, 0);
+
+		std::vector<EntityMesh*> entities = g->world->staticEntities;
+
+		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
+		entities = g->world->staticEntitiesCharacter;
+		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
+		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
+		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+		model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
+
+
 	}
 }

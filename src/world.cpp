@@ -30,7 +30,7 @@ void World::loadResources()
 	mainCharacter = new EntityCharacter();
 	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
 	mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(), true);
-	mainCharacter->model.setTranslation(5, 0, 15);
+	mainCharacter->model.setTranslation(-10, 0, 0);
 
 
 	ground = new EntityMesh();
@@ -80,6 +80,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "BUILD") == 0) {
 				entities = &this->buildWorld;
 			}
+			else if (strcmp(type.c_str(), "MISSION1") == 0) {
+				entities = &this->mission1Entities;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {
@@ -117,6 +120,10 @@ void World::writeObjectFile(const char* path)
 	for (int i = 0; i < this->staticEntitiesDragons.size(); i++) {
 		EntityMesh* entity = staticEntitiesDragons[i];
 		staticEntitiesWrite(outdata, entity, "STATICDRAGONS");
+	}
+	for (int i = 0; i < this->mission1Entities.size(); i++) {
+		EntityMesh* entity = mission1Entities[i];
+		staticEntitiesWrite(outdata, entity, "MISSION1");
 	}
 	for (int i = 0; i < this->buildWorld.size(); i++) {
 		EntityMesh* entity = buildWorld[i];
@@ -305,51 +312,6 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 	}
 }
 
-//void World::staticCharacterDragonRead(std::string& type, std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities)
-//{
-//	if (strcmp(type.c_str(), "STATICCHARACTER") == 0 || strcmp(type.c_str(), "STATICDRAGONS") == 0) {
-//		ss >> out;
-//		if (!entityB) {
-//
-//
-//			entity = new EntityMesh();
-//			entityB = true;
-//		}
-//		if (strcmp(out.c_str(), "MESH") == 0) {
-//			ss >> out;
-//			entity->mesh = Mesh::Get((PATH2 + out).c_str());
-//			ss >> out;
-//		}
-//		if (strcmp(out.c_str(), "TEX") == 0) {
-//			ss >> out;
-//			entity->texture = Texture::Get((PATH2 + out).c_str(), true);
-//			ss >> out;
-//		}
-//		if (strcmp(out.c_str(), "POS") == 0) {
-//			float x, y, z;
-//			ss >> x >> y >> z;
-//			entity->model.translate(x, y, z);
-//			ss >> out;
-//
-//		}
-//		if (strcmp(out.c_str(), "ROT") == 0) {
-//			float x, y, z;
-//			ss >> x >> y >> z;
-//			entity->model.rotate(x * DEG2RAD, Vector3(1, 0, 0));
-//			entity->model.rotate(y * DEG2RAD, Vector3(0, 1, 0));
-//			entity->model.rotate(z * DEG2RAD, Vector3(0, 0, -1));
-//			ss >> out;
-//		}
-//		if (strcmp(out.c_str(), "NAME") == 0) {
-//			ss >> out;
-//			entity->name = out;
-//			ss >> out;
-//		}
-//		if (strcmp(out.c_str(), "END") == 0) {
-//			entityB = false;
-//			entities->push_back(entity);
-//		}
-//	}
-//}
+
 
 

@@ -21,7 +21,7 @@
 #include "input.h"
 
 #pragma region EDITORMUNDO
-void AddEntityInFront(Camera* cam, EntityMesh* entity) {
+void AddEntityInFront(Camera* cam, EntityMesh* entity, std::vector<EntityMesh*>& entities) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	std::string PATH2 = "data/";
 #else
@@ -38,10 +38,13 @@ void AddEntityInFront(Camera* cam, EntityMesh* entity) {
 	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
 	Matrix44 model;
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	entity->model = model;
+	EntityMesh* newEntity = new EntityMesh();
+	newEntity->mesh = entity->mesh;
+	newEntity->texture = entity->texture;
+	newEntity->model = model;
 
 
-	g->world->staticEntities.push_back(entity);
+	entities.push_back(newEntity);
 }
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 	//esto exactamente no se lo que hace
@@ -140,6 +143,25 @@ void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
 	
 }
 #pragma endregion
+void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
+{
+	for (size_t i = 0; i < entities.size(); i++) {
+		EntityMesh* currentEntity = entities[i];
+		Vector3 coll;
+		Vector3 collnorm;
+		//comprobamos si colisiona el objeto con la esfera (radio 3)
+		if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
+			continue; //si no colisiona, pasamos al siguiente objeto
+
+					  //si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+		Vector3 push_away = normalize(coll - character_center) * dt;
+		nexPos = currentPos - push_away; //move to previous pos but a little bit further
+
+											//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
+		nexPos.y = 0;
+
+	}
+}
 
 void checkGameState()
 {

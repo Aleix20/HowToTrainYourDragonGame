@@ -22,7 +22,7 @@ public:
 
 	EntityMesh* sky;
 	EntityMesh* ocean;
-	Entity* selectedEntity;
+	Entity* selectedEntity = NULL;
 	EntityMesh* ground;
 	bool mission1 = false;
 	bool topOfDragon = false;
@@ -31,6 +31,7 @@ public:
 	std::vector<EntityMesh*> staticEntitiesDragons;
 	std::vector<EntityMesh*> staticEntitiesCharacter;
 	std::vector<EntityMesh*> buildWorld;
+	std::vector<EntityMesh*> mission1Entities;
 	std::vector<EntityCharacterDragon*> dynamicEntitiesDragons;
 	EntityCharacter* mainCharacter;
 

@@ -22,6 +22,7 @@ public:
     virtual void render() override;
     virtual void update(float dt) override;
     float tiling = 1.0f;
+    float angle = 0.0f;
 };
 
 #endif /* entityCharacter_h */
