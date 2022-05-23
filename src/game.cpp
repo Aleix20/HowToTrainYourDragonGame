@@ -265,7 +265,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	
 	case SDLK_MINUS: RotateSelected(20.0f * elapsed_time); break;
 	case SDLK_PLUS:  RotateSelected(-20.0f * elapsed_time); break;
-	case SDLK_LESS:
+	case SDLK_z:
 		if (selectedEntities == 2) {
 			selectedEntities = 0;
 		}
