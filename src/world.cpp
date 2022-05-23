@@ -80,6 +80,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "BUILD") == 0) {
 				entities = &this->buildWorld;
 			}
+			else if (strcmp(type.c_str(), "MISSION1") == 0) {
+				entities = &this->mission1Entities;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {
@@ -117,6 +120,10 @@ void World::writeObjectFile(const char* path)
 	for (int i = 0; i < this->staticEntitiesDragons.size(); i++) {
 		EntityMesh* entity = staticEntitiesDragons[i];
 		staticEntitiesWrite(outdata, entity, "STATICDRAGONS");
+	}
+	for (int i = 0; i < this->mission1Entities.size(); i++) {
+		EntityMesh* entity = mission1Entities[i];
+		staticEntitiesWrite(outdata, entity, "MISSION1");
 	}
 	for (int i = 0; i < this->buildWorld.size(); i++) {
 		EntityMesh* entity = buildWorld[i];

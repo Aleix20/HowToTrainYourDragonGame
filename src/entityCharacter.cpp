@@ -59,8 +59,8 @@ void EntityCharacter::update(float dt)
 
 
 
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle += rotSpeed; 
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle -= rotSpeed; 
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle -= rotSpeed; 
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle += rotSpeed; 
 
 		Matrix44 playerRotation;
 		playerRotation.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
@@ -78,27 +78,13 @@ void EntityCharacter::update(float dt)
 
 		std::vector<EntityMesh*> entities = g->world->staticEntities;
 
-		for (size_t i = 0; i < entities.size(); i++) {
-			EntityMesh* currentEntity = entities[i];
-			Vector3 coll;
-			Vector3 collnorm;
-			//comprobamos si colisiona el objeto con la esfera (radio 3)
-			if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
-				continue; //si no colisiona, pasamos al siguiente objeto
-
-			//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
-			Vector3 push_away = normalize(coll - character_center) * dt;
-			nexPos = getPosition() - push_away; //move to previous pos but a little bit further
-
-			//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
-			nexPos.y = 0;
-
-		}
+		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
+		entities = g->world->staticEntitiesCharacter;
+		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
 		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
 		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 
-		
-
 	}
 }
+
 
