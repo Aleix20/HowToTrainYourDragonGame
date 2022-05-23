@@ -46,45 +46,39 @@ void EntityCharacter::render()
 
 }
 
+
 void EntityCharacter::update(float dt)
 {
 
-
-	bool cameraLocked = Game::instance->cameraLocked;
-	Camera* cam = Game::instance->camera;
+	Game* g = Game::instance;
+	bool cameraLocked = g->cameraLocked;
+	Camera* cam = g->camera;
 	if (cameraLocked) {
 		float playerSpeed = 50.0f * dt;
-		float rotSpeed = 90.0f * DEG2RAD * dt;
+		float rotSpeed = 120.0f * dt;
 
-		float playYaw;
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-			model.rotate(-rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-		}
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
+
+
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle += rotSpeed; 
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle -= rotSpeed; 
 
 		Matrix44 playerRotation;
-		Vector3 forward = playerRotation.rotateVector(Vector3(0, 0, -1));
+		playerRotation.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+
+		Vector3 forward = playerRotation.rotateVector(Vector3(0, 0, 1));
 		Vector3 right = playerRotation.rotateVector(Vector3(1, 0, 0));
-		Vector3 playerMovement;
-		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-			playerMovement = playerMovement + (forward * playerSpeed);
-			//model.translate(0.0f, 0.0f, -playerSpeed);
-		}
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-			playerMovement = playerMovement - (forward * playerSpeed);
-			//model.translate(0.0f, 0.0f, playerSpeed);
-		}
 
+		Vector3 playerVel;
 
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) playerVel = playerVel - (forward * playerSpeed);
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) playerVel = playerVel + (forward * playerSpeed);
 
-		//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
-		Vector3 nexPos = getPosition() + playerMovement;
+		Vector3 nexPos = getPosition() + playerVel;
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
 
-		Game* g = Game::instance;
 		std::vector<EntityMesh*> entities = g->world->staticEntities;
-		for (size_t i = 0; i < entities.size(); i++)
-		{
+
+		for (size_t i = 0; i < entities.size(); i++) {
 			EntityMesh* currentEntity = entities[i];
 			Vector3 coll;
 			Vector3 collnorm;
@@ -100,61 +94,10 @@ void EntityCharacter::update(float dt)
 			nexPos.y = 0;
 
 		}
-		model.setTranslation(nexPos.x, 0, nexPos.z);
-		//if (cameraLocked) {
-		//	float playerSpeed = 50.0f * dt;
-		//	float rotSpeed = 90.0f * DEG2RAD * dt;
-	 //       Game* g = Game::instance;
-	 //       
-	 //       Vector3 playerRotation;
-	 //       Vector3 playerMovement;
-	 //       if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-	 //           playerRotation = Vector3(0.0f, -1.0f, 0.0f);
-	 //           //model.rotate(-rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-	 //       }
-	 //       if (Input::isKeyPressed(SDL_SCANCODE_D)){
-	 //           playerRotation = Vector3(0.0f, 1.0f, 0.0f);
-	 //           //model.rotate(rotSpeed, Vector3(0.0f, 1.0f, 0.0f));
-	 //           
-	 //       } else {
-	 //           playerRotation = Vector3(0.0f,0.0f,0.0f);
-	 //       }
-		//	Vector3 forward = Vector3(0,0,-1);
-	 //       if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-	 //               //Calculem quin seria el moviment del personatge
-	 //           playerMovement = (forward * playerSpeed);
-	 //               //model.translate(0.0f, 0.0f, -playerSpeed);
-	 //       }
-	 //       if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-	 //           playerMovement = (forward * (-playerSpeed));
-	 //               //model.translate(0.0f, 0.0f, playerSpeed);
-	 //       }
-	 //       
-	 //           //calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
-	 //       Vector3 nexPos = getPosition() + playerMovement;
-	 //       Vector3 character_center = nexPos + Vector3(0, 2, 0);
-	 //           
-	 //       
-	 //       std::vector<EntityMesh*> entities = g->world->staticEntities;
-	 //       for (size_t i = 0; i < entities.size(); i++)
-	 //       {
-	 //           EntityMesh* currentEntity = entities[i];
-	 //           Vector3 coll;
-	 //           Vector3 collnorm;
-	 //           //comprobamos si colisiona el objeto con la esfera (radio 3)
-	 //           if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
-	 //                   
-	 //               model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
-	 //               continue; //si no colisiona, pasamos al siguiente objeto
+		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
+		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 
-	 //           //si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
-	 //           //nexPos = getPosition() - push_away; //move to previous pos but a little bit further
-	 //           //nexPos.y = 0;
-
-	 //           }
-	 //       if (playerRotation.x != 0.0f && playerRotation.y != 0.0f && playerRotation.z != 0.0f ) model.rotate(rotSpeed, playerRotation);
-	 //       
-	 //       }
+		
 
 	}
 }

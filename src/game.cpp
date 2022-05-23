@@ -244,11 +244,16 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		}
 		break;
-	case SDLK_2: AddEntityInFront(camera,currentBuild); break;
-	case SDLK_UP:if (currentBuild == NULL) break; MoveSelected(0, 0, -10.0f * elapsed_time); break;
-	case SDLK_DOWN:if (currentBuild == NULL) break; MoveSelected(0, 0, 10.0f * elapsed_time); break;
-	case SDLK_LEFT: if (currentBuild == NULL) break; MoveSelected(-10.0f * elapsed_time, 0, 0); break;
-	case SDLK_RIGHT:if (currentBuild == NULL) break; MoveSelected(10.0f * elapsed_time, 0, 0); break;
+	case SDLK_2: 
+		
+		
+		
+		AddEntityInFront(camera,currentBuild); 
+		break;
+	case SDLK_UP:  MoveSelected(0, 0, -30.0f * elapsed_time); break;
+	case SDLK_DOWN: MoveSelected(0, 0, 30.0f * elapsed_time); break;
+	case SDLK_LEFT:  MoveSelected(-30.0f * elapsed_time, 0, 0); break;
+	case SDLK_RIGHT: MoveSelected(30.0f * elapsed_time, 0, 0); break;
 	case SDLK_3:
 		if (world->mainCharacter->getPosition().distance(Vector3(5, 1.5, 5)) < 10.0f) {
 
@@ -263,8 +268,8 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		break;
 	case SDLK_f:checkGameState(); break;
 	
-	case SDLK_MINUS: RotateSelected(20.0f * elapsed_time); break;
-	case SDLK_PLUS:  RotateSelected(-20.0f * elapsed_time); break;
+	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time); break;
+	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time); break;
 	case SDLK_LESS:
 		if (selectedEntities == 2) {
 			selectedEntities = 0;

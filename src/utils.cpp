@@ -38,10 +38,13 @@ void AddEntityInFront(Camera* cam, EntityMesh* entity) {
 	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
 	Matrix44 model;
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	entity->model = model;
+	EntityMesh* newEntity = new EntityMesh();
+	newEntity->mesh = entity->mesh;
+	newEntity->texture = entity->texture;
+	newEntity->model = model;
 
 
-	g->world->staticEntities.push_back(entity);
+	g->world->staticEntities.push_back(newEntity);
 }
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 	//esto exactamente no se lo que hace
