@@ -1,5 +1,6 @@
 #include "entityCharacterDragon.h"
 #include "input.h"
+#include "utils.h""
 
 EntityCharacterDragon::EntityCharacterDragon()
 {
@@ -59,7 +60,6 @@ void EntityCharacterDragon::update(float dt)
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
 
 		std::vector<EntityMesh*> entities = g->world->staticEntities;
-
 		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
 		entities = g->world->staticEntitiesCharacter;
 		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
