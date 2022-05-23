@@ -30,6 +30,7 @@ public:
 	std::vector<EntityMesh*> staticEntities;
 	std::vector<EntityMesh*> staticEntitiesDragons;
 	std::vector<EntityMesh*> staticEntitiesCharacter;
+	std::vector<EntityMesh*> buildWorld;
 	std::vector<EntityCharacterDragon*> dynamicEntitiesDragons;
 	EntityCharacter* mainCharacter;
 

@@ -23,6 +23,8 @@ public:
     Shader* shader;
 	World* world;
 	int selectedEntities=0;
+	int selectedBuild = 0;
+	EntityMesh* currentBuild;
 	float noRenderDistance = 250.0f;
 	//some globals
 	long frame;

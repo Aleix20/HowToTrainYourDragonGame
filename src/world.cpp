@@ -77,6 +77,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "DYNAMICDRAGONS") == 0) {
 				entitiesDragons = &this->dynamicEntitiesDragons;
 			}
+			else if (strcmp(type.c_str(), "BUILD") == 0) {
+				entities = &this->buildWorld;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {

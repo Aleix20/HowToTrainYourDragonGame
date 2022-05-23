@@ -75,3 +75,110 @@ OFFSET 0.000000 2.000000 0.000000
 ROT 0 0 0
 NAME Dragon3
 END
+TYPE BUILD
+MESH Buildings/bellTower.obj
+TEX Buildings/bellTower.png
+NAME bellTower
+END
+TYPE BUILD
+MESH Buildings/blackSmith.obj
+TEX Buildings/blackSmith.png
+NAME blackSmith
+END
+TYPE BUILD
+MESH Buildings/house1.obj
+TEX Buildings/house1.png
+NAME house1
+END
+TYPE BUILD
+MESH Buildings/house2.obj
+TEX Buildings/house2.png
+NAME house2
+END
+TYPE BUILD
+MESH Buildings/house3.obj
+TEX Buildings/house3.png
+NAME house3
+END
+TYPE BUILD
+MESH Buildings/house4.obj
+TEX Buildings/house4.png
+NAME house4
+END
+TYPE BUILD
+MESH Buildings/inn.obj
+TEX Buildings/inn.png
+NAME inn
+END
+TYPE BUILD
+MESH Buildings/mill.obj
+TEX Buildings/mill.png
+NAME mill
+END
+TYPE BUILD
+MESH Buildings/sawmill.obj
+TEX Buildings/sawmill.png
+NAME sawmill
+END
+TYPE BUILD
+MESH Buildings/stable.obj
+TEX Buildings/stable.png
+NAME stable
+END
+TYPE BUILD
+MESH Props/well.obj
+TEX Props/well.png
+NAME well
+END
+TYPE BUILD
+MESH Props/sawmillSaw.obj
+TEX Props/sawmillSaw.png
+NAME sawmillSaw
+END
+TYPE BUILD
+MESH Props/pathStraight.obj
+TEX Props/pathStraight.png
+NAME pathStraight
+END
+TYPE BUILD
+MESH Props/pathSquare.obj
+TEX Props/pathSquare.png
+NAME pathSquare
+END
+TYPE BUILD
+MESH Props/package1.obj
+TEX Props/package1.png
+NAME package
+END
+TYPE BUILD
+MESH Props/marketSand1.obj
+TEX Props/marketSand1.png
+NAME marketsand
+END
+TYPE BUILD
+MESH Props/cauldron.obj
+TEX Props/cauldron.png
+NAME cauldron
+END
+TYPE BUILD
+MESH Props/cart.obj
+TEX Props/cart.png
+NAME cart
+END
+TYPE BUILD
+MESH Props/box.obj
+TEX Props/box.png
+NAME box
+END
+TYPE BUILD
+MESH Props/bonfire.obj
+TEX Props/bonfire.png
+NAME bonfire
+END
+TYPE BUILD
+MESH Props/barrel.obj
+TEX Props/barrel.png
+NAME barrel
+END
+
+

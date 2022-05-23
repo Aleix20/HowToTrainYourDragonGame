@@ -244,7 +244,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		}
 		break;
-	case SDLK_2: AddEntityInFront(camera); break;
+	case SDLK_2: AddEntityInFront(camera,currentBuild); break;
 	case SDLK_UP: MoveSelected(0, 0, -10.0f * elapsed_time); break;
 	case SDLK_DOWN:MoveSelected(0, 0, 10.0f * elapsed_time); break;
 	case SDLK_LEFT: MoveSelected(-10.0f * elapsed_time, 0, 0); break;
@@ -285,7 +285,32 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		}
 		break;
+	case SDLK_PERIOD:
+		if (selectedBuild == world->buildWorld.size()-1) {
+			selectedBuild = 0;
+			currentBuild = world->buildWorld[selectedBuild];
+			std::cout << currentBuild->name << std::endl;
+		}
+		else {
 
+			selectedBuild++;
+			currentBuild = world->buildWorld[selectedBuild];
+			std::cout << currentBuild->name << std::endl;
+		}
+		break;
+	case SDLK_COMMA:
+		if (selectedBuild == 0) {
+			selectedBuild = world->buildWorld.size() - 1;
+			currentBuild = world->buildWorld[selectedBuild];
+			std::cout << currentBuild->name << std::endl;
+		}
+		else {
+
+			selectedBuild--;
+			currentBuild = world->buildWorld[selectedBuild];
+			std::cout << currentBuild->name << std::endl;
+		}
+		break;
 
 
 

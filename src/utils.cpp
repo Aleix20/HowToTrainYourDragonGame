@@ -21,12 +21,13 @@
 #include "input.h"
 
 #pragma region EDITORMUNDO
-void AddEntityInFront(Camera* cam) {
+void AddEntityInFront(Camera* cam, EntityMesh* entity) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	std::string PATH2 = "data/";
 #else
 	std::string PATH2 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
 #endif
+	if (entity == NULL) return;
 	std::string a;
 	Vector2 mouse = Input::mouse_position;
 	Game* g = Game::instance;
@@ -37,10 +38,8 @@ void AddEntityInFront(Camera* cam) {
 	Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
 	Matrix44 model;
 	model.translate(spawnPos.x, spawnPos.y, spawnPos.z);
-	EntityMesh* entity = new EntityMesh();
 	entity->model = model;
-	entity->mesh = Mesh::Get((PATH2 + a.assign("blacksmith.obj")).c_str());
-	entity->texture = Texture::Get((PATH2 + a.assign("blacksmith.png")).c_str());
+
 
 	g->world->staticEntities.push_back(entity);
 }

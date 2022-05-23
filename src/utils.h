@@ -20,7 +20,7 @@ long getTime();
 bool readFile(const std::string& filename, std::string& content);
 bool readFileBin(const std::string& filename, std::vector<unsigned char>& buffer);
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera);
-void AddEntityInFront(Camera* cam);
+void AddEntityInFront(Camera* cam, EntityMesh* entity);
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos);
