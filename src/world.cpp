@@ -30,7 +30,7 @@ void World::loadResources()
 	mainCharacter = new EntityCharacter();
 	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
 	mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(), true);
-	mainCharacter->model.setTranslation(0, 0, 0);
+	mainCharacter->model.setTranslation(-10, 0, 0);
 
 
 	ground = new EntityMesh();
