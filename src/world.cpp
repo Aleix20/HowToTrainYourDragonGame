@@ -118,6 +118,10 @@ void World::writeObjectFile(const char* path)
 		EntityMesh* entity = staticEntitiesDragons[i];
 		staticEntitiesWrite(outdata, entity, "STATICDRAGONS");
 	}
+	for (int i = 0; i < this->buildWorld.size(); i++) {
+		EntityMesh* entity = buildWorld[i];
+		staticEntitiesWrite(outdata, entity, "BUILD");
+	}
 	for (int i = 0; i < this->dynamicEntitiesDragons.size(); i++) {
 		EntityCharacterDragon* entity = dynamicEntitiesDragons[i];
 		std::string type;
@@ -139,8 +143,15 @@ void World::writeDynamicDragons(std::ofstream& outdata,  EntityCharacterDragon* 
 	outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
 	Vector3 entityOff = entity->characterOffset.getTranslation();
 	outdata << "OFFSET " + std::to_string(entityOff.x) + " " + std::to_string(entityOff.y) + " " + std::to_string(entityOff.z) << std::endl;
-	//Vector3 entityPos = entity->model.getRotationOnly();
-	outdata << "ROT " + std::to_string(0) + " " + std::to_string(0) + " " + std::to_string(0) << std::endl;
+	/*float* entityRot = entity->model.getRotationMatrix();
+	std::string rotMatrix;
+	for (size_t i = 0; i < 9; i++)
+	{
+		rotMatrix.append(std::to_string(entityRot[i]));
+		rotMatrix.append(" ");
+
+	}
+	outdata << "ROT "+ rotMatrix << std::endl;*/
 	if (strcmp(entity->name.c_str(), "") != 0) {
 		outdata << "NAME " + entity->name << std::endl;
 	}
@@ -155,15 +166,31 @@ void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std:
 	
 	
 	outdata << "TEX " + entity->texture->filename << std::endl;
-	Vector3 entityPos = entity->getPosition();
-	outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
-	//Vector3 entityPos = entity->model.getRotationOnly();
-	outdata << "ROT " + std::to_string(0) + " " + std::to_string(0) + " " + std::to_string(0) << std::endl;
-	if (strcmp(entity->name.c_str(), "") != 0) {
-		outdata << "NAME " + entity->name << std::endl;
+	if (strcmp(type.c_str(), "BUILD") == 0) {
+		if (strcmp(entity->name.c_str(), "") != 0) {
+			outdata << "NAME " + entity->name << std::endl;
+		}
 	}
-	Vector3 entityScale = entity->model.getScale();
-	outdata << "SCALE " + std::to_string(entityScale.x) + " " + std::to_string(entityScale.y) + " " + std::to_string(entityScale.z) << std::endl;
+	
+	if (strcmp(type.c_str(), "BUILD") != 0) {
+		Vector3 entityPos = entity->getPosition();
+		outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
+		float* entityRot = entity->model.getRotationMatrix();
+		std::string rotMatrix;
+		for (size_t i = 0; i < 16; i++)
+		{
+			rotMatrix.append(std::to_string(entityRot[i]));
+			rotMatrix.append(" ");
+
+		}
+		outdata << "ROT " + rotMatrix << std::endl;
+		if (strcmp(entity->name.c_str(), "") != 0) {
+			outdata << "NAME " + entity->name << std::endl;
+		}
+		Vector3 entityScale = entity->model.getScale();
+		outdata << "SCALE " + std::to_string(entityScale.x) + " " + std::to_string(entityScale.y) + " " + std::to_string(entityScale.z) << std::endl;
+	}
+	
 	outdata << "END" << std::endl;
 }
 
@@ -210,14 +237,12 @@ void World::readEntitiesCharacterDragonAttributes(std::stringstream& ss, std::st
 		ss >> out;
 
 	}
-	if (strcmp(out.c_str(), "ROT") == 0) {
-		float x, y, z;
-		ss >> x >> y >> z;
-		entityDragon->model.rotate(x * DEG2RAD, Vector3(1, 0, 0));
-		entityDragon->model.rotate(y * DEG2RAD, Vector3(0, 1, 0));
-		entityDragon->model.rotate(z * DEG2RAD, Vector3(0, 0, -1));
-		ss >> out;
-	}
+	//if (strcmp(out.c_str(), "ROT") == 0) {
+	//	
+	//	entityDragon->model.rotate(x * DEG2RAD, Vector3(1, 0, 0));
+	//	
+	//	ss >> out;
+	//}
 	if (strcmp(out.c_str(), "NAME") == 0) {
 		ss >> out;
 		entityDragon->name = out;
@@ -256,23 +281,21 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 		ss >> out;
 
 	}
-	if (strcmp(out.c_str(), "ROT") == 0) {
+	if (strcmp(out.c_str(), "SCALE") == 0) {
 		float x, y, z;
 		ss >> x >> y >> z;
-		entity->model.rotate(x * DEG2RAD, Vector3(1, 0, 0));
-		entity->model.rotate(y * DEG2RAD, Vector3(0, 1, 0));
-		entity->model.rotate(z * DEG2RAD, Vector3(0, 0, -1));
+		entity->model.scale(x, y, z);
+		ss >> out;
+	}
+	if (strcmp(out.c_str(), "ROT") == 0) {
+		float a1, a2, a3, a4, b1, b2, b3,b4, c1, c2, c3,c4, d1,d2,d3,d4;
+		ss >> a1 >> a2 >> a3 >> a4>> b1 >> b2 >> b3 >> b4 >> c1 >> c2 >> c3 >> c4 >> d1 >> d2 >> d3 >> d4 ;
+		entity->model.setMatrix(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "NAME") == 0) {
 		ss >> out;
 		entity->name = out;
-		ss >> out;
-	}
-	if (strcmp(out.c_str(), "SCALE") == 0) {
-		float x, y, z;
-		ss >> x >> y >> z;
-		entity->model.scale(x,y,z);
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "END") == 0) {

@@ -244,6 +244,9 @@ class Matrix44
 		void setRotation( float angle_in_rad, const Vector3& axis );
 		void setScale(float x, float y, float z);
 		Vector3 getScale();
+		float* getRotationMatrix();
+		void setMatrix(float a1, float a2, float a3, float a4, float b1, float b2, float b3, float b4, float c1, float c2, float c3, float c4,
+			float d1, float d2, float d3, float d4);
 
 		Vector3 getTranslation();
 

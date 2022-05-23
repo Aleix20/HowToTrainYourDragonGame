@@ -275,6 +275,24 @@ Vector3 Matrix44::getScale()
 	return Vector3(m[0], m[5], m[10]);
 }
 
+float* Matrix44::getRotationMatrix()
+{
+	return m;
+}
+
+void Matrix44::setMatrix(float a1, float a2, float a3, float a4, float b1, float b2, float b3, float b4, float c1, float c2, float c3, float c4,
+	float d1 , float d2, float d3, float d4)
+{
+	m[0] = a1; m[4] = b1; m[8] = c1; m[12] = d1;
+	m[1] = a2; m[5] = b2; m[9] = c2; m[13] = d2;
+	m[2] = a3; m[6] = b3; m[10] = c3; m[14] = d3;
+	m[3] = a4; m[7] = b4; m[11] = c4; m[15] = d4;
+
+
+}
+
+
+
 //To create a traslation matrix
 void Matrix44::setTranslation(float x, float y, float z)
 {
@@ -314,6 +332,7 @@ void Matrix44::setRotation( float angle_in_rad, const Vector3& axis  )
 
 	M[3][3] = 1.0f;
 }
+
 
 Matrix44 Matrix44::getRotationOnly()
 {
