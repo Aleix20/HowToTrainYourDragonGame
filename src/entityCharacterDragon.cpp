@@ -1,6 +1,5 @@
 #include "entityCharacterDragon.h"
 #include "input.h"
-#include "utils.h""
 
 EntityCharacterDragon::EntityCharacterDragon()
 {
