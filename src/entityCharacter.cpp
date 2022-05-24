@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "input.h"
 #include "entityCharacter.h"
+#include "utils.h"
 
 EntityCharacter::EntityCharacter()
 {
@@ -57,8 +58,6 @@ void EntityCharacter::update(float dt)
 		float playerSpeed = 50.0f * dt;
 		float rotSpeed = 120.0f * dt;
 
-
-
 		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle -= rotSpeed; 
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle += rotSpeed; 
 
@@ -77,10 +76,10 @@ void EntityCharacter::update(float dt)
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
 
 		std::vector<EntityMesh*> entities = g->world->staticEntities;
-
-		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
-		entities = g->world->staticEntitiesCharacter;
-		checkCollisionEntities(entities, character_center, dt, nexPos, getPosition());
+        Vector3 current = getPosition();
+		checkCollisionEntities(entities, character_center, dt, nexPos, current);
+        std::vector<EntityMesh*> entities_Ch = g->world->staticEntitiesCharacter;
+		checkCollisionEntities(entities_Ch, character_center, dt, nexPos, current);
 		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
 		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 
