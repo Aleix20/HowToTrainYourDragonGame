@@ -6,15 +6,11 @@
 #include <sys/time.h>
 #endif
 
-#include "includes.h"
 
 #include "game.h"
-#include "camera.h"
 #include "shader.h"
 #include "mesh.h"
-
 #include "extra/stb_easy_font.h"
-
 #include <sstream>
 #include <string>
 #include <iostream>
@@ -57,7 +53,7 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 		EntityMesh* entity = entities[i];
 		Vector3 pos;
 		Vector3 normal;
-		
+
 		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
 			std::cout << "selected" << std::endl;
 			float distanceCamtoObj = cam->eye.distance(pos);
@@ -130,34 +126,34 @@ void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
 {
 	Game* g = Game::instance;
 
-		Vector3 entityPos = entity->model.getTranslation();
-		Mesh* entityMesh = entity->mesh;
-		float dist = entityPos.distance(camPos);
-		if (dist > g->noRenderDistance) {
-			return;
-		}
-		if (!g->camera->testSphereInFrustum(entityPos, entityMesh->radius)) {
-			return;
-		}
-		entity->render();
-	
+	Vector3 entityPos = entity->model.getTranslation();
+	Mesh* entityMesh = entity->mesh;
+	float dist = entityPos.distance(camPos);
+	if (dist > g->noRenderDistance) {
+		return;
+	}
+	if (!g->camera->testSphereInFrustum(entityPos, entityMesh->radius)) {
+		return;
+	}
+	entity->render();
+
 }
 #pragma endregion
-void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
+void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
 {
-	for (size_t i = 0; i < entities.size(); i++) {
-		EntityMesh* currentEntity = entities[i];
+	for (size_t i = 0; i < entitiesCollision.size(); i++) {
+		EntityMesh* currentEntity = entitiesCollision[i];
 		Vector3 coll;
 		Vector3 collnorm;
 		//comprobamos si colisiona el objeto con la esfera (radio 3)
 		if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
 			continue; //si no colisiona, pasamos al siguiente objeto
 
-					  //si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+		//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
 		Vector3 push_away = normalize(coll - character_center) * dt;
 		nexPos = currentPos - push_away; //move to previous pos but a little bit further
 
-											//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
+		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
 		nexPos.y = 0;
 
 	}

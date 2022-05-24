@@ -24,11 +24,11 @@ void AddEntityInFront(Camera* cam, EntityMesh* entity, std::vector<EntityMesh*>&
 void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos);
+void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos);
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
 void ScaleSelected(float x, float y, float z);
 void RemoveSelected(std::vector<EntityMesh*>& entities);
-void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos);
 
 void checkGameState();
 //generic purposes fuctions
@@ -62,6 +62,5 @@ char* fetchBufferVec2(char* data, std::vector<Vector2>& vector);
 char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector);
 char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector);
 char* fetchBufferVec4(char* data, std::vector<Vector4>& vector);
-
 
 #endif
