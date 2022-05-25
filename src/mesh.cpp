@@ -1573,7 +1573,13 @@ Mesh* Mesh::Get(const char* filename)
 	//stats
 	long time = getTime();
 	std::cout << " + Mesh loading: " << filename << " ... ";
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	m->name = str.erase(0, 5);
+#else
+	m->name = str2.erase(0, 64);
+#endif
+
+	
 	std::string binfilename = filename;
 
 	if (file_format != FORMAT_MBIN)

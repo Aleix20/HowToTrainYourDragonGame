@@ -238,8 +238,12 @@ bool Texture::load(const char* filename, bool mipmaps, bool wrap,bool flip_y, un
 	Image* image = NULL;
 	double time = getTime();
 	
-
-	str2.erase(0,5);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	str2.erase(0, 5);
+#else
+	str2.erase(0, 64); 
+#endif
+	
 	std::cout << " + Texture loading: " << filename << " ... ";
 
 	image = new Image();

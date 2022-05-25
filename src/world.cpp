@@ -42,6 +42,7 @@ void World::loadResources()
 
 
 }
+#pragma region READ/WRITE MESHES
 void World::loadObjectFile(const char* path)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -311,6 +312,7 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 
 	}
 }
+#pragma endregion
 
 
 
