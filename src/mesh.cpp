@@ -1576,7 +1576,7 @@ Mesh* Mesh::Get(const char* filename)
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	m->name = str.erase(0, 5);
 #else
-	m->name = str2.erase(0, 64);
+	m->name = str.erase(0, 64);
 #endif
 
 	
