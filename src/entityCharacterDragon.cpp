@@ -45,28 +45,34 @@ void EntityCharacterDragon::update(float dt)
 		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle += rotSpeed;
 		if (Input::isKeyPressed(SDL_SCANCODE_Q)) angle2 -= rotSpeed;
 		if (Input::isKeyPressed(SDL_SCANCODE_E)) angle2 += rotSpeed;
+        
 		Matrix44 dragonRotation;
 		dragonRotation.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 
 		Vector3 forward = dragonRotation.rotateVector(Vector3(0, 0, 1));
+        Vector3 v = dragonRotation.rotateVector(Vector3(0, 1, 0));
 
 		Vector3 dragonVel;
 
 		if (Input::isKeyPressed(SDL_SCANCODE_W))  dragonVel = dragonVel - (forward * dragonSpeed * dt);
 		if (Input::isKeyPressed(SDL_SCANCODE_S)) dragonVel = dragonVel + (forward * dragonSpeed * dt);
-
+        if (Input::isKeyPressed(SDL_SCANCODE_UP)) dragonVel = dragonVel + (v * dragonSpeed * dt);
+        if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) dragonVel = dragonVel -(v * dragonSpeed * dt);
+        
 		Vector3 nexPos = getPosition() + dragonVel;
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
-
-		std::vector<EntityMesh*> entities2 = g->world->staticEntities;
+        std::vector<EntityMesh*> entities2 = g->world->staticEntities;
         Vector3 current = getPosition();
-		checkCollisionEntities(entities2, character_center, dt, nexPos, current);
-		entities2 = g->world->staticEntitiesCharacter;
-		checkCollisionEntities(entities2, character_center, dt, nexPos, current);
-		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
-		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-		model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
-
-
+        checkCollisionEntities(entities2, character_center, dt, nexPos, current);
+        entities2 = g->world->staticEntitiesCharacter;
+        checkCollisionEntities(entities2, character_center, dt, nexPos, current);
+        //No se puede volar por debajo del suelo
+        if (nexPos.y < 0) nexPos.y = current.y;
+        //'Muros invisibles'
+        if (nexPos.x > 200 || nexPos.x < -200) nexPos.x = current.x;
+        if (nexPos.z > 200 || nexPos.z < -200) nexPos.z = current.z;
+        model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
+        model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+        model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
 	}
 }

@@ -152,12 +152,13 @@ void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3
 		//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
 		Vector3 push_away = normalize(coll - character_center) * dt;
 		nexPos = currentPos - push_away; //move to previous pos but a little bit further
-
 		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
-		nexPos.y = 0;
+		//nexPos.y = 0;
 
 	}
 }
+
+
 
 void checkGameState()
 {
