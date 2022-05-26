@@ -141,6 +141,7 @@ void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
 #pragma endregion
 void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
 {
+	World* world = Game::instance->world;
 	for (size_t i = 0; i < entitiesCollision.size(); i++) {
 		EntityMesh* currentEntity = entitiesCollision[i];
 		Vector3 coll;
@@ -153,7 +154,9 @@ void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3
 		Vector3 push_away = normalize(coll - character_center) * dt;
 		nexPos = currentPos - push_away; //move to previous pos but a little bit further
 		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
-		//nexPos.y = 0;
+		if (!world->topOfDragon) {
+			nexPos.y = 0;
+		}
 
 	}
 }
