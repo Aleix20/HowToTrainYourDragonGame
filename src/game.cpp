@@ -264,7 +264,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	case SDLK_LEFT: if (world->selectedEntity == NULL) { break; } MoveSelected(-30.0f * elapsed_time, 0, 0); break;
 	case SDLK_RIGHT: if (world->selectedEntity == NULL) { break; } MoveSelected(30.0f * elapsed_time, 0, 0); break;
 	case SDLK_3:
-		if (world->mainCharacter->getPosition().distance(Vector3(5, 1.5, 5)) < 10.0f) {
+		if (world->mainCharacter->getPosition().distance(Vector3(5, 1.5, 5)) < 15.0f) {
 
 			if (world->topOfDragon) {
 				world->topOfDragon = !world->topOfDragon;

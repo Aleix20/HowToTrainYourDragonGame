@@ -39,12 +39,22 @@ void EntityCharacterDragon::update(float dt)
 
 	if (cameraLocked) {
 
-		float rotSpeed = 120.0f * dt;
+		float rotSpeed = 110.0f * dt;
 
-		if (Input::isKeyPressed(SDL_SCANCODE_A)) angle -= rotSpeed;
-		if (Input::isKeyPressed(SDL_SCANCODE_D)) angle += rotSpeed;
-		if (Input::isKeyPressed(SDL_SCANCODE_Q)) angle2 -= rotSpeed;
-		if (Input::isKeyPressed(SDL_SCANCODE_E)) angle2 += rotSpeed;
+
+		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
+			angle -= (rotSpeed * 0.5f);
+			if (angle2 > -35.0f) {
+				angle2 -= rotSpeed;
+			}
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_D)) {
+			angle += (rotSpeed * 0.5f);
+			if (angle2 < 35.0f) {
+				angle2 += rotSpeed;
+			}
+		}
+
         
 		Matrix44 dragonRotation;
 		dragonRotation.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
@@ -54,10 +64,25 @@ void EntityCharacterDragon::update(float dt)
 
 		Vector3 dragonVel;
 
-		if (Input::isKeyPressed(SDL_SCANCODE_W))  dragonVel = dragonVel - (forward * dragonSpeed * dt);
-		if (Input::isKeyPressed(SDL_SCANCODE_S)) dragonVel = dragonVel + (forward * dragonSpeed * dt);
-        if (Input::isKeyPressed(SDL_SCANCODE_UP)) dragonVel = dragonVel + (v * dragonSpeed * dt);
-        if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) dragonVel = dragonVel -(v * dragonSpeed * dt);
+		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
+			dragonVel = dragonVel - (forward * dragonSpeed * dt);
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_S)) {
+			dragonVel = dragonVel + (forward * dragonSpeed * dt);
+			
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_UP)) {
+			dragonVel = dragonVel + (v * dragonSpeed * dt);
+			if (angle3 > -25.0f) {
+				angle3 -= (rotSpeed * 0.5f) ;
+			}
+		}
+		if (Input::isKeyPressed(SDL_SCANCODE_DOWN)) {
+			dragonVel = dragonVel - (v * dragonSpeed * dt);
+			if (angle3 < 25.0f) {
+				angle3 += (rotSpeed * 0.5f);
+			}
+		}
         
 		Vector3 nexPos = getPosition() + dragonVel;
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
@@ -74,5 +99,6 @@ void EntityCharacterDragon::update(float dt)
         model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
         model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
         model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
+		model.rotate(angle3 * DEG2RAD, Vector3(1, 0, 0));
 	}
 }

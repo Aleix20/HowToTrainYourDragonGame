@@ -18,6 +18,7 @@ public:
 	float tiling = 1.0f;
 	float angle = 0.0f;
 	float angle2 = 0.0f;
+	float angle3 = 0.0f;
 };
 #endif
 
