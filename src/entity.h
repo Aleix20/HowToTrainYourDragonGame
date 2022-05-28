@@ -1,11 +1,12 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef Entity_h
+#define Entity_h
 #include <vector>
 #include "framework.h"
 #include <string>
 #include "texture.h"
 #include "mesh.h"
 #include "shader.h"
+#include "animation.h"
 
 
 class Entity
@@ -19,6 +20,7 @@ public:
     Matrix44 model;
     Mesh* mesh;
     Texture* texture;
+    std::vector<Animation*> animations;
     float tiling = 1.0f;
 
     //methods overwritten by derived classes 

@@ -230,20 +230,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		break;  //remove
 	case SDLK_g: world->writeObjectFile((PATH1 + a.assign("objects.txt")).c_str()); break;
 	case SDLK_1:
-		switch (selectedEntities) {
-		case 0:
-			RayPickCheck(camera, world->staticEntities);
-			break;
-		case 1:
-			RayPickCheck(camera, world->staticEntitiesCharacter);
-			break;
-		case 2:
-			RayPickCheck(camera, world->staticEntitiesDragons);
-			break;
-		case 3: 
-			RayPickCheck(camera, world->mission1Entities);
-			break;
-		}
+		
 		break;
 	case SDLK_2:
 		switch (selectedEntities) {
@@ -354,6 +341,22 @@ void Game::onMouseButtonDown(SDL_MouseButtonEvent event)
 	{
 		mouse_locked = !mouse_locked;
 		SDL_ShowCursor(!mouse_locked);
+	}
+	if (event.button == SDL_BUTTON_LEFT) {
+		switch (selectedEntities) {
+		case 0:
+			RayPickCheck(camera, world->staticEntities);
+			break;
+		case 1:
+			RayPickCheck(camera, world->staticEntitiesCharacter);
+			break;
+		case 2:
+			RayPickCheck(camera, world->staticEntitiesDragons);
+			break;
+		case 3:
+			RayPickCheck(camera, world->mission1Entities);
+			break;
+		}
 	}
 }
 

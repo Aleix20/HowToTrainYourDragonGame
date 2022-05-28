@@ -282,6 +282,11 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 		entity->texture = Texture::Get((PATH2 + out).c_str(), true);
 		ss >> out;
 	}
+	if (strcmp(out.c_str(), "ANIM") == 0) {
+		ss >> out;
+		entity->animations.push_back(Animation::Get((PATH2 + out).c_str()));
+		ss >> out;
+	}
 	if (strcmp(out.c_str(), "POS") == 0) {
 		float x, y, z;
 		ss >> x >> y >> z;
@@ -292,7 +297,7 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 	if (strcmp(out.c_str(), "SCALE") == 0) {
 		float x, y, z;
 		ss >> x >> y >> z;
-		entity->model.scale(x, y, z);
+		entity->model.setScale(x, y, z);
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "ROT") == 0) {

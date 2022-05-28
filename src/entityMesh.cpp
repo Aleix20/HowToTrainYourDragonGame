@@ -21,7 +21,22 @@ EntityMesh::EntityMesh(Mesh* mesh, Texture* texture, Matrix44 model) {
 
 void EntityMesh::render()
 {
-	Shader* shader = Game::instance->shader;
+	float time = Game::instance->time;
+	std::string a;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH1 = "data/";
+#else
+	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	Shader* shader;
+	if (animations.size() != 0) {
+		shader = Shader::Get((PATH1 + a.assign("shaders/skinning.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
+		model.setScale(0.011f, 0.011f, 0.011f);
+	}
+	else {
+		
+		shader = Game::instance->shader;
+	}
 	if (!shader) return;
 
 
@@ -36,7 +51,19 @@ void EntityMesh::render()
 	shader->setUniform("u_time", time);
 	shader->setUniform("u_model", model);
 	shader->setUniform("u_tex_tiling", tiling);
-	mesh->render(GL_TRIANGLES);
+	if (animations.size() != 0) {
+		for (size_t i = 0; i < animations.size(); i++)
+		{
+			animations[i]->assignTime(time);
+			//animations[i]->skeleton.renderSkeleton(cam, model);
+			mesh->renderAnimated(GL_TRIANGLES,&animations[i]->skeleton);
+
+		}
+	}
+	else {
+		mesh->render(GL_TRIANGLES);
+
+	}
 
 	//disable shader
 	shader->disable();
