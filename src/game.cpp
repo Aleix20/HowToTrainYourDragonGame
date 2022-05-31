@@ -135,6 +135,10 @@ void Game::render(void)
 	entities = world->staticEntitiesCharacter;
 	checkFrustrumStatic(entities, camPos);
 	
+	for (size_t i = 0; i < world->staticEntitiesPlants.size(); i++)
+	{
+		world->staticEntitiesPlants[i]->render();
+	}
 
 	//Check static dragon with camera unlocked
 	if (!cameraLocked) {
@@ -211,8 +215,8 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	{
 	case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 	case SDLK_F1: Shader::ReloadAll(); break;
-	case SDLK_F2: MoveSelected(0, -10.0f * elapsed_time, 0); break;
-	case SDLK_F3: MoveSelected(0, 10.0f * elapsed_time, 0); break;
+	case SDLK_F2: MoveSelected(0, -30.0f * elapsed_time, 0); break;
+	case SDLK_F3: MoveSelected(0, 30.0f * elapsed_time, 0); break;
 	case SDLK_F4: scale = scale - Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
 	case SDLK_F5: scale = scale + Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
 	case SDLK_F6:
@@ -225,6 +229,12 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		case 2:
 			RemoveSelected(world->staticEntitiesDragons);
+			break;
+		case 3:
+			RemoveSelected(world->mission1Entities);
+			break;
+		case 4:
+			RemoveSelected(world->staticEntitiesPlants);
 			break;
 		}
 		break;  //remove
@@ -239,6 +249,9 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		case 3:
 			AddEntityInFront(camera, currentBuild, world->mission1Entities);
+			break;
+		case 4:
+			AddEntityInFront(camera, currentBuild, world->staticEntitiesPlants);
 			break;
 		default:
 			AddEntityInFront(camera, currentBuild, world->staticEntities);
@@ -266,7 +279,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time); break;
 	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time); break;
 	case SDLK_z:
-		if (selectedEntities == 3) {
+		if (selectedEntities == 4) {
 			selectedEntities = 0;
 		}
 		else {
@@ -285,6 +298,9 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		case 3:
 			std::cout << "Mission1 ITEMS" << std::endl;
+			break;
+		case 4:
+			std::cout << "Plants" << std::endl;
 			break;
 		}
 		break;
@@ -355,6 +371,9 @@ void Game::onMouseButtonDown(SDL_MouseButtonEvent event)
 			break;
 		case 3:
 			RayPickCheck(camera, world->mission1Entities);
+			break;
+		case 4:
+			RayPickCheck(camera, world->staticEntitiesPlants);
 			break;
 		}
 	}

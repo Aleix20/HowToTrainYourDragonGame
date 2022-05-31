@@ -1,6 +1,7 @@
 #include "entityCharacterDragon.h"
 #include "input.h"
 #include "utils.h"
+
 EntityCharacterDragon::EntityCharacterDragon()
 {
 }
@@ -54,6 +55,19 @@ void EntityCharacterDragon::update(float dt)
 				angle2 += rotSpeed;
 			}
 		}
+		if (!Input::isKeyPressed(SDL_SCANCODE_A)) {
+			if (angle2 < 0) {
+				angle2 += rotSpeed * 0.7;
+			}
+		}
+		if (!Input::isKeyPressed(SDL_SCANCODE_D)) {
+			if (angle2 > 0) {
+				angle2 -= rotSpeed *0.7;
+			}
+		}
+		
+		
+		
 
         
 		Matrix44 dragonRotation;
@@ -83,6 +97,16 @@ void EntityCharacterDragon::update(float dt)
 				angle3 += (rotSpeed * 0.5f);
 			}
 		}
+		if (!Input::isKeyPressed(SDL_SCANCODE_UP)) {
+			if (angle3 < 0) {
+				angle3 += rotSpeed * 0.6;
+			}
+		}
+		if (!Input::isKeyPressed(SDL_SCANCODE_DOWN)) {
+			if (angle3 > 0) {
+				angle3 -= rotSpeed * 0.6;
+			}
+		}
         
 		Vector3 nexPos = getPosition() + dragonVel;
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
@@ -100,5 +124,6 @@ void EntityCharacterDragon::update(float dt)
         model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
         model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
 		model.rotate(angle3 * DEG2RAD, Vector3(1, 0, 0));
+
 	}
 }

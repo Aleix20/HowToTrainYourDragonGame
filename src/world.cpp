@@ -84,6 +84,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "MISSION1") == 0) {
 				entities = &this->mission1Entities;
 			}
+			else if (strcmp(type.c_str(), "PLANTS") == 0) {
+				entities = &this->staticEntitiesPlants;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {
@@ -129,6 +132,10 @@ void World::writeObjectFile(const char* path)
 	for (int i = 0; i < this->buildWorld.size(); i++) {
 		EntityMesh* entity = buildWorld[i];
 		staticEntitiesWrite(outdata, entity, "BUILD");
+	}
+	for (int i = 0; i < this->staticEntitiesPlants.size(); i++) {
+		EntityMesh* entity = staticEntitiesPlants[i];
+		staticEntitiesWrite(outdata, entity, "PLANTS");
 	}
 	for (int i = 0; i < this->dynamicEntitiesDragons.size(); i++) {
 		EntityCharacterDragon* entity = dynamicEntitiesDragons[i];
@@ -297,7 +304,7 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 	if (strcmp(out.c_str(), "SCALE") == 0) {
 		float x, y, z;
 		ss >> x >> y >> z;
-		entity->model.setScale(x, y, z);
+		entity->model.scale(x, y, z);
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "ROT") == 0) {
