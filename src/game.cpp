@@ -153,7 +153,10 @@ void Game::render(void)
 
 	if (world->mission1) {
 		entities = world->mission1Entities;
-		checkFrustrumStatic(entities, camPos);
+        //std::vector<EntityMesh*> entitiesCopy ;
+        //entitiesCopy = entities;
+        world->Mision1(entities);
+		
 	}
 
 
@@ -224,19 +227,19 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	case SDLK_F6:
 		switch (selectedEntities) {
 		case 0:
-			RemoveSelected(world->staticEntities);
+			RemoveSelected(world->staticEntities, world->selectedEntity);
 			break;
 		case 1:
-			RemoveSelected(world->staticEntitiesCharacter);
+			RemoveSelected(world->staticEntitiesCharacter,world->selectedEntity);
 			break;
 		case 2:
-			RemoveSelected(world->staticEntitiesDragons);
+			RemoveSelected(world->staticEntitiesDragons,world->selectedEntity);
 			break;
 		case 3:
-			RemoveSelected(world->mission1Entities);
+			RemoveSelected(world->mission1Entities,world->selectedEntity);
 			break;
 		case 4:
-			RemoveSelected(world->staticEntitiesPlants);
+			RemoveSelected(world->staticEntitiesPlants,world->selectedEntity);
 			break;
 		}
 		break;  //remove
@@ -270,7 +273,7 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 				Vector3 position = dragon->getPosition();
 				Vector3 positionDynamic = dragonDynamic->getPosition();
 				world->topOfDragon = !world->topOfDragon;
-				world->mainCharacter->model.setTranslation((position.x-7), 0, position.z);
+				//world->mainCharacter->model.setTranslation((position.x-7), 0, position.z);
 				dragon->model = dragonDynamic->model;
 				float angle3 = dragonDynamic->angle3;
 				float angle2 = dragonDynamic->angle2;

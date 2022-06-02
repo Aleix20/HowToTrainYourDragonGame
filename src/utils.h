@@ -29,7 +29,7 @@ void checkCollisionEntity(EntityMesh* entity, Vector3& character_center, float d
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
 void ScaleSelected(float x, float y, float z);
-void RemoveSelected(std::vector<EntityMesh*>& entities);
+void RemoveSelected(std::vector<EntityMesh*>& entities, Entity* selectedEntity);
 
 void checkGameState();
 //generic purposes fuctions

@@ -91,15 +91,14 @@ void ScaleSelected(float x, float y, float z) {
 
 }
 
-void RemoveSelected(std::vector<EntityMesh*>& entities)
+void RemoveSelected(std::vector<EntityMesh*>& entities, Entity* selectedEntity)
 {
-	Game* g = Game::instance;
-	if (g->world->selectedEntity == NULL) {
+	if (selectedEntity == NULL) {
 		return;
 	}
-	std::vector<EntityMesh*>::iterator it = std::find(entities.begin(), entities.end(), g->world->selectedEntity);
+	std::vector<EntityMesh*>::iterator it = std::find(entities.begin(), entities.end(), selectedEntity);
 	entities.erase(it);
-	g->world->selectedEntity = NULL;
+	selectedEntity = NULL;
 }
 
 

@@ -108,7 +108,7 @@ void EntityCharacterDragon::update(float dt)
 			}
 		}
         
-		Vector3 nexPos = getPosition() + dragonVel;
+		nexPos = getPosition() + dragonVel;
 		Vector3 character_center = nexPos + Vector3(0, 2, 0);
         std::vector<EntityMesh*> entities2 = g->world->staticEntities;
         Vector3 current = getPosition();
@@ -122,7 +122,7 @@ void EntityCharacterDragon::update(float dt)
         if (nexPos.z > 200 || nexPos.z < -200) nexPos.z = current.z;
         model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
 		EntityMesh* dragon = g->world->staticEntitiesDragons[g->world->currentDragon];
-		g->world->mainCharacter->model.setTranslation(current.x , 0, current.z );
+		g->world->mainCharacter->model.setTranslation(current.x - 7 , 0, current.z );
 		dragon->model.setTranslation(current.x , 0, current.z );
         model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
         model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));

@@ -11,6 +11,7 @@ public:
 	Texture* characterTex;
     Matrix44 characterModel;
     Matrix44 characterOffset;
+    Vector3 nexPos;
 	float dragonSpeed = 50.0f;
 	EntityCharacterDragon();
 	virtual void render() override;

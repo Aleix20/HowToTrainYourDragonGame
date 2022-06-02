@@ -297,7 +297,7 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 	if (strcmp(out.c_str(), "POS") == 0) {
 		float x, y, z;
 		ss >> x >> y >> z;
-		entity->model.translate(x, y, z);
+		entity->model.setTranslation(x, y, z);
 		ss >> out;
 
 	}
@@ -324,8 +324,30 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 
 	}
 }
+
+
 #pragma endregion
 
+void Mision1(std::vector<EntityMesh*>& entities){
+    World* world = Game::instance->world;
+    EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
+    for (size_t i = 0; i < entities.size(); i++) {
+        EntityMesh* currentEntity = entities[i];
+        Vector3 center = currentDragon->nexPos + Vector3(0, 2, 0);
+        Vector3 coll;
+        Vector3 collnorm;
+        //comprobamos si colisiona el objeto con la esfera (radio 3)
+        if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 0.5f, coll, collnorm))
+            continue; //si no colisiona, pasamos al siguiente objeto
+        
+        RemoveSelected(entities, currentEntity);
+        
 
+    
+    }
+    Camera* cam = Game::instance->camera;
+    checkFrustrumStatic(entities, cam->eye);
+    
+}
 
 
