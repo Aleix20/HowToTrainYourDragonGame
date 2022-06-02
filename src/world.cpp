@@ -328,7 +328,7 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 
 #pragma endregion
 
-void Mision1(std::vector<EntityMesh*>& entities){
+void World::Mision1(std::vector<EntityMesh*>& entities){
     World* world = Game::instance->world;
     EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
     for (size_t i = 0; i < entities.size(); i++) {
@@ -341,7 +341,7 @@ void Mision1(std::vector<EntityMesh*>& entities){
             continue; //si no colisiona, pasamos al siguiente objeto
         
         RemoveSelected(entities, currentEntity);
-        
+	
 
     
     }

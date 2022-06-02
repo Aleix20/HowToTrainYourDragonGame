@@ -25,7 +25,9 @@ public:
 	Entity* selectedEntity = NULL;
 	EntityMesh* ground;
 	bool mission1 = false;
+	bool mission1End = true;
 	bool topOfDragon = false;
+	float missionTime;
 	int currentDragon = 0;
 	std::vector<EntityMesh*> staticEntities;
 	std::vector<EntityMesh*> staticEntitiesDragons;
@@ -33,7 +35,9 @@ public:
 	std::vector<EntityMesh*> staticEntitiesPlants;
 	std::vector<EntityMesh*> buildWorld;
 	std::vector<EntityMesh*> mission1Entities;
+	std::vector<EntityMesh*> mission1EntitiesCopy;
 	std::vector<EntityCharacterDragon*> dynamicEntitiesDragons;
+
 	EntityCharacter* mainCharacter;
 
 	void loadResources();
@@ -44,6 +48,6 @@ public:
 	void readEntitiesCharacterDragonAttributes(std::stringstream& ss, std::string& out, bool& entityB, EntityCharacterDragon*& entityDragon, std::string& PATH2, std::vector<EntityCharacterDragon*>* entitiesDragons);
 	void readEntitiesAttributes(std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities);
 	//void staticCharacterDragonRead(std::string& type, std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities);
-    void Mision1(std::vector<EntityMesh*> &entities);
+    void Mision1(std::vector<EntityMesh*>& entities);
 };
 #endif

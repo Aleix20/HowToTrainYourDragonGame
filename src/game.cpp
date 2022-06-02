@@ -152,10 +152,22 @@ void Game::render(void)
 
 
 	if (world->mission1) {
-		entities = world->mission1Entities;
-        //std::vector<EntityMesh*> entitiesCopy ;
+		//entities = world->mission1Entities;
+		
+		if (world->mission1End) {
+			world->mission1EntitiesCopy = world->mission1Entities;
+			world->mission1End = false;
+		}
         //entitiesCopy = entities;
-        world->Mision1(entities);
+		if (world->missionTime > 0) {
+			world->Mision1(world->mission1EntitiesCopy);
+		}
+		else if(world->missionTime<=0 || world->mission1EntitiesCopy.empty()) {
+			world->mission1End = true;
+			world->mission1 = false;
+
+		}
+        
 		
 	}
 
@@ -174,7 +186,9 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-
+	if (world->mission1) {
+		world->missionTime -= seconds_elapsed;
+	}
 	float speed = seconds_elapsed * mouse_speed;//the speed is defined by the seconds_elapsed so it goes constant
 	//example
 	angle += (float)seconds_elapsed * 10.0f;
