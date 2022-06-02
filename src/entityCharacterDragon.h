@@ -15,6 +15,7 @@ public:
 	EntityCharacterDragon();
 	virtual void render() override;
 	virtual void update(float dt) override;
+	bool checkInsidePlane();
 	float tiling = 1.0f;
 	float angle = 0.0f;
 	float angle2 = 0.0f;

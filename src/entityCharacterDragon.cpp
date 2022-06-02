@@ -121,9 +121,19 @@ void EntityCharacterDragon::update(float dt)
         if (nexPos.x > 200 || nexPos.x < -200) nexPos.x = current.x;
         if (nexPos.z > 200 || nexPos.z < -200) nexPos.z = current.z;
         model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
+		EntityMesh* dragon = g->world->staticEntitiesDragons[g->world->currentDragon];
+		g->world->mainCharacter->model.setTranslation(current.x , 0, current.z );
+		dragon->model.setTranslation(current.x , 0, current.z );
         model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
         model.rotate(angle2 * DEG2RAD, Vector3(0, 0, 1));
 		model.rotate(angle3 * DEG2RAD, Vector3(1, 0, 0));
 
 	}
+}
+
+bool EntityCharacterDragon::checkInsidePlane()
+{
+	Vector3 position = getPosition();
+	if (position.x < 100 && position.x > -100 && position.z < 100 && position.z > -100) return true;
+	return false;
 }

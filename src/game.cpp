@@ -211,6 +211,8 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 {
 
 	Vector3 scale = Vector3(1, 1, 1);
+	EntityMesh* dragon = world->staticEntitiesDragons[world->currentDragon];
+	EntityCharacterDragon* dragonDynamic = world->dynamicEntitiesDragons[world->currentDragon];
 	switch (event.keysym.sym)
 	{
 	case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
@@ -264,13 +266,19 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 	case SDLK_LEFT: if (world->selectedEntity == NULL) { break; } MoveSelected(-30.0f * elapsed_time, 0, 0); break;
 	case SDLK_RIGHT: if (world->selectedEntity == NULL) { break; } MoveSelected(30.0f * elapsed_time, 0, 0); break;
 	case SDLK_3:
-		if (world->mainCharacter->getPosition().distance(Vector3(5, 1.5, 5)) < 15.0f) {
+		
+		if (world->mainCharacter->getPosition().distance(dragon->getPosition()) < 10.0f) {
 
-			if (world->topOfDragon) {
+			if (world->topOfDragon && dragonDynamic->checkInsidePlane() && dragonDynamic->getPosition().y < 1) {
+				Vector3 position = dragon->getPosition();
+				Vector3 positionDynamic = dragonDynamic->getPosition();
 				world->topOfDragon = !world->topOfDragon;
+				world->mainCharacter->model.setTranslation(position.x - 2, 0, position.z - 2);
+				dragon->model = dragonDynamic->model;
+				//dragon->model.setRotation(0, Vector3(0, 1, 0));
 			}
 			else {
-				world->dynamicEntitiesDragons[world->currentDragon]->model.setTranslation(5, 1.5, 5);
+				
 				world->topOfDragon = true;
 			}
 		}

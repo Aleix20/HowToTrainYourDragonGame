@@ -1469,7 +1469,7 @@ MESH NightFury/Toothless.obj
 TEX NightFury/Toothless.png
 MESH2 Hiccup/Hiccup.obj
 TEX2 Hiccup/HiccupTeen.png
-POS 67.813805 81.599968 18.837671
+POS 5.000000 1.500000 5.000000
 OFFSET 0.000000 2.000000 0.000000
 NAME Dragon1
 END
