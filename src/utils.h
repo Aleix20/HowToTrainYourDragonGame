@@ -25,6 +25,7 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities);
 void checkFrustrumStatic(std::vector<EntityMesh*>& entities, Vector3& camPos);
 void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos);
 void checkCollisionEntities(std::vector<EntityMesh*>& entities, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos);
+void checkCollisionEntity(EntityMesh* entity, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos);
 void RotateSelected(float angleDegrees);
 void MoveSelected(float x, float y, float z);
 void ScaleSelected(float x, float y, float z);

@@ -42,7 +42,7 @@ void EntityCharacterDragon::update(float dt)
 
 		float rotSpeed = 110.0f * dt;
 
-
+		
 		if (Input::isKeyPressed(SDL_SCANCODE_A)) {
 			angle -= (rotSpeed * 0.5f);
 			if (angle2 > -35.0f) {

@@ -160,6 +160,27 @@ void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3
 
 	}
 }
+void checkCollisionEntity(EntityMesh* entity, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
+{
+	World* world = Game::instance->world;
+	EntityMesh* currentEntity = entity;
+	Vector3 coll;
+	Vector3 collnorm;
+	//comprobamos si colisiona el objeto con la esfera (radio 3)
+	if (!currentEntity->mesh->testSphereCollision(currentEntity->model, character_center, 0.5f, coll, collnorm))
+		return;
+
+	//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+	Vector3 push_away = normalize(coll - character_center) * dt;
+	nexPos = currentPos - push_away; //move to previous pos but a little bit further
+	//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
+	if (!world->topOfDragon) {
+		nexPos.y = 0;
+	}
+
+
+}
+
 
 
 

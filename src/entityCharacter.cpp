@@ -80,6 +80,8 @@ void EntityCharacter::update(float dt)
 		checkCollisionEntities(entities, character_center, dt, nexPos, current);
         std::vector<EntityMesh*> entities_Ch = g->world->staticEntitiesCharacter;
 		checkCollisionEntities(entities_Ch, character_center, dt, nexPos, current);
+		
+		checkCollisionEntity(g->world->staticEntitiesDragons[g->world->currentDragon], character_center, dt, nexPos, current);
 		model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
 		model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 

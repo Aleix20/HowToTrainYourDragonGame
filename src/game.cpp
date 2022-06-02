@@ -241,9 +241,6 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		}
 		break;  //remove
 	case SDLK_g: world->writeObjectFile((PATH1 + a.assign("objects.txt")).c_str()); break;
-	case SDLK_1:
-		
-		break;
 	case SDLK_2:
 		switch (selectedEntities) {
 		case 0:
@@ -273,9 +270,18 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 				Vector3 position = dragon->getPosition();
 				Vector3 positionDynamic = dragonDynamic->getPosition();
 				world->topOfDragon = !world->topOfDragon;
-				world->mainCharacter->model.setTranslation(position.x - 2, 0, position.z - 2);
+				world->mainCharacter->model.setTranslation((position.x-7), 0, position.z);
 				dragon->model = dragonDynamic->model;
-				//dragon->model.setRotation(0, Vector3(0, 1, 0));
+				float angle3 = dragonDynamic->angle3;
+				float angle2 = dragonDynamic->angle2;
+				
+				dragon->model.rotate(-angle3 * DEG2RAD, Vector3(1, 0, 0));
+				dragonDynamic->model.rotate(-angle3 * DEG2RAD, Vector3(1, 0, 0));
+				dragon->model.rotate(-angle2 * DEG2RAD, Vector3(0, 0, 1));
+				dragonDynamic->model.rotate(-angle2 * DEG2RAD, Vector3(0, 0, 1));
+				dragonDynamic->angle3 = 0;
+				dragonDynamic->angle2 = 0;
+				
 			}
 			else {
 				
