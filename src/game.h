@@ -10,6 +10,8 @@
 #include "utils.h"
 #include "shader.h"
 #include "world.h"
+#include "audio.h"
+
 class World;
 class Game
 {

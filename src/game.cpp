@@ -7,7 +7,6 @@
 #include "input.h"
 #include "animation.h"
 
-
 #include <cmath>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -77,7 +76,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	world = new World();
 	cameraLocked = true;
 
-
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
+	{
+		//error abriendo la tarjeta de sonido...
+	}
+	Audio* audio = Audio::Get((PATH1 + a.assign("queXulo.wav")).c_str());
+	audio->Play();
+	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
