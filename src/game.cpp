@@ -80,8 +80,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	{
 		//error abriendo la tarjeta de sonido...
 	}
-	Audio* audio = Audio::Get((PATH1 + a.assign("queXulo.wav")).c_str());
-	audio->Play();
+	Audio::Play((PATH1 + a.assign("queXulo.wav")).c_str());
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
