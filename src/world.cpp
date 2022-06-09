@@ -87,6 +87,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "PLANTS") == 0) {
 				entities = &this->staticEntitiesPlants;
 			}
+			else if (strcmp(type.c_str(), "MISSION2") == 0) {
+				entities = &this->mission2Entities;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {
@@ -136,6 +139,10 @@ void World::writeObjectFile(const char* path)
 	for (int i = 0; i < this->staticEntitiesPlants.size(); i++) {
 		EntityMesh* entity = staticEntitiesPlants[i];
 		staticEntitiesWrite(outdata, entity, "PLANTS");
+	}
+	for (int i = 0; i < this->mission2Entities.size(); i++) {
+		EntityMesh* entity = mission2Entities[i];
+		staticEntitiesWrite(outdata, entity, "MISSION2");
 	}
 	for (int i = 0; i < this->dynamicEntitiesDragons.size(); i++) {
 		EntityCharacterDragon* entity = dynamicEntitiesDragons[i];
@@ -333,21 +340,25 @@ void World::Mision1(std::vector<EntityMesh*>& entities){
     EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
     for (size_t i = 0; i < entities.size(); i++) {
         EntityMesh* currentEntity = entities[i];
-        Vector3 center = currentDragon->nexPos + Vector3(0, 2, 0);
+        Vector3 center = currentDragon->nexPos + Vector3(0, 3, 0);
         Vector3 coll;
         Vector3 collnorm;
         //comprobamos si colisiona el objeto con la esfera (radio 3)
-        if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 0.5f, coll, collnorm))
+        if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 1.0f, coll, collnorm))
             continue; //si no colisiona, pasamos al siguiente objeto
         
         RemoveSelected(entities, currentEntity);
-	
 
     
     }
     Camera* cam = Game::instance->camera;
     checkFrustrumStatic(entities, cam->eye);
     
+}
+
+void World::Mision2(std::vector<EntityMesh*>& entities)
+{
+
 }
 
 

@@ -201,7 +201,12 @@ void checkGameState()
 			if (currentCharacter->name.compare("Mission1") == 0) {
 				world->mission1 = true;
 				world->mission1End = true;
-				world->missionTime = 10.0f;
+				world->missionTime = 120.0f;
+			}
+			if (currentCharacter->name.compare("Mission2") == 0) {
+				world->mission2 = true;
+				world->mission2End = true;
+				world->missionTime = 120.0f;
 			}
 		}
 

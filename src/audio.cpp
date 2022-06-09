@@ -12,17 +12,17 @@ Audio::~Audio()
 	if (filename.size())
 	{
 		auto it = sLoadedAudios.find(filename);
-		/*if (it != sLoadedAudios.end())
-			sLoadedAudios.erase(it);*/
+		if (it != sLoadedAudios.end())
+			sLoadedAudios.erase(it);
 	}
 }
-HCHANNEL Audio::play(float volume)
+HCHANNEL Audio::play(float volume, DWORD flags)
 {
 	//El handler para un canal
 	HCHANNEL hSampleChannel;
 	//Creamos un canal para el sample
 
-	hSampleChannel = BASS_SampleGetChannel(hSample, false);
+	hSampleChannel = BASS_SampleGetChannel(hSample, flags);
 
 
 	//Lanzamos un sample
@@ -37,10 +37,10 @@ Audio* Audio::Find(const char* filename)
 		return it->second;
 	return NULL;
 }
-HCHANNEL* Audio::Play(const char* filename)
+HCHANNEL* Audio::Play(const char* filename, DWORD flags)
 {
 	Audio* audio = Audio::Get(filename);
-	HCHANNEL hSampleChannel = audio->play(1.0f);
+	HCHANNEL hSampleChannel = audio->play(1.0f, flags);
 	return &hSampleChannel;
 
 }
@@ -77,6 +77,11 @@ void Audio::setName(const char* name)
 	filename = name;
 	sLoadedAudios[filename] = this;
 
+}
+
+void Audio::Stop(HCHANNEL* channel)
+{
+	BASS_ChannelStop(*channel);
 }
 
 Audio* Audio::Get(const char* filename)

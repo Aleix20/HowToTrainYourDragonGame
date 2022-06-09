@@ -45,7 +45,7 @@ float no_render_distance = 1000.0f;
 
 
 std::string a;
-
+HCHANNEL* channel;
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 
@@ -80,7 +80,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	{
 		//error abriendo la tarjeta de sonido...
 	}
-	Audio::Play((PATH1 + a.assign("queXulo.wav")).c_str());
+	channel = Audio::Play((PATH1 + a.assign("sounds/background_music.wav")).c_str(), BASS_SAMPLE_LOOP);
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -142,6 +142,7 @@ void Game::render(void)
 	for (size_t i = 0; i < world->staticEntitiesPlants.size(); i++)
 	{
 		world->staticEntitiesPlants[i]->render();
+
 	}
 
 	//Check static dragon with camera unlocked
@@ -149,6 +150,8 @@ void Game::render(void)
 		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		currentStaticDragon->render();
 		entities = world->mission1Entities;
+		checkFrustrumStatic(entities, camPos);
+		entities = world->mission2Entities;
 		checkFrustrumStatic(entities, camPos);
 	}
 
@@ -169,13 +172,33 @@ void Game::render(void)
 		else if(world->missionTime<=0 || world->mission1EntitiesCopy.empty()) {
 			world->mission1End = true;
 			world->mission1 = false;
+			std::cout << "Mission1 completed" << std::endl;
 
 		}
         
 		
 	}
 
+	if (world->mission2) {
+		//entities = world->mission1Entities;
 
+		if (world->mission2End) {
+			world->mission2EntitiesCopy = world->mission1Entities;
+			world->mission2End = false;
+		}
+		//entitiesCopy = entities;
+		if (world->missionTime > 0) {
+			world->Mision2(world->mission2EntitiesCopy);
+		}
+		else if (world->missionTime <= 0 || world->mission2EntitiesCopy.empty()) {
+			world->mission2End = true;
+			world->mission2 = false;
+			std::cout << "Mission2 completed" << std::endl;
+
+		}
+
+
+	}
 
 	drawGrid();
 
@@ -259,6 +282,9 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		case 4:
 			RemoveSelected(world->staticEntitiesPlants,world->selectedEntity);
 			break;
+		case 5:
+			RemoveSelected(world->mission2Entities, world->selectedEntity);
+			break;
 		}
 		break;  //remove
 	case SDLK_g: world->writeObjectFile((PATH1 + a.assign("objects.txt")).c_str()); break;
@@ -272,6 +298,9 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		case 4:
 			AddEntityInFront(camera, currentBuild, world->staticEntitiesPlants);
+			break;
+		case 5:
+			AddEntityInFront(camera, currentBuild, world->mission2Entities);
 			break;
 		default:
 			AddEntityInFront(camera, currentBuild, world->staticEntities);
@@ -310,11 +339,11 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			}
 		}
 		break;
-	case SDLK_f:checkGameState(); break;
+	case SDLK_f:checkGameState();  break;
 	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time); break;
 	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time); break;
 	case SDLK_z:
-		if (selectedEntities == 4) {
+		if (selectedEntities == 5) {
 			selectedEntities = 0;
 		}
 		else {
@@ -336,6 +365,9 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 			break;
 		case 4:
 			std::cout << "Plants" << std::endl;
+			break;
+		case 5:
+			std::cout << "Mission2 ITEMS" << std::endl;
 			break;
 		}
 		break;
@@ -409,6 +441,9 @@ void Game::onMouseButtonDown(SDL_MouseButtonEvent event)
 			break;
 		case 4:
 			RayPickCheck(camera, world->staticEntitiesPlants);
+			break;
+		case 5:
+			RayPickCheck(camera, world->mission2Entities);
 			break;
 		}
 	}
