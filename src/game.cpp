@@ -177,13 +177,11 @@ void Game::render(void)
 		}
         
 		
-	}
-
-	if (world->mission2) {
+	}else if (world->mission2) {
 		//entities = world->mission1Entities;
 
 		if (world->mission2End) {
-			world->mission2EntitiesCopy = world->mission1Entities;
+			world->mission2EntitiesCopy = world->mission2Entities;
 			world->mission2End = false;
 		}
 		//entitiesCopy = entities;

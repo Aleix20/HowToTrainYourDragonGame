@@ -197,6 +197,8 @@ void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std:
 	if (strcmp(type.c_str(), "BUILD") != 0) {
 		Vector3 entityPos = entity->getPosition();
 		outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
+		Vector3 entityScale = entity->model.getScale();
+		outdata << "SCALE " + std::to_string(entityScale.x) + " " + std::to_string(entityScale.y) + " " + std::to_string(entityScale.z) << std::endl;
 		float* entityRot = entity->model.getRotationMatrix();
 		std::string rotMatrix;
 		for (size_t i = 0; i < 16; i++)
@@ -209,8 +211,7 @@ void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std:
 		if (strcmp(entity->name.c_str(), "") != 0) {
 			outdata << "NAME " + entity->name << std::endl;
 		}
-		Vector3 entityScale = entity->model.getScale();
-		outdata << "SCALE " + std::to_string(entityScale.x) + " " + std::to_string(entityScale.y) + " " + std::to_string(entityScale.z) << std::endl;
+		
 	}
 	
 	outdata << "END" << std::endl;
@@ -358,7 +359,23 @@ void World::Mision1(std::vector<EntityMesh*>& entities){
 
 void World::Mision2(std::vector<EntityMesh*>& entities)
 {
+	World* world = Game::instance->world;
+	EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
+	//for (size_t i = 0; i < entities.size(); i++) {
+	//	EntityMesh* currentEntity = entities[i];
+	//	Vector3 center = currentDragon->nexPos + Vector3(0, 3, 0);
+	//	Vector3 coll;
+	//	Vector3 collnorm;
+	//	//comprobamos si colisiona el objeto con la esfera (radio 3)
+	//	if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 1.0f, coll, collnorm))
+	//		continue; //si no colisiona, pasamos al siguiente objeto
 
+	//	RemoveSelected(entities, currentEntity);
+
+
+	//}
+	Camera* cam = Game::instance->camera;
+	checkFrustrumStatic(entities, cam->eye);
 }
 
 
