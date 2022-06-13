@@ -21,6 +21,7 @@ public:
     EntityMesh(Mesh*mesh, Texture* texture,  Matrix44 model);
     virtual void render() override;
     virtual void update(float dt) override;
+    bool isScale = true; 
 
 
 };

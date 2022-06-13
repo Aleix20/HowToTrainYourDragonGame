@@ -31,10 +31,11 @@ void EntityMesh::render()
 	Shader* shader;
 	if (animations.size() != 0) {
 		shader = Shader::Get((PATH1 + a.assign("shaders/skinning.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
-		model.setScale(0.011f, 0.011f, 0.011f);
+		model.scale(0.01f, 0.01f, 0.01f);
+
 	}
 	else {
-		
+
 		shader = Game::instance->shader;
 	}
 	if (!shader) return;
@@ -49,6 +50,10 @@ void EntityMesh::render()
 	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
 	shader->setUniform("u_texture", texture, 0);
 	shader->setUniform("u_time", time);
+	//ROTAR MODELOS CON PROBLEMAS APP JAVI
+	if (name.compare("Mission3")==0) {
+		model.rotate(-90* DEG2RAD, Vector3(1,0,0));
+	}
 	shader->setUniform("u_model", model);
 	shader->setUniform("u_tex_tiling", tiling);
 	if (animations.size() != 0) {
@@ -56,15 +61,19 @@ void EntityMesh::render()
 		{
 			animations[i]->assignTime(time);
 			//animations[i]->skeleton.renderSkeleton(cam, model);
-			mesh->renderAnimated(GL_TRIANGLES,&animations[i]->skeleton);
-
+			mesh->renderAnimated(GL_TRIANGLES, &animations[i]->skeleton);
+			model.scale(100.0f, 100.0f, 100.0f);
 		}
 	}
+
 	else {
 		mesh->render(GL_TRIANGLES);
 
 	}
-
+	//ROTAR MODELOS CON PROBLEMAS APP JAVI
+	if (name.compare("Mission3")==0) {
+		model.rotate(90 * DEG2RAD, Vector3(1, 0, 0));
+	}
 	//disable shader
 	shader->disable();
 

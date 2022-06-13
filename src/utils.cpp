@@ -67,12 +67,12 @@ void RayPickCheck(Camera* cam, std::vector<EntityMesh*> entities) {
 
 };
 
-void RotateSelected(float angleDegrees) {
+void RotateSelected(float angleDegrees, Vector3 rotationVector) {
 	Game* g = Game::instance;
 	if (g->world->selectedEntity == NULL) {
 		return;
 	}
-	g->world->selectedEntity->model.rotate(angleDegrees * DEG2RAD, Vector3(0, 1, 0));
+	g->world->selectedEntity->model.rotate(angleDegrees * DEG2RAD, rotationVector);
 }
 void MoveSelected(float x, float y, float z) {
 	Game* g = Game::instance;

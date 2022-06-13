@@ -338,8 +338,10 @@ void Game::onKeyDown(SDL_KeyboardEvent event)
 		}
 		break;
 	case SDLK_f:checkGameState();  break;
-	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time); break;
-	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time); break;
+	case SDLK_MINUS: RotateSelected(40.0f * elapsed_time, Vector3(0, 1, 0)); break;
+	case SDLK_PLUS:  RotateSelected(-40.0f * elapsed_time, Vector3(0, 1, 0)); break;
+	case SDLK_l: RotateSelected(40.0f * elapsed_time, Vector3(1, 0, 0)); break;
+	case SDLK_k:  RotateSelected(-40.0f * elapsed_time, Vector3(1, 0, 0)); break;
 	case SDLK_z:
 		if (selectedEntities == 5) {
 			selectedEntities = 0;
