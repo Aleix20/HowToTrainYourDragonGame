@@ -45,7 +45,7 @@ float no_render_distance = 1000.0f;
 
 
 std::string a;
-HCHANNEL* channel;
+//HCHANNEL* channel;
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 
@@ -76,11 +76,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	world = new World();
 	cameraLocked = true;
 
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
-	{
-		//error abriendo la tarjeta de sonido...
-	}
-	channel = Audio::Play((PATH1 + a.assign("sounds/background_music.wav")).c_str(), BASS_SAMPLE_LOOP);
+//	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
+//	{
+//		//error abriendo la tarjeta de sonido...
+//	}
+//	channel = Audio::Play((PATH1 + a.assign("sounds/background_music.wav")).c_str(), BASS_SAMPLE_LOOP);
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
