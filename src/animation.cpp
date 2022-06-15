@@ -222,7 +222,12 @@ void Animation::operator = (Animation* anim)
 bool Animation::load(const char* filename)
 {
 	//struct stat stbuffer;
-
+	std::string str2 = filename;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	str2.erase(0, 5);
+#else
+	str2.erase(0, 64);
+#endif
 	std::cout << " + Animation loading: " << filename << " ... ";
 	long time = getTime();
 
@@ -250,7 +255,7 @@ bool Animation::load(const char* filename)
 			writeABIN( filename );
 		}
 	}
-
+	this->filename = str2;
 	std::cout << "[OK] Num. Bones: " << skeleton.num_bones << " Time: " << (getTime() - time) * 0.001 << "sec" << std::endl;
 	return true;
 }

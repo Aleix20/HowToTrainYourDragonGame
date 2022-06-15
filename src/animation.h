@@ -62,7 +62,7 @@ class Animation {
 public:
 
 	Skeleton skeleton;
-
+	std::string filename;
 	float duration;
 	float samples_per_second;
 	int num_animated_bones;
