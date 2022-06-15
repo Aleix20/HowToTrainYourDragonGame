@@ -190,11 +190,11 @@ void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std:
 	outdata << "TEX " + entity->texture->filename << std::endl;
 
 	if (!entity->animations.empty()) {
-		for (size_t i = 0; i < entity.; i++)
+		for (size_t i = 0; i < entity->animations.size(); i++)
 		{
 
+			outdata << "ANIM " + entity->animations[i]->filename << std::endl;
 		}
-		outdata << "ANIM " + entity->animations->filename << std::endl;
 	}
 	if (strcmp(type.c_str(), "BUILD") == 0) {
 		if (strcmp(entity->name.c_str(), "") != 0) {
