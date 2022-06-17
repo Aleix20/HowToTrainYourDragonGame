@@ -38,12 +38,27 @@
 		12BE84F21981D8F20090DDBD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BE84F11981D8F20090DDBD /* SDL2.framework */; };
 		12D3D2D419903A8200779234 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D319903A8200779234 /* GLUT.framework */; };
 		12D3D2D619903A9A00779234 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D3D2D519903A9A00779234 /* OpenGL.framework */; };
+		E26A9BEC285CE9950010AFC7 /* playstage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E26A9BE7285CE9950010AFC7 /* playstage.cpp */; };
+		E26A9BED285CE9950010AFC7 /* introstage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E26A9BE9285CE9950010AFC7 /* introstage.cpp */; };
 		E29E95F9282FAE95002F0B39 /* entityCharacterDragon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29E95F6282FAE95002F0B39 /* entityCharacterDragon.cpp */; };
 		E29E95FA282FAE95002F0B39 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29E95F8282FAE95002F0B39 /* world.cpp */; };
 		E2EDD926282D93880089AA9B /* entityCharacter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD925282D93880089AA9B /* entityCharacter.cpp */; };
 		E2EDD929282D946D0089AA9B /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD928282D946D0089AA9B /* entity.cpp */; };
 		E2EDD92C282D95400089AA9B /* entityMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2EDD92B282D95400089AA9B /* entityMesh.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E26A9BE6285CE6A50010AFC7 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1208AC7C2433FC5500BB6E8A /* fbo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fbo.cpp; path = ../src/fbo.cpp; sourceTree = "<group>"; };
@@ -92,6 +107,12 @@
 		12BE84F11981D8F20090DDBD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		12D3D2D319903A8200779234 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		12D3D2D519903A9A00779234 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		E26A9BE1285CDDF50010AFC7 /* libbass.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbass.dylib; path = ../../../../../../usr/local/lib/libbass.dylib; sourceTree = "<group>"; };
+		E26A9BE7285CE9950010AFC7 /* playstage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = playstage.cpp; path = ../../src/playstage.cpp; sourceTree = "<group>"; };
+		E26A9BE8285CE9950010AFC7 /* introstage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = introstage.h; path = ../../src/introstage.h; sourceTree = "<group>"; };
+		E26A9BE9285CE9950010AFC7 /* introstage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = introstage.cpp; path = ../../src/introstage.cpp; sourceTree = "<group>"; };
+		E26A9BEA285CE9950010AFC7 /* playstage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = playstage.h; path = ../../src/playstage.h; sourceTree = "<group>"; };
+		E26A9BEB285CE9950010AFC7 /* stage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stage.h; path = ../../src/stage.h; sourceTree = "<group>"; };
 		E29E95F5282FAE95002F0B39 /* entityCharacterDragon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entityCharacterDragon.h; path = ../../src/entityCharacterDragon.h; sourceTree = "<group>"; };
 		E29E95F6282FAE95002F0B39 /* entityCharacterDragon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = entityCharacterDragon.cpp; path = ../../src/entityCharacterDragon.cpp; sourceTree = "<group>"; };
 		E29E95F7282FAE95002F0B39 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = world.h; path = ../../src/world.h; sourceTree = "<group>"; };
@@ -152,6 +173,7 @@
 		12BE84BC1981D8180090DDBD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E26A9BE1285CDDF50010AFC7 /* libbass.dylib */,
 				12D3D2D519903A9A00779234 /* OpenGL.framework */,
 				12D3D2D319903A8200779234 /* GLUT.framework */,
 				12BE84F11981D8F20090DDBD /* SDL2.framework */,
@@ -203,6 +225,11 @@
 				128DBA241AD69163002B8C0C /* texture.cpp */,
 				128DBA251AD69163002B8C0C /* texture.h */,
 				128DBA261AD69163002B8C0C /* utils.cpp */,
+				E26A9BE9285CE9950010AFC7 /* introstage.cpp */,
+				E26A9BE8285CE9950010AFC7 /* introstage.h */,
+				E26A9BE7285CE9950010AFC7 /* playstage.cpp */,
+				E26A9BEA285CE9950010AFC7 /* playstage.h */,
+				E26A9BEB285CE9950010AFC7 /* stage.h */,
 				128DBA271AD69163002B8C0C /* utils.h */,
 				12BE84D51981D8180090DDBD /* Images.xcassets */,
 				12BE84C41981D8180090DDBD /* Supporting Files */,
@@ -232,6 +259,7 @@
 				12BE84B61981D8180090DDBD /* Sources */,
 				12BE84B71981D8180090DDBD /* Frameworks */,
 				12BE84B81981D8180090DDBD /* Resources */,
+				E26A9BE6285CE6A50010AFC7 /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -302,6 +330,8 @@
 				E2EDD926282D93880089AA9B /* entityCharacter.cpp in Sources */,
 				1208AC912433FCC500BB6E8A /* box.cpp in Sources */,
 				1208AC922433FCC500BB6E8A /* coldet.cpp in Sources */,
+				E26A9BED285CE9950010AFC7 /* introstage.cpp in Sources */,
+				E26A9BEC285CE9950010AFC7 /* playstage.cpp in Sources */,
 				1208AC932433FCC500BB6E8A /* sysdep.cpp in Sources */,
 				1208AC832433FCAD00BB6E8A /* animation.cpp in Sources */,
 				1208AC802433FC7300BB6E8A /* picopng.cpp in Sources */,

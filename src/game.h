@@ -12,6 +12,7 @@
 #include "world.h"
 #include "audio.h"
 
+
 class World;
 class Game
 {
@@ -36,6 +37,7 @@ public:
 	bool must_exit;
 	bool cameraLocked;
 	float mouse_speed = 100.0f;
+    float angle = 0;
 	//some vars
 	Camera* camera; //our global camera
 	bool mouse_locked; //tells if the mouse is locked (not seen)
