@@ -69,6 +69,8 @@
     <ClCompile Include="..\..\src\world.cpp" />
     <ClCompile Include="..\..\src\entityCharacterDragon.cpp" />
     <ClCompile Include="..\..\src\audio.cpp" />
+    <ClCompile Include="..\..\src\introstage.cpp" />
+    <ClCompile Include="..\..\src\playstage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -136,6 +138,9 @@
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\entityCharacterDragon.h" />
     <ClInclude Include="..\..\src\audio.h" />
+    <ClInclude Include="..\..\src\introstage.h" />
+    <ClInclude Include="..\..\src\playstage.h" />
+    <ClInclude Include="..\..\src\stage.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">
