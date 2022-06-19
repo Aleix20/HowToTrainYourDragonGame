@@ -63,6 +63,18 @@ void IntroStage::render() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
+    
+    EntityMesh* Hiccup = new EntityMesh();
+    Hiccup->texture = Texture::Get((PATH1 + a.assign("Hiccup/HiccupTeen.png")).c_str());
+    Hiccup->mesh = Mesh::Get((PATH1 + a.assign("Hiccup/HiccupIntro2.mesh")).c_str());
+    Hiccup->animations.push_back(Animation::Get((PATH1 + a.assign("Hiccup/HiccupIntro2.skanim")).c_str()));
+    Hiccup->model = Matrix44();
+    Hiccup->model.setTranslation(45, 0, 50);
+    Hiccup->model.scale(35,35,35);
+    Hiccup->model.rotate(40*DEG2RAD, Vector3(1,0,0));
+    Hiccup->model.rotate(35*DEG2RAD, Vector3(0,1,0));
+    Hiccup->render();
+    
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 	SDL_GL_SwapWindow(window);
 };
