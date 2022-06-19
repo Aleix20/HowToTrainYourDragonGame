@@ -16,7 +16,7 @@ float moveSpeed = 40.0f;
 void PlayStage :: render(){
     World* world = Game::instance->world;
     Camera* camera = Game::instance->camera;
-    bool cameraLocked = Game::instance->cameraLocked;
+    bool* cameraLocked = &Game::instance->cameraLocked;
     SDL_Window* window = Game::instance->window;
     //set the clear color (the background color)
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -40,7 +40,7 @@ void PlayStage :: render(){
     checkFrustrumEntity(world->ground, camera->eye);
     //camera->enable();
     int currentDragon = world->currentDragon;
-    if (cameraLocked && world->topOfDragon) {
+    if (*cameraLocked && world->topOfDragon) {
 
         Matrix44 currentDragonModel = world->dynamicEntitiesDragons[currentDragon]->model;
         EntityCharacterDragon* currentEntityDragon = world->dynamicEntitiesDragons[currentDragon];
@@ -49,7 +49,7 @@ void PlayStage :: render(){
         currentEntityDragon->render();
 
     }
-    else if (cameraLocked && !world->topOfDragon) {
+    else if (*cameraLocked && !world->topOfDragon) {
 
         EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
         Matrix44 currentCharacterModel = world->mainCharacter->model;
@@ -73,13 +73,13 @@ void PlayStage :: render(){
     }
 
     //Check static dragon with camera unlocked
-    if (!cameraLocked) {
+    if (!*cameraLocked) {
         EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
         currentStaticDragon->render();
-        entities = world->mission1Entities;
-        checkFrustrumStatic(entities, camPos);
-        entities = world->mission2Entities;
-        checkFrustrumStatic(entities, camPos);
+        //entities = world->mission1Entities;
+        //checkFrustrumStatic(entities, camPos);
+        //entities = world->mission2Entities;
+        //checkFrustrumStatic(entities, camPos);
     }
 
 
@@ -127,14 +127,14 @@ void PlayStage :: render(){
 
     drawGrid();
 
-    drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+    //drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     SDL_GL_SwapWindow(window);
 };
 
 void PlayStage:: update(double seconds_elapsed){
     World* world = Game::instance->world;
     Camera* camera = Game::instance->camera;
-    bool cameraLocked = Game::instance->cameraLocked;
+    bool* cameraLocked = &Game::instance->cameraLocked;
     float mouse_speed = Game::instance->mouse_speed;
     float angle = Game::instance->angle;
     bool mouse_locked = Game::instance->mouse_locked;
@@ -151,8 +151,8 @@ void PlayStage:: update(double seconds_elapsed){
         camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
         camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
     }
-    if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) cameraLocked = !cameraLocked;
-    if (!cameraLocked) {
+    if (Input::wasKeyPressed(SDL_SCANCODE_TAB)) *cameraLocked = !*cameraLocked;
+    if (!*cameraLocked) {
 
         if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
         if (Input::isKeyPressed(SDL_SCANCODE_W)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);

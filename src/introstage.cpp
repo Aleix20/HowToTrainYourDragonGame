@@ -46,12 +46,16 @@ void IntroStage::render() {
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	Texture* tex = Texture::Get((PATH1 + a.assign("dragonIcon.png")).c_str());
-	if (RenderButton(200, 300, 100, 100, tex)) {
+	Texture* tex = Texture::Get((PATH1 + a.assign("fondo.png")).c_str());
+	Mesh quad;
+	quad.createQuad(Game::instance->window_width*0.5, Game::instance->window_height * 0.5 +50, Game::instance->window_width, Game::instance->window_height+300, false);
+	RenderGUI(quad, tex, Vector4(1,1,1,1));
+	tex = Texture::Get((PATH1 + a.assign("dragonIcon.png")).c_str());
+	if (RenderButton(200, 300, 312, 143, tex)) {
 		Game::instance->world->playStage = true;
 	}
-	if (RenderButton(200, 500, 100, 100, tex)) {
+	tex = Texture::Get((PATH1 + a.assign("exitDoor.png")).c_str());
+	if (RenderButton(200, 500, 312, 143, tex)) {
 		Game::instance->must_exit = true;
 	}
 
@@ -67,11 +71,11 @@ bool IntroStage::RenderButton(float x, float y, float w, float h, Texture* tex)
 	Vector2 mouse = Input::mouse_position;
 	float halfWidth = w * 0.5;
 	float halfHeight = h * 0.5;
-	std::cout << mouse.y << std::endl;
+	std::cout << mouse.x << std::endl;
 	float min_x = x - halfWidth;
 	float max_x = x + halfWidth;
-	float min_y = y - halfHeight;
-	float max_y = y + halfHeight;
+	float min_y = y - halfHeight*2;
+	float max_y = y ;
 
 	bool hover = mouse.x >= min_x && mouse.x <= max_x && mouse.y >= min_y && mouse.y <= max_y;
 	Vector4 buttonColor = hover ? Vector4(1, 1, 1, 1) : Vector4(1, 1, 1, 0.7f);
