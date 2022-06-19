@@ -46,7 +46,7 @@ public:
 	std::vector<EntityCharacterDragon*> dynamicEntitiesDragons;
 
 	EntityCharacter* mainCharacter;
-
+	bool playStage = false;
 	void loadResources();
 	void loadObjectFile(const char* path);
 	void writeObjectFile(const char* path);

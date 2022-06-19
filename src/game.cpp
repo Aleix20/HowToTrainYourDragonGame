@@ -57,12 +57,12 @@ Stage* getCurrentStage(){
     return getStage(currentStage);
 };
 
-void setStage(STAGE_ID id){
+ void setStage(STAGE_ID id){
     currentStage = id;
 };
 
 void initStages(){
-    stages.reserve(4);
+    stages.reserve(2);
     stages.push_back(new IntroStage());
     stages.push_back(new PlayStage());
     
@@ -102,7 +102,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	world = new World();
 	cameraLocked = true;
     initStages();
-    setStage(STAGE_ID::PLAY);
+    setStage(STAGE_ID::INTRO);
 //	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
 //	{
 //		//error abriendo la tarjeta de sonido...
@@ -129,13 +129,20 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
+	if (world->playStage && currentStage == STAGE_ID::INTRO) {
+		setStage(STAGE_ID::PLAY);
+	}
+	if(!world->playStage && currentStage == STAGE_ID::PLAY) {
+		setStage(STAGE_ID::INTRO);
+
+	}
     getCurrentStage()->update(seconds_elapsed);
 }
 
 //Keyboard event handler (sync input)
 void Game::onKeyDown(SDL_KeyboardEvent event)
 {
-
+	getCurrentStage()->onKeyDown(event);
 	
 }
 
@@ -157,33 +164,8 @@ void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
 
 void Game::onMouseButtonDown(SDL_MouseButtonEvent event)
 {
-	if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
-	{
-		mouse_locked = !mouse_locked;
-		SDL_ShowCursor(!mouse_locked);
-	}
-	if (event.button == SDL_BUTTON_LEFT) {
-		switch (selectedEntities) {
-		case 0:
-			RayPickCheck(camera, world->staticEntities);
-			break;
-		case 1:
-			RayPickCheck(camera, world->staticEntitiesCharacter);
-			break;
-		case 2:
-			RayPickCheck(camera, world->staticEntitiesDragons);
-			break;
-		case 3:
-			RayPickCheck(camera, world->mission1Entities);
-			break;
-		case 4:
-			RayPickCheck(camera, world->staticEntitiesPlants);
-			break;
-		case 5:
-			RayPickCheck(camera, world->mission2Entities);
-			break;
-		}
-	}
+	getCurrentStage()->onMouseButtonDown(event);
+
 }
 
 void Game::onMouseButtonUp(SDL_MouseButtonEvent event)

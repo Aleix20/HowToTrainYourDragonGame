@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "world.h"
 #include "audio.h"
+#include "stage.h"
 
 
 class World;
@@ -59,6 +60,10 @@ public:
 	void onGamepadButtonDown(SDL_JoyButtonEvent event);
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
+
+	//STAGES
+
+
 
 };
 

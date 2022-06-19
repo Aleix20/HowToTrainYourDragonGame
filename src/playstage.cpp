@@ -7,8 +7,6 @@
 
 #include <stdio.h>
 #include "playstage.h"
-#include "game.h"
-#include "input.h"
 
 std::string b;
 PlayStage::PlayStage(){}
@@ -252,6 +250,9 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
     case SDLK_DOWN: if (world->selectedEntity == NULL) { break; } MoveSelected(0, 0, 30.0f * elapsed_time); break;
     case SDLK_LEFT: if (world->selectedEntity == NULL) { break; } MoveSelected(-30.0f * elapsed_time, 0, 0); break;
     case SDLK_RIGHT: if (world->selectedEntity == NULL) { break; } MoveSelected(30.0f * elapsed_time, 0, 0); break;
+    case SDLK_0:
+        world->playStage = !world->playStage;
+        break;
     case SDLK_3:
         
         if (world->mainCharacter->getPosition().distance(dragon->getPosition()) < 10.0f) {
@@ -343,4 +344,39 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
 
     }
     
-};
+}
+void PlayStage::onMouseButtonDown(SDL_MouseButtonEvent event)
+{
+    World* world = Game::instance->world;
+    int selectedEntities = Game::instance->selectedEntities;
+    Camera* camera = Game::instance->camera;
+    bool mouse_locked = Game::instance->mouse_locked;
+    if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
+    {
+        mouse_locked = !mouse_locked;
+        SDL_ShowCursor(!mouse_locked);
+    }
+    if (event.button == SDL_BUTTON_LEFT) {
+        switch (selectedEntities) {
+        case 0:
+            RayPickCheck(camera, world->staticEntities);
+            break;
+        case 1:
+            RayPickCheck(camera, world->staticEntitiesCharacter);
+            break;
+        case 2:
+            RayPickCheck(camera, world->staticEntitiesDragons);
+            break;
+        case 3:
+            RayPickCheck(camera, world->mission1Entities);
+            break;
+        case 4:
+            RayPickCheck(camera, world->staticEntitiesPlants);
+            break;
+        case 5:
+            RayPickCheck(camera, world->mission2Entities);
+            break;
+        }
+    }
+}
+;

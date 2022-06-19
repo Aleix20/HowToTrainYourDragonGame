@@ -10,9 +10,9 @@
 #include "input.h"
 
 
-enum STAGE_ID{
+enum STAGE_ID {
     INTRO = 0,
-    PLAY =1,
+    PLAY = 1
 };
 
 class Stage
@@ -22,5 +22,6 @@ public:
     virtual void render(void) {}; //empty body
     virtual void update(double seconds_elapsed) {}; //empty body
     virtual void onKeyDown(SDL_KeyboardEvent event){};
+    virtual void onMouseButtonDown(SDL_MouseButtonEvent event) {};
 };
 #endif
