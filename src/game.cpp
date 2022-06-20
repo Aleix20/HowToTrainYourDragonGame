@@ -13,6 +13,7 @@
 #include <cmath>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+HCHANNEL channel;
 std::string PATH1 = "data/";
 #else
 std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
@@ -71,7 +72,6 @@ void initStages(){
 
 
 std::string a;
-//HCHANNEL* channel;
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 
@@ -103,11 +103,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	cameraLocked = true;
     initStages();
     setStage(STAGE_ID::INTRO);
-//	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
-//	{
-//		//error abriendo la tarjeta de sonido...
-//	}
-//	channel = Audio::Play((PATH1 + a.assign("sounds/background_music.wav")).c_str(), BASS_SAMPLE_LOOP);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
+	{
+		//error abriendo la tarjeta de sonido...
+	}
+	channel = Audio::Play((PATH1 + a.assign("sounds/background_music.wav")).c_str(), BASS_SAMPLE_LOOP);
+#endif
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -130,6 +132,7 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	if (world->playStage && currentStage == STAGE_ID::INTRO) {
+		//BOOL error = Audio::Stop(channel);
 		setStage(STAGE_ID::PLAY);
 	}
 	if(!world->playStage && currentStage == STAGE_ID::PLAY) {

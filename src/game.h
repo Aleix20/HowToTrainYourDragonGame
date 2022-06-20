@@ -10,7 +10,9 @@
 #include "utils.h"
 #include "shader.h"
 #include "world.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include "audio.h"
+#endif
 #include "stage.h"
 
 
