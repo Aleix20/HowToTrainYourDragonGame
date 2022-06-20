@@ -37,6 +37,7 @@ void PlayStage :: render(){
     world->sky->render();
     glEnable(GL_DEPTH_TEST);
     world->ocean->render();
+    world->ocean2->render();
     checkFrustrumEntity(world->ground, camera->eye);
     //camera->enable();
     int currentDragon = world->currentDragon;
@@ -125,7 +126,7 @@ void PlayStage :: render(){
 
     }
 
-    drawGrid();
+    //drawGrid();
 
     //drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     SDL_GL_SwapWindow(window);

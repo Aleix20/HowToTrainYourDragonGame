@@ -24,8 +24,11 @@ void World::loadResources()
 	this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
 
 	ocean = new EntityMesh();
-	ocean->mesh = Mesh::Get((PATH + s.assign("water_deep.ASE")).c_str());
-	ocean->texture = Texture::Get((PATH + s.assign("water_deep.tga")).c_str());
+	ocean->mesh = new Mesh();
+	ocean->mesh->createPlane(20000);
+	ocean->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
+	ocean->name = "ocean";
+
 
 	mainCharacter = new EntityCharacter();
 	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());

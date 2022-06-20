@@ -22,6 +22,7 @@ public:
 
 	EntityMesh* sky;
 	EntityMesh* ocean;
+
 	Entity* selectedEntity = NULL;
 	EntityMesh* ground;
 	bool mission1 = false;
