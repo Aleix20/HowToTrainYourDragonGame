@@ -48,14 +48,14 @@ void IntroStage::render() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Texture* tex = Texture::Get((PATH1 + a.assign("fondo.png")).c_str());
 	Mesh quad;
-	quad.createQuad(Game::instance->window_width*0.5, Game::instance->window_height * 0.5 +50, Game::instance->window_width, Game::instance->window_height+300, false);
+	quad.createQuad(Game::instance->window_width*0.5, Game::instance->window_height * 0.5 , Game::instance->window_width, Game::instance->window_height, false);
 	RenderGUI(quad, tex, Vector4(1,1,1,1));
 	tex = Texture::Get((PATH1 + a.assign("dragonIcon.png")).c_str());
-	if (RenderButton(200, 300, 312, 143, tex)) {
+	if (RenderButton(200, 200, 312, 143, tex)) {
 		Game::instance->world->playStage = true;
 	}
 	tex = Texture::Get((PATH1 + a.assign("exitDoor.png")).c_str());
-	if (RenderButton(200, 500, 312, 143, tex)) {
+	if (RenderButton(200, 400, 312, 143, tex)) {
 		Game::instance->must_exit = true;
 	}
 
@@ -123,7 +123,7 @@ void IntroStage::RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1
 #endif
 	std::string a;
 	int windowWidth = Game::instance->window_width;
-	int windowHeight = Game::instance->window_width;
+	int windowHeight = Game::instance->window_height;
 
 
 
