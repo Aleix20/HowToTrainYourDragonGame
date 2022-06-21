@@ -8,6 +8,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
+#include "audio.h"
 
 class EntityMesh;
 class EntityCharacterDragon;
@@ -28,7 +29,7 @@ public:
 
 	bool audioTimer;
 	float timerAudio;
-
+	HCHANNEL channelAudios;
 
 	bool mission1 = false;
 	bool mission1End = true;

@@ -219,6 +219,7 @@ void checkAudios()
 #endif
 	std::string s;
 	World* world = Game::instance->world;
+	
 	if (!world->audioTimer) {
 		for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
 			EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
@@ -243,7 +244,35 @@ void checkAudios()
 					int randNum = rand() % 4;
 					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
 				}
-
+				if (currentCharacter->name.compare("Mission3") == 0) {
+					world->audioTimer = true;
+					world->timerAudio = 10;
+					int randNum = rand() % 3;
+					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
+				}
+				if (currentCharacter->name.compare("ChangeDragon") == 0) {
+					world->audioTimer = true;
+					world->timerAudio = 10;
+					int randNum = rand() % 3;
+					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
+				}
+				if (currentCharacter->name.compare("Dance") == 0) {
+					world->audioTimer = false;
+					world->timerAudio = 0;
+					int randNum = 0;
+					if (world->channelAudios == 0) {
+						world->channelAudios = Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), BASS_SAMPLE_LOOP);
+					}
+					
+				}
+				
+			}
+			else {
+				if (world->channelAudios > 0 && currentCharacter->name.compare("Dance") == 0) {
+					Audio::Stop(world->channelAudios);
+					world->audioTimer = false;
+					world->channelAudios = 0;
+				}
 			}
 
 		}

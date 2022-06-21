@@ -19,7 +19,7 @@ void PlayStage :: render(){
     bool* cameraLocked = &Game::instance->cameraLocked;
     SDL_Window* window = Game::instance->window;
     //set the clear color (the background color)
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(0.529f, 0.807f, 0.90f, 0.90f);
 
     // Clear the window and the depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -31,10 +31,14 @@ void PlayStage :: render(){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     Matrix44 skyModel;
-    skyModel.translate(camera->eye.x, camera->eye.y - 40.0f, camera->eye.z);
+    skyModel.translate(camera->eye.x, camera->eye.y -20- world->dynamicEntitiesDragons[world->currentDragon]->getPosition().y, camera->eye.z);
     world->sky->model = skyModel;
     glDisable(GL_DEPTH_TEST);
     world->sky->render();
+  /*  skyModel.rotate(-180 *DEG2RAD, Vector3(1,0,0));
+    world->sky->model = skyModel;
+    world->sky->render();
+    skyModel.rotate(180 * DEG2RAD, Vector3(0, 1, 0));*/
     glEnable(GL_DEPTH_TEST);
     world->ocean->render();
     checkFrustrumEntity(world->ground, camera->eye);
@@ -124,7 +128,10 @@ void PlayStage :: render(){
 
 
     }
-    checkAudios();
+    if (!world->topOfDragon) {
+
+        checkAudios();
+    }
 
     //drawGrid();
 
