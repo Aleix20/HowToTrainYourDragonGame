@@ -18,11 +18,7 @@
 
 #pragma region EDITORMUNDO
 void AddEntityInFront(Camera* cam, EntityMesh* entity, std::vector<EntityMesh*>& entities) {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-	std::string PATH2 = "data/";
-#else
-	std::string PATH2 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
-#endif
+
 	if (entity == NULL) return;
 	std::string a;
 	Vector2 mouse = Input::mouse_position;
@@ -212,6 +208,49 @@ void checkGameState()
 
 	}
 }
+
+void checkAudios()
+{
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH1 = "data/";
+#else
+	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	std::string s;
+	World* world = Game::instance->world;
+	if (!world->audioTimer) {
+		for (int i = 0; i < world->staticEntitiesCharacter.size(); i++) {
+			EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
+			Vector3 currentCharacterPosition = currentCharacter->getPosition();
+			if (currentCharacterPosition.distance(world->mainCharacter->getPosition()) < 10.0f) {
+
+				if (currentCharacter->name.compare("Mission5") == 0) {
+					world->audioTimer = true;
+					world->timerAudio = 15;
+					int randNum = rand() % 3;
+					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
+				}
+				if (currentCharacter->name.compare("Mission2") == 0) {
+					world->audioTimer = true;
+					world->timerAudio = 15;
+					int randNum = rand() % 3;
+					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
+				}
+				if (currentCharacter->name.compare("Mission1") == 0) {
+					world->audioTimer = true;
+					world->timerAudio = 15;
+					int randNum = rand() % 4;
+					Audio::Play((PATH1 + s.assign(currentCharacter->audios[randNum])).c_str(), NULL);
+				}
+
+			}
+
+		}
+	}
+	
+}
+
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
 {
 	Vector3 eye = model * eyeVec;

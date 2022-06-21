@@ -16,7 +16,8 @@
 class EntityMesh:public Entity
 {
 public:
-    
+    std::vector<std::string> audios;
+ 
     EntityMesh();
     EntityMesh(Mesh*mesh, Texture* texture,  Matrix44 model);
     virtual void render() override;

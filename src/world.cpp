@@ -337,6 +337,15 @@ void World::readEntitiesAttributes(std::stringstream& ss, std::string& out, bool
 		entity->name = out;
 		ss >> out;
 	}
+	if (strcmp(out.c_str(), "AUDIO") == 0) {
+		int length;
+		ss >> length;
+		for (int i = 0; i < length; i++) {
+			ss >> out;
+			entity->audios.push_back(out);
+		}
+		ss >> out;
+	}
 	if (strcmp(out.c_str(), "END") == 0) {
 		entityB = false;
 		entities->push_back(entity);

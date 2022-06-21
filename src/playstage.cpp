@@ -37,7 +37,6 @@ void PlayStage :: render(){
     world->sky->render();
     glEnable(GL_DEPTH_TEST);
     world->ocean->render();
-    world->ocean2->render();
     checkFrustrumEntity(world->ground, camera->eye);
     //camera->enable();
     int currentDragon = world->currentDragon;
@@ -125,6 +124,7 @@ void PlayStage :: render(){
 
 
     }
+    checkAudios();
 
     //drawGrid();
 
@@ -140,7 +140,12 @@ void PlayStage:: update(double seconds_elapsed){
     float angle = Game::instance->angle;
     bool mouse_locked = Game::instance->mouse_locked;
     
-
+    if (world->audioTimer) {
+        world->timerAudio -= seconds_elapsed;
+        if (world->timerAudio <= 0) {
+            world->audioTimer = false;
+        }
+    }
     if (world->mission1) {
         world->missionTime -= seconds_elapsed;
     }

@@ -25,6 +25,11 @@ public:
 
 	Entity* selectedEntity = NULL;
 	EntityMesh* ground;
+
+	bool audioTimer;
+	float timerAudio;
+
+
 	bool mission1 = false;
 	bool mission1End = true;
 	bool mission2 = false;

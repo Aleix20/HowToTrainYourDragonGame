@@ -63,7 +63,7 @@ void IntroStage::render() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
-    
+	wasLeftPressed = false;
     EntityMesh* Hiccup = new EntityMesh();
     Hiccup->texture = Texture::Get((PATH1 + a.assign("Hiccup/HiccupTeen.png")).c_str());
     Hiccup->mesh = Mesh::Get((PATH1 + a.assign("Hiccup/HiccupIntro2.mesh")).c_str());
@@ -83,11 +83,10 @@ bool IntroStage::RenderButton(float x, float y, float w, float h, Texture* tex)
 	Vector2 mouse = Input::mouse_position;
 	float halfWidth = w * 0.5;
 	float halfHeight = h * 0.5;
-	std::cout << mouse.x << std::endl;
 	float min_x = x - halfWidth;
 	float max_x = x + halfWidth;
-	float min_y = y - halfHeight*2;
-	float max_y = y ;
+	float min_y = y - halfHeight;
+	float max_y = y + halfHeight;
 
 	bool hover = mouse.x >= min_x && mouse.x <= max_x && mouse.y >= min_y && mouse.y <= max_y;
 	Vector4 buttonColor = hover ? Vector4(1, 1, 1, 1) : Vector4(1, 1, 1, 0.7f);
@@ -142,8 +141,10 @@ void IntroStage::RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1
 	shader->setUniform("u_color", color);
 	shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
 	shader->setUniform("u_texture", tex, 0);
-	shader->setUniform("u_time", time);
 	shader->setUniform("u_tex_tiling", 1.0f);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_tex_range", Vector4(0,0,1,1));
+
 	shader->setUniform("u_model", Matrix44());
 	quad.render(GL_TRIANGLES);
 

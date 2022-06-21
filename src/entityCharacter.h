@@ -16,7 +16,7 @@
 class EntityCharacter:public Entity
 {
 public:
-    
+
     EntityCharacter();
     EntityCharacter(Mesh*mesh, Texture* texture, Matrix44 model);
     virtual void render() override;
