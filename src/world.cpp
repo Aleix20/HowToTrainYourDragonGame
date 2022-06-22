@@ -222,6 +222,15 @@ void World::staticEntitiesWrite(std::ofstream& outdata, EntityMesh* entity, std:
 		if (strcmp(entity->name.c_str(), "") != 0) {
 			outdata << "NAME " + entity->name << std::endl;
 		}
+		if (!entity->audios.empty()) {
+			outdata << "AUDIO"  << std::endl;
+			outdata << entity->audios.size() << std::endl;
+			for (size_t i = 0; i < entity->audios.size(); i++)
+			{
+				outdata <<  entity->audios[i] << std::endl;
+			}
+
+		}
 		
 	}
 	

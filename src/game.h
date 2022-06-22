@@ -28,8 +28,7 @@ public:
 	int window_height;
     Shader* shader;
 	World* world;
-	int selectedEntities=0;
-	int selectedBuild = 0;
+	
 	EntityMesh* currentBuild;
 	float noRenderDistance = 250.0f;
 	//some globals

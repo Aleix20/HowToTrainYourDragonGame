@@ -201,10 +201,8 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
     World* world = Game::instance->world;
     bool must_exit = Game::instance->must_exit;
     float elapsed_time = Game::instance->elapsed_time;
-    int selectedEntities = Game::instance->selectedEntities;
     Camera* camera = Game::instance->camera;
     EntityMesh* currentBuild = Game::instance->currentBuild;
-    int selectedBuild = Game::instance->selectedBuild;
     
     Vector3 scale = Vector3(1, 1, 1);
     EntityMesh* dragon = world->staticEntitiesDragons[world->currentDragon];
@@ -218,7 +216,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
     case SDLK_F4: scale = scale - Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
     case SDLK_F5: scale = scale + Vector3(0.1, 0.1, 0.1); ScaleSelected(scale.x, scale.y, scale.z); break;
     case SDLK_F6:
-        switch (selectedEntities) {
+        switch (world->selectedEntities) {
         case 0:
             RemoveSelected(world->staticEntities, world->selectedEntity);
             break;
@@ -241,7 +239,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
         break;  //remove
     case SDLK_g: world->writeObjectFile((PATH1 + b.assign("objects.txt")).c_str()); break;
     case SDLK_2:
-        switch (selectedEntities) {
+        switch (world->selectedEntities) {
         case 0:
             AddEntityInFront(camera, currentBuild, world->staticEntities);
             break;
@@ -300,14 +298,14 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
     case SDLK_l: RotateSelected(40.0f * elapsed_time, Vector3(1, 0, 0)); break;
     case SDLK_k:  RotateSelected(-40.0f * elapsed_time, Vector3(1, 0, 0)); break;
     case SDLK_z:
-        if (selectedEntities == 5) {
-            selectedEntities = 0;
+        if (world->selectedEntities == 5) {
+            world->selectedEntities = 0;
         }
         else {
 
-            selectedEntities++;
+            world->selectedEntities++;
         }
-        switch (selectedEntities) {
+        switch (world->selectedEntities) {
         case 0:
             std::cout << "staticEnties" << std::endl;
             break;
@@ -330,26 +328,26 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
         break;
 
     case SDLK_PERIOD:
-        if (selectedBuild == world->buildWorld.size() - 1) {
-            selectedBuild = 0;
-            currentBuild = world->buildWorld[selectedBuild];
+        if (world->selectedBuild == world->buildWorld.size() - 1) {
+            world->selectedBuild = 0;
+            currentBuild = world->buildWorld[world->selectedBuild];
             std::cout << currentBuild->name << std::endl;
         }
         else {
-            selectedBuild++;
-            currentBuild = world->buildWorld[selectedBuild];
+            world->selectedBuild++;
+            currentBuild = world->buildWorld[world->selectedBuild];
             std::cout << currentBuild->name << std::endl;
         }
         break;
     case SDLK_COMMA:
-        if (selectedBuild == 0) {
-            selectedBuild = world->buildWorld.size() - 1;
-            currentBuild = world->buildWorld[selectedBuild];
+        if (world->selectedBuild == 0) {
+            world->selectedBuild = world->buildWorld.size() - 1;
+            currentBuild = world->buildWorld[world->selectedBuild];
             std::cout << currentBuild->name << std::endl;
         }
         else {
-            selectedBuild--;
-            currentBuild = world->buildWorld[selectedBuild];
+            world->selectedBuild--;
+            currentBuild = world->buildWorld[world->selectedBuild];
             std::cout << currentBuild->name << std::endl;
         }
         break;
@@ -362,7 +360,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event){
 void PlayStage::onMouseButtonDown(SDL_MouseButtonEvent event)
 {
     World* world = Game::instance->world;
-    int selectedEntities = Game::instance->selectedEntities;
+    
     Camera* camera = Game::instance->camera;
     bool mouse_locked = Game::instance->mouse_locked;
     if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
@@ -371,7 +369,7 @@ void PlayStage::onMouseButtonDown(SDL_MouseButtonEvent event)
         SDL_ShowCursor(!mouse_locked);
     }
     if (event.button == SDL_BUTTON_LEFT) {
-        switch (selectedEntities) {
+        switch (world->selectedEntities) {
         case 0:
             RayPickCheck(camera, world->staticEntities);
             break;

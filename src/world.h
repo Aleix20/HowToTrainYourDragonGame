@@ -22,7 +22,8 @@ class World
 {
 public:
 	World();
-
+	int selectedEntities = 0;
+	int selectedBuild = 0;
 	EntityMesh* sky;
 	EntityMesh* ocean;
 
