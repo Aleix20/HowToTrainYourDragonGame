@@ -208,7 +208,7 @@ void checkGameState()
 
 	}
 }
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 void checkAudios()
 {
 
@@ -279,7 +279,7 @@ void checkAudios()
 	}
 	
 }
-
+#endif
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
 {
 	Vector3 eye = model * eyeVec;

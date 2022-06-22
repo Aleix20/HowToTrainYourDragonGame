@@ -32,7 +32,9 @@ void ScaleSelected(float x, float y, float z);
 void RemoveSelected(std::vector<EntityMesh*>& entities, Entity* selectedEntity);
 
 void checkGameState();
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 void checkAudios();
+#endif
 //generic purposes fuctions
 void drawGrid();
 bool drawText(float x, float y, std::string text, Vector3 c, float scale = 1);

@@ -129,8 +129,9 @@ void PlayStage :: render(){
 
     }
     if (!world->topOfDragon) {
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
         checkAudios();
+#endif
     }
 
     //drawGrid();

@@ -8,7 +8,9 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include "audio.h"
+#endif
 
 class EntityMesh;
 class EntityCharacterDragon;
@@ -29,7 +31,9 @@ public:
 
 	bool audioTimer;
 	float timerAudio;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	HCHANNEL channelAudios;
+#endif
 
 	bool mission1 = false;
 	bool mission1End = true;
