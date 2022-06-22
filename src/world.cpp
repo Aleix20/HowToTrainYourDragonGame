@@ -13,10 +13,12 @@ void World::loadResources()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	std::string PATH = "data/";
+    channelAudios = 0;
 #else
 	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+    
 #endif
-	channelAudios = 0;
+	
 	loadObjectFile((PATH + s.assign("objects.txt")).c_str());
 	//writeObjectFile((PATH + s.assign("objects2.txt")).c_str());
 	this->sky = new EntityMesh();

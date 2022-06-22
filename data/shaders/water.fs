@@ -14,13 +14,13 @@ uniform vec3 u_cam_pos;
 void main()
 {
 	vec2 uv = v_world_position.xz * 0.05;
-	uv.x += 3 * sin(u_time*0.01);
+	uv.x += 3.0 * sin(u_time*0.01);
 
 	vec2 uv2 = v_world_position.xz *  0.02;
 	uv2 += 2.0 * sin(u_time*0.13);
  
-	vec3 N1 =normalize( texture2D(u_normal_map, uv).xzy * 2.0 - vec3(1));
-	vec3 N2 =normalize( texture2D(u_normal_map, uv2).xzy * 2.0 - vec3(1));
+	vec3 N1 =normalize( texture2D(u_normal_map, uv).xzy * 2.0 - vec3(1.0));
+	vec3 N2 =normalize( texture2D(u_normal_map, uv2).xzy * 2.0 - vec3(1.0));
 
 	vec3 N = mix(N1,N2,0.5);
 
