@@ -166,6 +166,12 @@ void World::writeDynamicDragons(std::ofstream& outdata,  EntityCharacterDragon* 
 	outdata << "TEX " + entity->texture->filename << std::endl;
 	outdata << "MESH2 " + entity->characterMesh->name << std::endl;
 	outdata << "TEX2 " + entity->characterTex->filename << std::endl;
+	if (!entity->animations.empty()) {
+		for (size_t i = 0; i < entity->animations.size(); i++)
+		{
+			outdata << "ANIM " + entity->animations[i]->filename << std::endl;
+		}
+	}
 	Vector3 entityPos = entity->getPosition();
 	outdata << "POS " + std::to_string(entityPos.x) + " " + std::to_string(entityPos.y) + " " + std::to_string(entityPos.z) << std::endl;
 	Vector3 entityOff = entity->characterOffset.getTranslation();
@@ -266,6 +272,11 @@ void World::readEntitiesCharacterDragonAttributes(std::stringstream& ss, std::st
 	if (strcmp(out.c_str(), "TEX2") == 0) {
 		ss >> out;
 		entityDragon->characterTex = Texture::Get((PATH2 + out).c_str(), true);
+		ss >> out;
+	}
+	if (strcmp(out.c_str(), "ANIM") == 0) {
+		ss >> out;
+		entityDragon->animations.push_back(Animation::Get((PATH2 + out).c_str()));
 		ss >> out;
 	}
 	if (strcmp(out.c_str(), "POS") == 0) {

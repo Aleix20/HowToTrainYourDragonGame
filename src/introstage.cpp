@@ -51,13 +51,19 @@ void IntroStage::render() {
 	quad.createQuad(Game::instance->window_width*0.5, Game::instance->window_height * 0.5 , Game::instance->window_width, Game::instance->window_height, false);
 	RenderGUI(quad, tex, Vector4(1,1,1,1));
 	tex = Texture::Get((PATH1 + a.assign("dragonIcon.png")).c_str());
-	if (RenderButton(200, 200, 312, 143, tex)) {
+	if (RenderButton(200, 140, 312, 143, tex)) {
 		Game::instance->world->playStage = true;
+
+	}
+	tex = Texture::Get((PATH1 + a.assign("tutorial.png")).c_str());
+	if (RenderButton(200, 290, 312, 143, tex)) {
+
 	}
 	tex = Texture::Get((PATH1 + a.assign("exitDoor.png")).c_str());
-	if (RenderButton(200, 400, 312, 143, tex)) {
+	if (RenderButton(200, 440, 312, 143, tex)) {
 		Game::instance->must_exit = true;
 	}
+	
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -108,12 +114,14 @@ void IntroStage::onKeyDown(SDL_KeyboardEvent event) {
 		break;
 	}
 }
+
 void IntroStage::onMouseButtonDown(SDL_MouseButtonEvent event)
 {
 	if (event.button == SDL_BUTTON_LEFT) {
 		wasLeftPressed = true;
 	}
 }
+
 void IntroStage::RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

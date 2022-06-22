@@ -8,10 +8,18 @@ EntityCharacterDragon::EntityCharacterDragon()
 
 void EntityCharacterDragon::render()
 {
-	Shader* shader = Game::instance->shader;
+	float time = Game::instance->time;
+	std::string a;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH1 = "data/";
+#else
+	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	Shader* shader;
+	shader = Game::instance->shader;
 	if (!shader) return;
 
-
+	
 	//enable shader
 	shader->enable();
 
@@ -24,9 +32,34 @@ void EntityCharacterDragon::render()
 	shader->setUniform("u_model", model);
 	shader->setUniform("u_tex_tiling", tiling);
 	mesh->render(GL_TRIANGLES);
+	shader->disable();
+
+	if (animations.size() != 0) {
+		shader = Shader::Get((PATH1 + a.assign("shaders/skinning.vs")).c_str(), (PATH1 + a.assign("shaders/texture.fs")).c_str());
+		characterModel.scale(0.01f, 0.01f, 0.01f);
+
+	}
+
+	shader->enable();
+	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_tex_tiling", tiling);
 	shader->setUniform("u_texture", characterTex, 0);
+	characterModel.rotate(180 * DEG2RAD, Vector3(0, 1, 0));
 	shader->setUniform("u_model", characterModel);
-	characterMesh->render(GL_TRIANGLES);
+	if (animations.size() != 0) {
+		for (size_t i = 0; i < animations.size(); i++)
+		{
+			animations[i]->assignTime(time);
+			//animations[i]->skeleton.renderSkeleton(cam, model);
+			characterMesh->renderAnimated(GL_TRIANGLES, &animations[i]->skeleton);
+			characterModel.scale(100.0f, 100.0f, 100.0f);
+		}
+	}
+
+
+
 
 	//disable shader
 	shader->disable();
