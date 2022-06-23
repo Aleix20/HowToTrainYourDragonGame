@@ -299,6 +299,62 @@ long getTime()
 #endif
 }
 
+bool RenderButton(float x, float y, float w, float h, Texture* tex, bool wasLeftPressed)
+{
+	Vector2 mouse = Input::mouse_position;
+	float halfWidth = w * 0.5;
+	float halfHeight = h * 0.5;
+	float min_x = x - halfWidth;
+	float max_x = x + halfWidth;
+	float min_y = y - halfHeight;
+	float max_y = y + halfHeight;
+
+	bool hover = mouse.x >= min_x && mouse.x <= max_x && mouse.y >= min_y && mouse.y <= max_y;
+	Vector4 buttonColor = hover ? Vector4(1, 1, 1, 1) : Vector4(1, 1, 1, 0.7f);
+	Mesh quad;
+	quad.createQuad(x, y, w, h, false);
+	RenderGUI(quad, tex, buttonColor);
+	return wasLeftPressed && hover;
+}
+void RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH1 = "data/";
+#else
+	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	std::string a;
+	int windowWidth = Game::instance->window_width;
+	int windowHeight = Game::instance->window_height;
+
+
+
+	Camera cam2D;
+	cam2D.setOrthographic(0, windowWidth, windowHeight, 0, -1, 1);
+
+	Shader* shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/gui.fs")).c_str());
+	if (!shader) return;
+
+
+	//enable shader
+	shader->enable();
+
+	//upload uniforms
+	shader->setUniform("u_color", color);
+	shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+	shader->setUniform("u_texture", tex, 0);
+	shader->setUniform("u_tex_tiling", 1.0f);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_tex_range", Vector4(0, 0, 1, 1));
+
+	shader->setUniform("u_model", Matrix44());
+	quad.render(GL_TRIANGLES);
+
+
+	//disable shader
+	shader->disable();
+}
+
 
 //this function is used to access OpenGL Extensions (special features not supported by all cards)
 void* getGLProcAddress(const char* name)

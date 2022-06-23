@@ -36,6 +36,10 @@ void checkGameState();
 void checkAudios();
 #endif
 //generic purposes fuctions
+
+void RenderGUI(Mesh quad, Texture* tex, Vector4 color);
+bool RenderButton(float x, float y, float w, float h, Texture* tex, bool wasLeftPressed);
+
 void drawGrid();
 bool drawText(float x, float y, std::string text, Vector3 c, float scale = 1);
 

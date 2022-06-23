@@ -59,6 +59,7 @@ public:
 
 	EntityCharacter* mainCharacter;
 	bool playStage = false;
+	bool tutorialStage = false;
 	void loadResources();
 	void loadObjectFile(const char* path);
 	void writeObjectFile(const char* path);

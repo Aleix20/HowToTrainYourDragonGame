@@ -8,6 +8,7 @@
 #include "animation.h"
 #include "playstage.h"
 #include "introstage.h"
+#include "TutorialStage.h"
 #include "stage.h"
 
 #include <cmath>
@@ -66,6 +67,7 @@ void initStages(){
     stages.reserve(2);
     stages.push_back(new IntroStage());
     stages.push_back(new PlayStage());
+	stages.push_back(new TutorialStage());
     
 
 };
@@ -137,6 +139,13 @@ void Game::update(double seconds_elapsed)
 	}
 	if(!world->playStage && currentStage == STAGE_ID::PLAY) {
 		setStage(STAGE_ID::INTRO);
+
+	}
+	if (world->tutorialStage && currentStage == STAGE_ID::INTRO) {
+		setStage(STAGE_ID::TUTORIAL);
+	}
+	if(world->playStage && currentStage == STAGE_ID::TUTORIAL){
+		setStage(STAGE_ID::PLAY);
 
 	}
     getCurrentStage()->update(seconds_elapsed);
