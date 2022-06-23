@@ -33,8 +33,13 @@ void World::loadResources()
 
 
 	mainCharacter = new EntityCharacter();
-	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/Hiccup.obj")).c_str());
+	mainCharacter->mesh = Mesh::Get((PATH + s.assign("Hiccup/HiccupIntro.mesh")).c_str());
 	mainCharacter->texture = Texture::Get((PATH + s.assign("Hiccup/HiccupTeen.png")).c_str(), true);
+	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupIdle.skanim")).c_str()));
+	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupWalking.skanim")).c_str()));
+	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupRunning.skanim")).c_str()));
+	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupTwerk.skanim")).c_str()));
+
 	mainCharacter->model.setTranslation(-10, 0, 0);
 
 

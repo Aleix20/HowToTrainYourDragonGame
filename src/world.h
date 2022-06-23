@@ -33,7 +33,7 @@ public:
 	bool audioTimer;
 	float timerAudio;
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-	HCHANNEL channelAudios;
+	HCHANNEL channelAudios = 0;
 #endif
 
 	bool mission1 = false;
