@@ -34,17 +34,30 @@ public:
 	float timerAudio;
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	HCHANNEL channelAudios = 0;
+	HCHANNEL channelWind = 0;
+
 #endif
 
+#pragma region MISSIONFLAGS
+	bool text = false;
+	float textTimer = 5;
+	float missionTime = 10;
+	float completeTime = 5;
 	bool mission1 = false;
 	bool mission1End = true;
 	bool mission2 = false;
 	bool mission2End = false;
 	bool mission3 = false;
 	bool mission3End = false;
+	bool mission1Pass = false;
+	bool mission2Pass = false;
+	bool mission3Pass = false;
+#pragma endregion
+
+
 	bool topOfDragon = false;
-	float missionTime=120;
 	int currentDragon = 0;
+
 	std::vector<EntityMesh*> staticEntities;
 	std::vector<EntityMesh*> staticEntitiesDragons;
 	std::vector<EntityMesh*> staticEntitiesCharacter;
