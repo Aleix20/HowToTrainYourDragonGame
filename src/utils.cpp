@@ -134,6 +134,8 @@ void checkFrustrumEntity(EntityMesh*& entity, Vector3& camPos)
 
 }
 #pragma endregion
+
+#pragma region COLLISIONS
 void checkCollisionEntities(std::vector<EntityMesh*>& entitiesCollision, Vector3& character_center, float dt, Vector3& nexPos, Vector3& currentPos)
 {
 	World* world = Game::instance->world;
@@ -176,9 +178,9 @@ void checkCollisionEntity(EntityMesh* entity, Vector3& character_center, float d
 
 }
 
+#pragma endregion
 
-
-
+#pragma region CHECKS
 void checkGameState()
 {
 	World* world = Game::instance->world;
@@ -202,7 +204,7 @@ void checkGameState()
 			if (currentCharacter->name.compare("Mission2") == 0) {
 				world->mission2 = true;
 				world->mission2End = true;
-				world->missionTime = 120.0f;
+				world->missionTime = 10.0f;
 			}
 		}
 
@@ -280,25 +282,9 @@ void checkAudios()
 	
 }
 #endif
-void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
-{
-	Vector3 eye = model * eyeVec;
-	Vector3 center = model * centerVec;
-	Vector3 up = model.rotateVector(upVec);
-	camera->enable();
-	camera->lookAt(eye, center, up);
-}
-long getTime()
-{
-#ifdef WIN32
-	return GetTickCount();
-#else
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return (int)(tv.tv_sec * 1000 + (tv.tv_usec / 1000));
-#endif
-}
+#pragma endregion
 
+#pragma region GUI
 bool RenderButton(float x, float y, float w, float h, Texture* tex, bool wasLeftPressed)
 {
 	Vector2 mouse = Input::mouse_position;
@@ -354,6 +340,28 @@ void RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
 	//disable shader
 	shader->disable();
 }
+#pragma endregion
+
+void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
+{
+	Vector3 eye = model * eyeVec;
+	Vector3 center = model * centerVec;
+	Vector3 up = model.rotateVector(upVec);
+	camera->enable();
+	camera->lookAt(eye, center, up);
+}
+long getTime()
+{
+#ifdef WIN32
+	return GetTickCount();
+#else
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (int)(tv.tv_sec * 1000 + (tv.tv_usec / 1000));
+#endif
+}
+
+
 
 
 //this function is used to access OpenGL Extensions (special features not supported by all cards)
