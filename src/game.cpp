@@ -24,7 +24,6 @@ Mesh* mesh = NULL;
 Texture* texture = NULL;
 
 
-
 Mesh* planeMesh = NULL;
 Texture* planeTex = NULL;
 Matrix44 planeModel;

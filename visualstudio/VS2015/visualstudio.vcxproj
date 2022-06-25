@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\animation.cpp" />
     <ClCompile Include="..\..\src\audio.cpp" />
+    <ClCompile Include="..\..\src\BulletManager.cpp" />
     <ClCompile Include="..\..\src\camera.cpp" />
     <ClCompile Include="..\..\src\entityCharacter.cpp" />
     <ClCompile Include="..\..\src\entityCharacterDragon.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\animation.h" />
     <ClInclude Include="..\..\src\audio.h" />
+    <ClInclude Include="..\..\src\BulletManager.h" />
     <ClInclude Include="..\..\src\camera.h" />
     <ClInclude Include="..\..\src\entity.h" />
     <ClInclude Include="..\..\src\entityCharacter.h" />
