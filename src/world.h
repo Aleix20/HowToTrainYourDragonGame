@@ -58,6 +58,7 @@ public:
 	bool mission1Pass = false;
 	bool mission2Pass = false;
 	bool mission3Pass = false;
+	EntityMesh* marketMision3;
 #pragma endregion
 
 
@@ -71,9 +72,10 @@ public:
 	std::vector<EntityMesh*> buildWorld;
 	std::vector<EntityMesh*> mission1Entities;
 	std::vector<EntityMesh*> mission2Entities;
-
+	std::vector<EntityMesh*> mission3Entities;
 	std::vector<EntityMesh*> mission1EntitiesCopy;
 	std::vector<EntityMesh*> mission2EntitiesCopy;
+	std::vector<EntityMesh*> mission3EntitiesCopy;
 	std::vector<EntityCharacterDragon*> dynamicEntitiesDragons;
 
 	EntityCharacter* mainCharacter;
@@ -89,5 +91,6 @@ public:
 	//void staticCharacterDragonRead(std::string& type, std::stringstream& ss, std::string& out, bool& entityB, EntityMesh*& entity, std::string& PATH2, std::vector<EntityMesh*>* entities);
     void Mision1(std::vector<EntityMesh*>& entities);
 	void Mision2(std::vector<EntityMesh*>& entities);
+	void Mision3(std::vector<EntityMesh*>& entities);
 };
 #endif

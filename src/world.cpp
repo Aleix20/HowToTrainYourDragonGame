@@ -456,4 +456,25 @@ void World::Mision2(std::vector<EntityMesh*>& entities)
 	}
 }
 
+void World::Mision3(std::vector<EntityMesh*>& entities) {
+	World* world = Game::instance->world;
+	EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
+	for (size_t i = 0; i < entities.size(); i++) {
+		EntityMesh* currentEntity = entities[i];
+		Vector3 center = currentDragon->nexPos + Vector3(0, 3, 0);
+		Vector3 coll;
+		Vector3 collnorm;
+		//comprobamos si colisiona el objeto con la esfera (radio 3)
+		if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 1.0f, coll, collnorm))
+			continue; //si no colisiona, pasamos al siguiente objeto
+
+		RemoveSelected(entities, currentEntity);
+
+
+	}
+	Camera* cam = Game::instance->camera;
+	checkFrustrumStatic(entities, cam->eye);
+
+}
+
 

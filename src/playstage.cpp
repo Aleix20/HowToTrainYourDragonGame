@@ -455,6 +455,35 @@ void PlayStage::checkMissions(World* world)
 
 
 	}
+	else if (world->mission3) {
+		std::string time = std::to_string(world->missionTime);
+		drawText(2, 2, "Sleepy Fish  Time: " + time.substr(0, time.find(".") + 3) + "   Fishes remain: " + std::to_string(world->mission3EntitiesCopy.size()), Vector3(1, 1, 1), 2);
+		if (world->mission3End) {
+			world->mission3EntitiesCopy = world->mission3Entities;
+			world->mission3End = false;
+		}
+		//entitiesCopy = entities;
+		if (world->missionTime > 0) {
+			world->Mision1(world->mission3EntitiesCopy);
+		}
+		if (world->missionTime <= 0) {
+			world->mission3End = true;
+			world->mission3 = false;
+			world->text = true;
+
+		} 
+		float distance2Market = 100000;
+		if (!world->topOfDragon) {
+			Vector3 marketPos = world->marketMision3->getPosition();
+			distance2Market = marketPos.distance(world->mainCharacter->getPosition());
+		}
+		if (world->mission3EntitiesCopy.size() == 0 &&  distance2Market <= 10.0f) {
+			world->mission3End = true;
+			world->mission3 = false;
+			world->text = true;
+			world->mission3Pass = true;
+		}
+
 	if (world->text && world->missionTime <= 0) {
 
 		drawText(190, 250, "Time's UP!", Vector3(1, 1, 1), 8);
