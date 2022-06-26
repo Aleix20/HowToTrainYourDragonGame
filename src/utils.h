@@ -16,11 +16,12 @@
 class EntityMesh;
 class sBullet {
 public:
-	EntityMesh* bulletMesh;
+	Mesh* mesh;
+	Texture* tex;
 	Matrix44 model;
 	Vector3 last_position;
 	Vector3 velocity;
-	float ttl;
+	float ttl = 0.0f;
 	float power;
 	int author;
 	bool isActive() { return ttl > 0.0f; };

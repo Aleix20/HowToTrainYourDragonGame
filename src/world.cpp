@@ -18,7 +18,11 @@ void World::loadResources()
 	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
     
 #endif
-	
+	for (size_t i = 0; i < MAXBULLETS; i++)
+	{
+		bullets[i] = new sBullet();
+		//bullets[i]->ttl = 0.0f;
+	}
 	loadObjectFile((PATH + s.assign("objects.txt")).c_str());
 	//writeObjectFile((PATH + s.assign("objects2.txt")).c_str());
 	this->sky = new EntityMesh();
@@ -430,8 +434,26 @@ void World::Mision2(std::vector<EntityMesh*>& entities)
 			continue;
 		}
 		Vector3 currentPos = currentBullet->model.getTranslation();
-		currentBullet->bulletMesh->model.translate(currentPos.x,currentPos.y,currentPos.z);
-		currentBullet->bulletMesh->render();
+
+		currentBullet->model.setTranslation(currentPos.x,currentPos.y,currentPos.z);
+
+		//Render bullet
+		Shader*	shader = Game::instance->shader;
+		if (!shader) return;
+		//enable shader
+		shader->enable();
+		//upload uniforms
+		Camera* cam = Game::instance->camera;
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+		shader->setUniform("u_texture", currentBullet->tex, 0);
+		shader->setUniform("u_time", time);
+		shader->setUniform("u_model", currentBullet->model);
+		shader->setUniform("u_tex_tiling", 1.0f);
+		currentBullet->mesh->render(GL_TRIANGLES);
+		//disable shader
+		shader->disable();
+
 
 	}
 }

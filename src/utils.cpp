@@ -205,7 +205,7 @@ void checkGameState()
 			if (currentCharacter->name.compare("Mission2") == 0) {
 				world->mission2 = true;
 				world->mission2End = true;
-				world->missionTime = 10.0f;
+				world->missionTime = 120.0f;
 			}
 		}
 
@@ -362,6 +362,15 @@ bool spawnBullet(Matrix44 model, Vector3 last_position, Vector3 velocity, float 
 	bullet->last_position = last_position;
 	bullet->velocity = velocity;
 	bullet->ttl = ttl;
+	std::string s;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH = "data/";
+#else
+	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+	bullet->mesh = Mesh::Get((PATH + s.assign("FireGem/FireGem.obj")).c_str());
+	bullet->tex = Texture::Get((PATH + s.assign("FireGem/FireGem.png")).c_str());
 	return true;
 	
 

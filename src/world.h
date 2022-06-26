@@ -17,6 +17,7 @@ class EntityMesh;
 class EntityCharacterDragon;
 class EntityCharacter;
 class Entity;
+class sBullet;
 
 
 class World

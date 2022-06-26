@@ -110,7 +110,14 @@ void EntityCharacterDragon::update(float dt)
         Vector3 v = dragonRotation.rotateVector(Vector3(0, 1, 0));
 
 		Vector3 dragonVel;
-
+		if (g->world->mission2) {
+			if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
+				Vector3 bulletVelocity = dragonVel - (forward * 100.01f * dt);
+				Matrix44 prova;
+				prova.setTranslation(0,0,0);
+				spawnBullet(prova, Vector3(), bulletVelocity, 100);
+			}
+		}
 		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
 			dragonVel = dragonVel - (forward * dragonSpeed * dt);
 		}

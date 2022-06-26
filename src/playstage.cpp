@@ -111,6 +111,7 @@ void PlayStage::render() {
 }
 
 void PlayStage::update(double seconds_elapsed) {
+	Game* g = Game::instance;
 	World* world = Game::instance->world;
 	Camera* camera = Game::instance->camera;
 	bool* cameraLocked = &Game::instance->cameraLocked;
@@ -273,6 +274,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event) {
 	case SDLK_z:selectEntities(world); break;
 	case SDLK_PERIOD:increaseBuild(world, currentBuild); break;
 	case SDLK_COMMA:decreaseBuild(world, currentBuild); break;
+	
 	}
 
 }
