@@ -85,7 +85,7 @@ void EntityMesh::render()
 		shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_time", time);
 		//ROTAR MODELOS CON PROBLEMAS APP JAVI
-		if (name.compare("Mission3") == 0) {
+		if (name.compare("Mission4") == 0) {
 			model.rotate(-90 * DEG2RAD, Vector3(1, 0, 0));
 		}
 		shader->setUniform("u_model", model);
@@ -105,7 +105,7 @@ void EntityMesh::render()
 
 		}
 		//ROTAR MODELOS CON PROBLEMAS APP JAVI
-		if (name.compare("Mission3") == 0) {
+		if (name.compare("Mission4") == 0) {
 			model.rotate(90 * DEG2RAD, Vector3(1, 0, 0));
 		}
 		//disable shader

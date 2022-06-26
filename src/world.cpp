@@ -28,6 +28,11 @@ void World::loadResources()
 	this->sky = new EntityMesh();
 	this->sky->mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
 	this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
+	marketMision3 = new EntityMesh();
+	marketMision3->mesh = Mesh::Get((PATH + s.assign("Props/marketSand1.obj")).c_str()); ;
+	marketMision3->texture = Texture::Get((PATH + s.assign("Props/marketSand1.png")).c_str());;
+	marketMision3->model.setTranslation(0,0,20);
+	marketMision3->model.scale(5,5,5);
 
 	ocean = new EntityMesh();
 	ocean->mesh = new Mesh();
@@ -102,6 +107,9 @@ void World::loadObjectFile(const char* path)
 			else if (strcmp(type.c_str(), "MISSION2") == 0) {
 				entities = &this->mission2Entities;
 			}
+			else if (strcmp(type.c_str(), "MISSION3") == 0) {
+				entities = &this->mission3Entities;
+			}
 		}
 
 		if (strcmp(type.c_str(), "DYNAMICDRAGONS") != 0) {
@@ -155,6 +163,10 @@ void World::writeObjectFile(const char* path)
 	for (int i = 0; i < this->mission2Entities.size(); i++) {
 		EntityMesh* entity = mission2Entities[i];
 		staticEntitiesWrite(outdata, entity, "MISSION2");
+	}
+	for (int i = 0; i < this->mission3Entities.size(); i++) {
+		EntityMesh* entity = mission3Entities[i];
+		staticEntitiesWrite(outdata, entity, "MISSION3");
 	}
 	for (int i = 0; i < this->dynamicEntitiesDragons.size(); i++) {
 		EntityCharacterDragon* entity = dynamicEntitiesDragons[i];
@@ -461,19 +473,22 @@ void World::Mision3(std::vector<EntityMesh*>& entities) {
 	EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
 	for (size_t i = 0; i < entities.size(); i++) {
 		EntityMesh* currentEntity = entities[i];
-		Vector3 center = currentDragon->nexPos + Vector3(0, 3, 0);
+		Vector3 center = currentDragon->nexPos + Vector3(0, 0, 0);
 		Vector3 coll;
 		Vector3 collnorm;
 		//comprobamos si colisiona el objeto con la esfera (radio 3)
-		if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 1.0f, coll, collnorm))
+		if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 2.0f, coll, collnorm))
 			continue; //si no colisiona, pasamos al siguiente objeto
+		if (currentDragon->angle3 > 24.0) {
 
-		RemoveSelected(entities, currentEntity);
+			RemoveSelected(entities, currentEntity);
+		}
 
 
 	}
 	Camera* cam = Game::instance->camera;
 	checkFrustrumStatic(entities, cam->eye);
+	checkFrustrumEntity(marketMision3, cam->eye);
 
 }
 

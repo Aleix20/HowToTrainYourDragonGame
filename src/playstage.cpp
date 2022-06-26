@@ -89,10 +89,12 @@ void PlayStage::render() {
 	if (!*cameraLocked) {
 		EntityMesh* currentStaticDragon = world->staticEntitiesDragons[currentDragon];
 		currentStaticDragon->render();
-		//entities = world->mission1Entities;
-		//checkFrustrumStatic(entities, camPos);
-		//entities = world->mission2Entities;
-		//checkFrustrumStatic(entities, camPos);
+		entities = world->mission1Entities;
+		checkFrustrumStatic(entities, camPos);
+		entities = world->mission2Entities;
+		checkFrustrumStatic(entities, camPos);
+		entities = world->mission3Entities;
+		checkFrustrumStatic(entities, camPos);
 	}
 
 
@@ -125,7 +127,7 @@ void PlayStage::update(double seconds_elapsed) {
 			world->audioTimer = false;
 		}
 	}
-	if (world->mission1 || world->mission2) {
+	if (world->mission1 || world->mission2 || world->mission3) {
 		world->missionTime -= seconds_elapsed;
 	}
 	if (world->mission2 && world->topOfDragon) {
@@ -159,6 +161,9 @@ void PlayStage::update(double seconds_elapsed) {
 		if (world->textTimer <= 0) {
 			world->text = false;
 			world->textTimer = 5.0f;
+			if (world->mission3Pass) {
+				checkFrustrumEntity(world->marketMision3, camera->eye);
+			}
 		}
 	}
 	float speed = seconds_elapsed * mouse_speed;//the speed is defined by the seconds_elapsed so it goes constant
@@ -206,7 +211,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event) {
 	bool must_exit = Game::instance->must_exit;
 	float elapsed_time = Game::instance->elapsed_time;
 	Camera* camera = Game::instance->camera;
-	EntityMesh* currentBuild = Game::instance->currentBuild;
+	 
 
 	Vector3 scale = Vector3(1, 1, 1);
 	EntityMesh* dragon = world->staticEntitiesDragons[world->currentDragon];
@@ -239,25 +244,31 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event) {
 		case 5:
 			RemoveSelected(world->mission2Entities, world->selectedEntity);
 			break;
+		case 6:
+			RemoveSelected(world->mission3Entities, world->selectedEntity);
+			break;
 		}
 		break;  //remove
 	case SDLK_g: world->writeObjectFile((PATH1 + b.assign("objects.txt")).c_str()); break;
 	case SDLK_2:
 		switch (world->selectedEntities) {
 		case 0:
-			AddEntityInFront(camera, currentBuild, world->staticEntities);
+			AddEntityInFront(camera, Game::instance->currentBuild, world->staticEntities);
 			break;
 		case 3:
-			AddEntityInFront(camera, currentBuild, world->mission1Entities);
+			AddEntityInFront(camera, Game::instance->currentBuild, world->mission1Entities);
 			break;
 		case 4:
-			AddEntityInFront(camera, currentBuild, world->staticEntitiesPlants);
+			AddEntityInFront(camera, Game::instance->currentBuild, world->staticEntitiesPlants);
 			break;
 		case 5:
-			AddEntityInFront(camera, currentBuild, world->mission2Entities);
+			AddEntityInFront(camera, Game::instance->currentBuild, world->mission2Entities);
+			break;
+		case 6:
+			AddEntityInFront(camera, Game::instance->currentBuild, world->mission3Entities);
 			break;
 		default:
-			AddEntityInFront(camera, currentBuild, world->staticEntities);
+			AddEntityInFront(camera, Game::instance->currentBuild, world->staticEntities);
 			break;
 		}
 
@@ -273,8 +284,8 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event) {
 	case SDLK_l: RotateSelected(40.0f * elapsed_time, Vector3(1, 0, 0)); break;
 	case SDLK_k:  RotateSelected(-40.0f * elapsed_time, Vector3(1, 0, 0)); break;
 	case SDLK_z:selectEntities(world); break;
-	case SDLK_PERIOD:increaseBuild(world, currentBuild); break;
-	case SDLK_COMMA:decreaseBuild(world, currentBuild); break;
+	case SDLK_PERIOD:increaseBuild(world, Game::instance->currentBuild); break;
+	case SDLK_COMMA:decreaseBuild(world, Game::instance->currentBuild); break;
 	
 	}
 
@@ -307,7 +318,7 @@ void PlayStage::increaseBuild(World* world, EntityMesh*& currentBuild)
 }
 void PlayStage::selectEntities(World* world)
 {
-	if (world->selectedEntities == 5) {
+	if (world->selectedEntities == 6) {
 		world->selectedEntities = 0;
 	}
 	else {
@@ -332,6 +343,9 @@ void PlayStage::selectEntities(World* world)
 		break;
 	case 5:
 		std::cout << "Mission2 ITEMS" << std::endl;
+		break;
+	case 6:
+		std::cout << "Mission3 ITEMS" << std::endl;
 		break;
 	}
 }
@@ -393,6 +407,9 @@ void PlayStage::onMouseButtonDown(SDL_MouseButtonEvent event)
 			break;
 		case 5:
 			RayPickCheck(camera, world->mission2Entities);
+			break;
+		case 6:
+			RayPickCheck(camera, world->mission3Entities);
 			break;
 		}
 	}
@@ -464,26 +481,26 @@ void PlayStage::checkMissions(World* world)
 		}
 		//entitiesCopy = entities;
 		if (world->missionTime > 0) {
-			world->Mision1(world->mission3EntitiesCopy);
+			world->Mision3(world->mission3EntitiesCopy);
 		}
 		if (world->missionTime <= 0) {
 			world->mission3End = true;
 			world->mission3 = false;
 			world->text = true;
 
-		} 
+		}
 		float distance2Market = 100000;
 		if (!world->topOfDragon) {
 			Vector3 marketPos = world->marketMision3->getPosition();
 			distance2Market = marketPos.distance(world->mainCharacter->getPosition());
 		}
-		if (world->mission3EntitiesCopy.size() == 0 &&  distance2Market <= 10.0f) {
+		if (world->mission3EntitiesCopy.size() == 0 && distance2Market <= 10.0f) {
 			world->mission3End = true;
 			world->mission3 = false;
 			world->text = true;
 			world->mission3Pass = true;
 		}
-
+	}
 	if (world->text && world->missionTime <= 0) {
 
 		drawText(190, 250, "Time's UP!", Vector3(1, 1, 1), 8);
