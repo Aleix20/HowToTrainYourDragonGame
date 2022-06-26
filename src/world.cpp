@@ -423,6 +423,17 @@ void World::Mision2(std::vector<EntityMesh*>& entities)
 	//}
 	Camera* cam = Game::instance->camera;
 	checkFrustrumStatic(entities, cam->eye);
+	for (size_t i = 0; i < MAXBULLETS; i++)
+	{
+		sBullet* currentBullet = world->bullets[i];
+		if (!currentBullet->isActive()) {
+			continue;
+		}
+		Vector3 currentPos = currentBullet->model.getTranslation();
+		currentBullet->bulletMesh->model.translate(currentPos.x,currentPos.y,currentPos.z);
+		currentBullet->bulletMesh->render();
+
+	}
 }
 
 

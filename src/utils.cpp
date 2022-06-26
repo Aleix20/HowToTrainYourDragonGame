@@ -16,6 +16,7 @@
 #include <iostream>
 #include "input.h"
 
+
 #pragma region EDITORMUNDO
 void AddEntityInFront(Camera* cam, EntityMesh* entity, std::vector<EntityMesh*>& entities) {
 
@@ -341,6 +342,42 @@ void RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
 	shader->disable();
 }
 #pragma endregion
+
+#pragma region BULLET
+
+sBullet* getFreeBullet() {
+	World* w = Game::instance->world;
+	for (size_t i = 0; i < MAXBULLETS; i++)
+	{
+		sBullet* currentBullet = w->bullets[i];
+		if (!currentBullet->isActive()) { return currentBullet; }
+		return NULL;	
+	}
+};
+
+bool spawnBullet(Matrix44 model, Vector3 last_position, Vector3 velocity, float ttl) {
+	sBullet* bullet = getFreeBullet();
+	if (bullet == NULL) { return false; }
+	bullet->model = model;
+	bullet->last_position = last_position;
+	bullet->velocity = velocity;
+	bullet->ttl = ttl;
+	return true;
+	
+
+};
+
+void deleteBullet(sBullet* b) {
+	b->ttl = 0.0f;
+};
+
+Vector3 getRayDirectionBullet(int nexPos_x, int nexPos_y, Vector3 currentPos, float window_width, float window_height)
+{
+	Vector3 nexPos((float)nexPos_x, window_height - nexPos_y, 1.0f);
+	//Vector3 p = unproject(nexPos, window_width, window_height);
+	return (nexPos - currentPos ).normalize();
+}
+#pragma endregion 
 
 void setUpCamera(Matrix44& model, Vector3 eyeVec, Vector3 centerVec, Vector3 upVec, Camera* camera)
 {

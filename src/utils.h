@@ -14,6 +14,17 @@
 #include "entityMesh.h"
 
 class EntityMesh;
+class sBullet {
+public:
+	EntityMesh* bulletMesh;
+	Matrix44 model;
+	Vector3 last_position;
+	Vector3 velocity;
+	float ttl;
+	float power;
+	int author;
+	bool isActive() { return ttl > 0.0f; };
+};
 
 //General functions **************
 long getTime();
@@ -30,6 +41,10 @@ void RotateSelected(float angleDegrees, Vector3 rotationVector);
 void MoveSelected(float x, float y, float z);
 void ScaleSelected(float x, float y, float z);
 void RemoveSelected(std::vector<EntityMesh*>& entities, Entity* selectedEntity);
+sBullet* getFreeBullet();
+bool spawnBullet(Matrix44 model, Vector3 last_position, Vector3 velocity, float ttl);
+void deleteBullet(sBullet* b);
+Vector3 getRayDirectionBullet(int nexPos_x, int nexPos_y, Vector3 currentPos, float window_width, float window_height);
 
 void checkGameState();
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -70,5 +85,11 @@ char* fetchBufferVec2(char* data, std::vector<Vector2>& vector);
 char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector);
 char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector);
 char* fetchBufferVec4(char* data, std::vector<Vector4>& vector);
+
+
+//struct sProp{
+//	EntityMesh* bulletMesh;
+//	Texture* bulletTex;
+//};
 
 #endif

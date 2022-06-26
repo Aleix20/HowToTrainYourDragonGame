@@ -8,6 +8,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
+#define MAXBULLETS 100
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include "audio.h"
 #endif
@@ -32,6 +33,10 @@ public:
 
 	bool audioTimer;
 	float timerAudio;
+
+	sBullet* bullets[MAXBULLETS];
+	
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	HCHANNEL channelAudios = 0;
 	HCHANNEL channelWind = 0;

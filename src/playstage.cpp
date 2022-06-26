@@ -127,6 +127,32 @@ void PlayStage::update(double seconds_elapsed) {
 	if (world->mission1 || world->mission2) {
 		world->missionTime -= seconds_elapsed;
 	}
+	if (world->mission2 && world->topOfDragon) {
+		for (size_t i = 0; i < MAXBULLETS; i++)
+		{
+			sBullet* currentBullet = world->bullets[i];
+			if (!currentBullet->isActive()) { continue; }
+			Vector3 currentPos = currentBullet->model.getTranslation();
+			Vector3 nexPos = currentPos + (currentBullet->velocity*seconds_elapsed);
+			for (size_t i = 0; i < world->mission2EntitiesCopy.size(); i++)
+			{
+				Vector3 dir = camera->getRayDirection(currentPos.x, currentPos.y, g->window_width, g->window_height);
+				Vector3 rayOrigin = camera->eye;
+				float distance = 1000.0f;
+				//if(currentBullet->bulletMesh->mesh->testRayCollision()){
+				//	//entity.onBulletColision(currentBullet)
+				//	//deleteBullet
+				//	//continue
+				//}
+
+				currentBullet->last_position = currentPos;
+				currentBullet->model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
+				currentBullet->ttl -= seconds_elapsed;
+			}
+
+
+		}
+	}
 	if (world->text) {
 		world->textTimer -= seconds_elapsed;
 		if (world->textTimer <= 0) {
