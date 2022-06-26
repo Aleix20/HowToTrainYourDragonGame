@@ -21,10 +21,10 @@ void World::loadResources()
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
 		bullets[i] = new sBullet();
-		//bullets[i]->ttl = 0.0f;
 	}
 	loadObjectFile((PATH + s.assign("objects.txt")).c_str());
-	//writeObjectFile((PATH + s.assign("objects2.txt")).c_str());
+
+
 	this->sky = new EntityMesh();
 	this->sky->mesh = Mesh::Get((PATH + s.assign("cielo/cielo.ASE")).c_str());
 	this->sky->texture = Texture::Get((PATH + s.assign("cielo/cielo.tga")).c_str());
@@ -52,8 +52,6 @@ void World::loadResources()
 	ground->mesh->createPlane(100);
 	ground->texture = Texture::Get((PATH + s.assign("grass.jpg")).c_str());
 	ground->tiling = 100.0f;
-	
-
 
 }
 #pragma region READ/WRITE MESHES

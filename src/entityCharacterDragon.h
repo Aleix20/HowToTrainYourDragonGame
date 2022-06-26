@@ -13,6 +13,8 @@ public:
     Matrix44 characterOffset;
     Vector3 nexPos;
 	float dragonSpeed = 50.0f;
+	float damage;
+	float life;
 	EntityCharacterDragon();
 	virtual void render() override;
 	virtual void update(float dt) override;

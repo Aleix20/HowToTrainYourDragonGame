@@ -137,14 +137,14 @@ void PlayStage::update(double seconds_elapsed) {
 			Vector3 nexPos = currentPos + (currentBullet->velocity*seconds_elapsed);
 			for (size_t i = 0; i < world->mission2EntitiesCopy.size(); i++)
 			{
-				Vector3 dir = camera->getRayDirection(currentPos.x, currentPos.y, g->window_width, g->window_height);
-				Vector3 rayOrigin = camera->eye;
-				float distance = 1000.0f;
-				//if(currentBullet->bulletMesh->mesh->testRayCollision()){
-				//	//entity.onBulletColision(currentBullet)
-				//	//deleteBullet
-				//	//continue
-				//}
+				EntityMesh* currentEntity = world->mission2EntitiesCopy[i];
+				Vector3 coll;
+				Vector3 collnorm;
+				if(currentEntity->mesh->testSphereCollision(currentEntity->model, nexPos,0.5f,coll, collnorm)){
+					RemoveSelected(world->mission2EntitiesCopy, currentEntity);
+					deleteBullet(currentBullet);
+					continue;
+				}
 
 				currentBullet->last_position = currentPos;
 				currentBullet->model.setTranslation(nexPos.x, nexPos.y, nexPos.z);
@@ -158,6 +158,7 @@ void PlayStage::update(double seconds_elapsed) {
 		world->textTimer -= seconds_elapsed;
 		if (world->textTimer <= 0) {
 			world->text = false;
+			world->textTimer = 5.0f;
 		}
 	}
 	float speed = seconds_elapsed * mouse_speed;//the speed is defined by the seconds_elapsed so it goes constant

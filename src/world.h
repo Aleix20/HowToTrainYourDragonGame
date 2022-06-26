@@ -8,7 +8,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
-#define MAXBULLETS 100
+#define MAXBULLETS 500
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include "audio.h"
 #endif

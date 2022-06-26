@@ -205,7 +205,7 @@ void checkGameState()
 			if (currentCharacter->name.compare("Mission2") == 0) {
 				world->mission2 = true;
 				world->mission2End = true;
-				world->missionTime = 120.0f;
+				world->missionTime = 10.0f;
 			}
 		}
 
@@ -350,9 +350,12 @@ sBullet* getFreeBullet() {
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
 		sBullet* currentBullet = w->bullets[i];
-		if (!currentBullet->isActive()) { return currentBullet; }
-		return NULL;	
+		if (!currentBullet->isActive()) {
+			return currentBullet; 
+		}
+			
 	}
+	return NULL;
 };
 
 bool spawnBullet(Matrix44 model, Vector3 last_position, Vector3 velocity, float ttl) {

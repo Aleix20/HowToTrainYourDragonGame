@@ -111,11 +111,14 @@ void EntityCharacterDragon::update(float dt)
 
 		Vector3 dragonVel;
 		if (g->world->mission2) {
-			if (Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
-				Vector3 bulletVelocity = dragonVel - (forward * 100.01f * dt);
-				Matrix44 prova;
-				prova.setTranslation(0,0,0);
-				spawnBullet(prova, Vector3(), bulletVelocity, 100);
+			if (Input::wasKeyPressed(SDL_SCANCODE_LEFT)) {
+				Vector3 bulletVelocity = bulletVelocity - (forward * 10000.01f * dt);
+				Matrix44 bulletModel;
+				Vector3 currentPosdrag = model.getTranslation();
+				bulletModel.setTranslation(currentPosdrag.x, currentPosdrag.y+2, currentPosdrag.z);
+				if (spawnBullet(bulletModel, Vector3(), bulletVelocity, 100)) {
+					std::cout << "bullet spawned" << std::endl;
+				}
 			}
 		}
 		if (Input::isKeyPressed(SDL_SCANCODE_W)) {
