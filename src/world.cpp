@@ -410,7 +410,14 @@ void World::Mision1(std::vector<EntityMesh*>& entities){
             continue; //si no colisiona, pasamos al siguiente objeto
         
         RemoveSelected(entities, currentEntity);
+		//audio pescaito
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+		std::string PATH = "data/";
+#else
+		std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
 
+#endif
+		Audio::Play((PATH + s.assign("sounds/CogerMonedaAro.wav")).c_str(), NULL);
     
     }
     Camera* cam = Game::instance->camera;
@@ -422,21 +429,10 @@ void World::Mision2(std::vector<EntityMesh*>& entities)
 {
 	World* world = Game::instance->world;
 	EntityCharacterDragon* currentDragon = world->dynamicEntitiesDragons[world->currentDragon];
-	//for (size_t i = 0; i < entities.size(); i++) {
-	//	EntityMesh* currentEntity = entities[i];
-	//	Vector3 center = currentDragon->nexPos + Vector3(0, 3, 0);
-	//	Vector3 coll;
-	//	Vector3 collnorm;
-	//	//comprobamos si colisiona el objeto con la esfera (radio 3)
-	//	if (!currentEntity->mesh->testSphereCollision(currentEntity->model, center, 1.0f, coll, collnorm))
-	//		continue; //si no colisiona, pasamos al siguiente objeto
-
-	//	RemoveSelected(entities, currentEntity);
-
-
-	//}
+	
 	Camera* cam = Game::instance->camera;
 	checkFrustrumStatic(entities, cam->eye);
+
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
 		sBullet* currentBullet = world->bullets[i];
@@ -461,6 +457,7 @@ void World::Mision2(std::vector<EntityMesh*>& entities)
 		shader->setUniform("u_model", currentBullet->model);
 		shader->setUniform("u_tex_tiling", 1.0f);
 		currentBullet->mesh->render(GL_TRIANGLES);
+
 		//disable shader
 		shader->disable();
 
@@ -482,6 +479,14 @@ void World::Mision3(std::vector<EntityMesh*>& entities) {
 		if (currentDragon->angle3 > 24.0) {
 
 			RemoveSelected(entities, currentEntity);
+			//audio pescaito
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+			std::string PATH = "data/";
+#else
+			std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+			Audio::Play((PATH + s.assign("sounds/CogerPez.wav")).c_str(), NULL);
 		}
 
 

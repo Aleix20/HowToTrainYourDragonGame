@@ -119,6 +119,14 @@ void EntityCharacterDragon::update(float dt)
 				if (spawnBullet(bulletModel, Vector3(), bulletVelocity, 100)) {
 					std::cout << "bullet spawned" << std::endl;
 				}
+				std::string s;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				std::string PATH = "data/";
+#else
+				std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+				Audio::Play((PATH + s.assign("sounds/disparo.wav")).c_str(), NULL);
 			}
 		}
 		if (Input::isKeyPressed(SDL_SCANCODE_W)) {

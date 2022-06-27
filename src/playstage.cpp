@@ -70,6 +70,27 @@ void PlayStage::render() {
 			world->channelWind = 0;
 		}
 
+		for (size_t i = 0; i < world->staticEntitiesCharacter.size(); i++)
+		{
+			if (strcmp(world->staticEntitiesCharacter[i]->name.c_str(), "Mission1") == 0 || strcmp(world->staticEntitiesCharacter[i]->name.c_str(), "Mission2") == 0 || strcmp(world->staticEntitiesCharacter[i]->name.c_str(), "Mission3") == 0 || strcmp(world->staticEntitiesCharacter[i]->name.c_str(), "ChangeDragon") == 0) {
+				EntityMesh* currentCharacter = world->staticEntitiesCharacter[i];
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				std::string PATH1 = "data/";
+#else
+				std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+				std::string s;
+				Texture* texQuestion = Texture::Get((PATH1 + s.assign("QuestionMark/QuestionMark.png")).c_str());
+				Mesh* meshQuestion = Mesh::Get((PATH1 + s.assign("QuestionMark/QuestionMark.obj")).c_str());
+				Matrix44 offset;
+				offset.setTranslation(0.0f,3.0f,0.0f);
+				Matrix44 questionModel = offset*currentCharacter->model;
+				questionModel.rotate(world->questionAngle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+				EntityMesh* question = new EntityMesh(meshQuestion, texQuestion, questionModel);
+				checkFrustrumEntity(question, camera->eye);
+			}
+		}
+
 	}
 
 
@@ -120,6 +141,7 @@ void PlayStage::update(double seconds_elapsed) {
 	float mouse_speed = Game::instance->mouse_speed;
 	float angle = Game::instance->angle;
 	bool mouse_locked = Game::instance->mouse_locked;
+	world->questionAngle += seconds_elapsed*50;
 
 	if (world->audioTimer) {
 		world->timerAudio -= seconds_elapsed;
@@ -144,6 +166,15 @@ void PlayStage::update(double seconds_elapsed) {
 				Vector3 collnorm;
 				if(currentEntity->mesh->testSphereCollision(currentEntity->model, nexPos,0.5f,coll, collnorm)){
 					RemoveSelected(world->mission2EntitiesCopy, currentEntity);
+					//audio pescaito
+					std::string s;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+					std::string PATH = "data/";
+#else
+					std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+					Audio::Play((PATH + s.assign("sounds/CogerMonedaAro.wav")).c_str(), NULL);
 					deleteBullet(currentBullet);
 					continue;
 				}
@@ -501,18 +532,29 @@ void PlayStage::checkMissions(World* world)
 			world->mission3Pass = true;
 		}
 	}
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH = "data/";
+#else
+	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+	std::string s;
 	if (world->text && world->missionTime <= 0) {
 
 		drawText(190, 250, "Time's UP!", Vector3(1, 1, 1), 8);
+		Audio::Play((PATH + s.assign("sounds/levelNoCompleted.wav")).c_str(), NULL);
 	}
 	else if (world->text && world->mission1Pass) {
 		drawText(135, 250, "Mission 1 completed", Vector3(1, 1, 1), 6);
+		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
 	}
 	else if (world->text && world->mission2Pass) {
 		drawText(135, 250, "Mission 2 completed", Vector3(1, 1, 1), 6);
+		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
 	}
 	else if (world->text && world->mission3Pass) {
 		drawText(135, 250, "Mission 3 completed", Vector3(1, 1, 1), 6);
+		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
 	}
 }
 ;

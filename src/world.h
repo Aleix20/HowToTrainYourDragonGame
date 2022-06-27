@@ -59,6 +59,7 @@ public:
 	bool mission2Pass = false;
 	bool mission3Pass = false;
 	EntityMesh* marketMision3;
+	float questionAngle;
 #pragma endregion
 
 
