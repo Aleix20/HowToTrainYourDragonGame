@@ -48,6 +48,7 @@ void World::loadResources()
 	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupWalking.skanim")).c_str()));
 	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupRunning.skanim")).c_str()));
 	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupTwerk.skanim")).c_str()));
+	mainCharacter->animations.push_back(Animation::Get((PATH + s.assign("Hiccup/HiccupPet.skanim")).c_str()));
 
 	mainCharacter->model.setTranslation(-10, 0, 0);
 

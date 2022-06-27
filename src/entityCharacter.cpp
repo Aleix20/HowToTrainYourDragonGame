@@ -42,12 +42,14 @@ void EntityCharacter::render()
 	Animation* walk = animations[1];
 	Animation* run = animations[2];
 	Animation* dance = animations[3];
+	Animation* pet = animations[4];
 
 	float t = fmod(time, walk->duration) / walk->duration;
 	walk->assignTime(t* walk->duration);
 	run->assignTime(t * run->duration);
 	idle->assignTime(time);
 	dance->assignTime(time);
+	pet->assignTime(time);
 	float velFactor = playerVel.length() * 0.1f;
 	if (velFactor > 1.0f) {
 		blendSkeleton(&walk->skeleton, &run->skeleton, velFactor, &resultSk);
@@ -58,6 +60,9 @@ void EntityCharacter::render()
 	}
 	if (velFactor <=0.01 && g->world->channelAudios !=0) {
 		resultSk = dance->skeleton;
+	}
+	if (g->world->pet) {
+		resultSk = pet->skeleton;
 	}
 	//enable shader
 	shader->enable();

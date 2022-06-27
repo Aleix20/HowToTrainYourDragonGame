@@ -60,9 +60,13 @@ public:
 	bool mission3Pass = false;
 	EntityMesh* marketMision3;
 	float questionAngle;
+
+	HCHANNEL missionTimesUp = 0;
+	HCHANNEL missionCompleted = 0;
+	HCHANNEL level = 0; 
 #pragma endregion
 
-
+	bool pet = false; 
 	bool topOfDragon = false;
 	int currentDragon = 0;
 

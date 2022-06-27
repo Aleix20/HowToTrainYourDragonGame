@@ -112,21 +112,20 @@ void EntityCharacterDragon::update(float dt)
 		Vector3 dragonVel;
 		if (g->world->mission2) {
 			if (Input::wasKeyPressed(SDL_SCANCODE_LEFT)) {
-				Vector3 bulletVelocity = bulletVelocity - (forward * 10000.01f * dt);
+				std::string s;
+				std::string PATH = "data/";
+				Audio::Play((PATH + s.assign("sounds/disparo.wav")).c_str(), NULL);
+				Vector3 bulletVelocity = Vector3(0.0f, 0.0f, 0.0f);
+				bulletVelocity = bulletVelocity - (forward * 10000.01f * dt);
 				Matrix44 bulletModel;
 				Vector3 currentPosdrag = model.getTranslation();
 				bulletModel.setTranslation(currentPosdrag.x, currentPosdrag.y+2, currentPosdrag.z);
 				if (spawnBullet(bulletModel, Vector3(), bulletVelocity, 100)) {
 					std::cout << "bullet spawned" << std::endl;
-				}
-				std::string s;
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-				std::string PATH = "data/";
-#else
-				std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+					
 
-#endif
-				Audio::Play((PATH + s.assign("sounds/disparo.wav")).c_str(), NULL);
+				}
+
 			}
 		}
 		if (Input::isKeyPressed(SDL_SCANCODE_W)) {

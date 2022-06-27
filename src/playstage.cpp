@@ -14,6 +14,12 @@ PlayStage::PlayStage() {}
 float jumpSpeed = 1.0f;
 float moveSpeed = 40.0f;
 void PlayStage::render() {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH1 = "data/";
+#else
+	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+#endif
+	std::string s;
 	World* world = Game::instance->world;
 	Camera* camera = Game::instance->camera;
 	bool* cameraLocked = &Game::instance->cameraLocked;
@@ -48,12 +54,7 @@ void PlayStage::render() {
 		currentEntityDragon->characterModel = currentEntityDragon->characterOffset * currentEntityDragon->model;
 		currentEntityDragon->render();
 		if (world->channelWind == 0 && currentEntityDragon->getPosition().y > 10.0f) {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-			std::string PATH1 = "data/";
-#else
-			std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
-#endif
-			std::string s;
+
 			world->channelWind = Audio::Play((PATH1 + s.assign("sounds/viento.wav")).c_str(), BASS_SAMPLE_LOOP);
 		}
 
@@ -65,6 +66,19 @@ void PlayStage::render() {
 		setUpCamera(currentCharacterModel, Vector3(0.0f, 5.0f, 5.0f), Vector3(0.0f, 0.0f, -5.0f), Vector3(0.0f, 1.0f, 0.0f), camera);
 		world->mainCharacter->render();
 		checkFrustrumEntity(currentStaticDragon, camera->eye);
+		if (!world->audioTimer) {
+			if (world->mainCharacter->getPosition().distance(currentStaticDragon->getPosition()) < 5.0f) {
+				world->pet = true;
+				world->audioTimer = true;
+				world->timerAudio = 7;
+				Audio::Play((PATH1 + s.assign("sounds/Toothless.wav")).c_str(), NULL);
+			}
+			else {
+				world->pet = false;
+			}
+		}
+		
+		
 		if (world->channelWind != 0) {
 			Audio::Stop(world->channelWind);
 			world->channelWind = 0;
@@ -143,10 +157,20 @@ void PlayStage::update(double seconds_elapsed) {
 	bool mouse_locked = Game::instance->mouse_locked;
 	world->questionAngle += seconds_elapsed*50;
 
+	if (world->topOfDragon) {
+		int currentDragon = world->currentDragon;
+		EntityCharacterDragon* currentDragonEntity = world->dynamicEntitiesDragons[currentDragon];
+		currentDragonEntity->update(seconds_elapsed);
+	}
+	else {
+		world->mainCharacter->update(seconds_elapsed);
+	}
 	if (world->audioTimer) {
 		world->timerAudio -= seconds_elapsed;
 		if (world->timerAudio <= 0) {
 			world->audioTimer = false;
+			world->missionCompleted = 0;
+			world->missionTimesUp = 0;
 		}
 	}
 	if (world->mission1 || world->mission2 || world->mission3) {
@@ -216,13 +240,8 @@ void PlayStage::update(double seconds_elapsed) {
 
 	}
 
-	if (world->topOfDragon) {
-		int currentDragon = world->currentDragon;
-		EntityCharacterDragon* currentDragonEntity = world->dynamicEntitiesDragons[currentDragon];
-		currentDragonEntity->update(seconds_elapsed);
-	}
 
-	world->mainCharacter->update(seconds_elapsed);
+	
 	//mouse input to rotate the cam
 
 	//async input to move the camera around
@@ -449,6 +468,13 @@ void PlayStage::onMouseButtonDown(SDL_MouseButtonEvent event)
 
 void PlayStage::checkMissions(World* world)
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	std::string PATH = "data/";
+#else
+	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
+
+#endif
+	std::string s;
 	if (world->mission1) {
 		std::string time = std::to_string(world->missionTime);
 		drawText(2, 2, "Speed rings   Time: " + time.substr(0, time.find(".") + 3) + "   Rings remain: " + std::to_string(world->mission1EntitiesCopy.size()), Vector3(1, 1, 1), 2);
@@ -459,11 +485,18 @@ void PlayStage::checkMissions(World* world)
 		//entitiesCopy = entities;
 		if (world->missionTime > 0) {
 			world->Mision1(world->mission1EntitiesCopy);
+			if (world->level == 0) {
+				world->level = Audio::Play((PATH + s.assign("sounds/levelMusic.wav")).c_str(), NULL);
+			}
 		}
 		if (world->missionTime <= 0) {
 			world->mission1End = true;
 			world->mission1 = false;
 			world->text = true;
+			if (world->level != 0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
 
 		}
 		if (world->mission1EntitiesCopy.size() == 0) {
@@ -471,6 +504,10 @@ void PlayStage::checkMissions(World* world)
 			world->mission1 = false;
 			world->text = true;
 			world->mission1Pass = true;
+			if (world->level != 0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
 		}
 
 
@@ -486,11 +523,19 @@ void PlayStage::checkMissions(World* world)
 		//entitiesCopy = entities;
 		if (world->missionTime > 0) {
 			world->Mision2(world->mission2EntitiesCopy);
+			if (world->level == 0) {
+				world->level =Audio::Play((PATH + s.assign("sounds/levelMusic.wav")).c_str(), NULL);
+			}
 		}
 		if (world->missionTime <= 0) {
 			world->mission2End = true;
 			world->mission2 = false;
 			world->text = true;
+			if (world->level !=0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
+			
 
 
 		}
@@ -499,6 +544,10 @@ void PlayStage::checkMissions(World* world)
 			world->mission2 = false;
 			world->text = true;
 			world->mission2Pass = true;
+			if (world->level != 0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
 		}
 
 
@@ -513,11 +562,18 @@ void PlayStage::checkMissions(World* world)
 		//entitiesCopy = entities;
 		if (world->missionTime > 0) {
 			world->Mision3(world->mission3EntitiesCopy);
+			if (world->level == 0) {
+				world->level = Audio::Play((PATH + s.assign("sounds/levelMusic.wav")).c_str(), NULL);
+			}
 		}
 		if (world->missionTime <= 0) {
 			world->mission3End = true;
 			world->mission3 = false;
 			world->text = true;
+			if (world->level != 0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
 
 		}
 		float distance2Market = 100000;
@@ -530,31 +586,37 @@ void PlayStage::checkMissions(World* world)
 			world->mission3 = false;
 			world->text = true;
 			world->mission3Pass = true;
+			if (world->level != 0) {
+				Audio::Stop(world->level);
+				world->level = 0;
+			}
 		}
 	}
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-	std::string PATH = "data/";
-#else
-	std::string PATH = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
 
-#endif
-	std::string s;
 	if (world->text && world->missionTime <= 0) {
 
 		drawText(190, 250, "Time's UP!", Vector3(1, 1, 1), 8);
-		Audio::Play((PATH + s.assign("sounds/levelNoCompleted.wav")).c_str(), NULL);
+		if (world->missionTimesUp == 0) {
+			Audio::Play((PATH + s.assign("sounds/levelNoCompleted.wav")).c_str(), NULL);
+		}
 	}
 	else if (world->text && world->mission1Pass) {
 		drawText(135, 250, "Mission 1 completed", Vector3(1, 1, 1), 6);
-		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		if (world->missionCompleted == 0) {
+			Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		}
 	}
 	else if (world->text && world->mission2Pass) {
 		drawText(135, 250, "Mission 2 completed", Vector3(1, 1, 1), 6);
-		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		if (world->missionCompleted == 0) {
+			Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		}
 	}
 	else if (world->text && world->mission3Pass) {
 		drawText(135, 250, "Mission 3 completed", Vector3(1, 1, 1), 6);
-		Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		if (world->missionCompleted == 0) {
+			Audio::Play((PATH + s.assign("sounds/levelCompleted.wav")).c_str(), NULL);
+		}
 	}
 }
 ;
