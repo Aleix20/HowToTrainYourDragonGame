@@ -24,22 +24,48 @@ We have missed to put a final boss, so that the mini-games have more sense.
 
 Controls
 ------------------------------
+
+
 Player movement: AWSD, shift run
+
+
 Dragon movement: AWSD and ArrowUp ArrowDown up and down ArrowLeft shoot (mission2 only)
+
+
 Character/dragon interaction: F
 
-World Editor
+World Editor (CHECK CONSOLE TO SEE OUTPUTS)
 ---------------------------
 Select which entities to modify and where to save props: z
+
+
 Select which entity to build: backward , forward .
+
+
 Select entity to modify: click on mesh
+
+
 Add selected object: 2
+
+
 Rotate an object: -+
+
+
 Raise and lower an object: F2 and F3
+
+
 Scale an object: F4 and F5
+
+
 Delete selected object: F6
+
+
 Move object: arrows
+
+
 Rotate vertically: K L 
+
+
 Save changes: g
 
 
