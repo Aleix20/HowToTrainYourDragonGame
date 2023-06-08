@@ -1,12 +1,24 @@
 3D game made with the following framework, based on how to train your dragon. 
+
+
 Implementations discussed in the video:
+
+
 -Character and dragon collisions
+
 -World builder
+
 -Player and dragon movement
+
 -Saving and reading in a file 
+
 -Minimal interactions with the characters in the scene (audios by distance and animations)
+
 -3 Missions
+
+
 -Tutorial
+
 
 We have missed to put a final boss, so that the mini-games have more sense.
 
